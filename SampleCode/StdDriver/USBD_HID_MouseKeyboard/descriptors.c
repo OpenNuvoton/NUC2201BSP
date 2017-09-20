@@ -1,11 +1,9 @@
 /******************************************************************************
  * @file     descriptors.c
  * @brief    USBD descriptor file
- * @version  2.0.0
- * @date     22, March, 2013
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 /*!<Includes */
 #include "NUC2201.h"

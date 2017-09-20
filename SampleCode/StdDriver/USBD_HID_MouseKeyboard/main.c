@@ -4,9 +4,8 @@
  *           Demonstrate how to implement a USB mouse function and a USB keyboard on the same USB device.
  *           The mouse cursor will move automatically when this mouse device connecting to PC.
  *           This sample code uses a GPIO to simulate key input.
- *           
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -126,5 +125,5 @@ int32_t main(void)
 
 
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

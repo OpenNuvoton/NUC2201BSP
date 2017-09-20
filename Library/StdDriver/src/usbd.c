@@ -1,12 +1,10 @@
 /**************************************************************************//**
  * @file     usbd.c
  * @version  V3.00
- * $Revision: 5 $
- * $Date: 15/08/31 10:36a $
- * @brief    USBD driver source file
+ * @brief    NUC2201 series USBD driver source file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include <stdio.h>
 #include <string.h>
@@ -681,9 +679,4 @@ void USBD_LockEpStall(uint32_t u32EpBitmap)
 }
 #endif
 
-/*** (C) COPYRIGHT 2015 Nuvoton Technology Corp. ***/
-
-
-
-
-
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

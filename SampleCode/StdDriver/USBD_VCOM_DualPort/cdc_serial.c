@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     cdc_serial.c
- * @brief    NUC230/240 series USBD VCOM sample file
+ * @brief    NUC2201 series USBD VCOM sample file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 /*!<Includes */

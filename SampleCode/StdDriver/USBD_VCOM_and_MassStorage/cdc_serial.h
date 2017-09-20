@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     cdc_serial.h
- * @brief    NUC230/240 series USB VCOM header file
+ * @brief    NUC2201 series USB VCOM header file
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_CDC_H__
 #define __USBD_CDC_H__
@@ -100,4 +100,4 @@ void VCOM_TransferData(void);
 
 #endif  /* __USBD_CDC_H_ */
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

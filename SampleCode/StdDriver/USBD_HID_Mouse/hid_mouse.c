@@ -1,11 +1,9 @@
 /******************************************************************************
  * @file     hid_mouse.c
  * @brief    USBD driver Sample file
- * @version  2.0.0
- * @date     22, March, 2013
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 /*!<Includes */

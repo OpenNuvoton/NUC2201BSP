@@ -23,7 +23,7 @@
  *                  Define MSC_ImageSize value in massstorage.h in this project.
  *                  Modify MSC_ImageSize value to hold the file size.
  *
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -146,5 +146,5 @@ int32_t main(void)
 
 
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

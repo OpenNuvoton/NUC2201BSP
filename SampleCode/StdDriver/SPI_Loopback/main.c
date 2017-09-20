@@ -1,17 +1,17 @@
 /******************************************************************************
  * @file     main.c
- * @version  V2.00
- * $Revision: 3 $
- * $Date: 15/04/16 2:18p $
- * @brief    NUC2201 Series SPI Driver Sample Code
- *
+ * @version  V3.00
+ * @brief
+ *           Implement SPI Master loop back transfer. 
+ *           This sample code needs to connect SPI0_MISO0 pin and SPI0_MOSI0 pin together. 
+ *           It will compare the received data with transmitted data.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
 
-#define TEST_COUNT             64
+#define TEST_COUNT 64
 
 uint32_t g_au32SourceData[TEST_COUNT];
 uint32_t g_au32DestinationData[TEST_COUNT];
@@ -44,7 +44,7 @@ int main(void)
 
     printf("\n\n");
     printf("+--------------------------------------------------------------------+\n");
-    printf("|                 NUC2201 SPI Driver Sample Code                  |\n");
+    printf("|                   NUC2201 SPI Driver Sample Code                   |\n");
     printf("+--------------------------------------------------------------------+\n");
     printf("\n");
     printf("\nThis sample code demonstrates SPI0 self loop back data transfer.\n");
@@ -71,13 +71,13 @@ int main(void)
 
         while(1) {
             /* Write to TX register */
-            SPI_WRITE_TX0(SPI0, g_au32SourceData[u32DataCount]);
+            SPI_WRITE_TX(SPI0, g_au32SourceData[u32DataCount]);
             /* Trigger SPI data transfer */
             SPI_TRIGGER(SPI0);
             /* Check SPI0 busy status */
             while(SPI_IS_BUSY(SPI0));
             /* Read received data */
-            g_au32DestinationData[u32DataCount] = SPI_READ_RX0(SPI0);
+            g_au32DestinationData[u32DataCount] = SPI_READ_RX(SPI0);
             u32DataCount++;
             if(u32DataCount > TEST_COUNT)
                 break;
@@ -163,8 +163,8 @@ void SPI_Init(void)
     SPI_Open(SPI0, SPI_MASTER, SPI_MODE_0, 32, 2000000);
 
     /* Enable the automatic hardware slave select function. Select the SS pin and configure as low-active. */
-    SPI_EnableAutoSS(SPI0, SPI_SS0, SPI_SS_ACTIVE_LOW);
+    SPI_EnableAutoSS(SPI0, SPI_SS, SPI_SS_ACTIVE_LOW);
 }
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

@@ -1,22 +1,19 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V3.0
- * $Revision: 1 $
- * $Date: 15/04/20 4:18p $
+ * @version  V3.00
  * @brief
  *           Demonstrate SPI data transfer with PDMA.
  *           SPI0 will be configured as Master mode and SPI1 will be configured as Slave mode.
  *           Both TX PDMA function and RX PDMA function will be enabled.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
 
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 
-#define TEST_COUNT 64
+#define TEST_COUNT          64
 
 /* Function prototype declaration */
 void SYS_Init(void);
@@ -152,7 +149,7 @@ void SPI_Init(void)
     /* Configure SPI0 as a master, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */
     SPI0->CNTRL = SPI_MASTER | SPI_CNTRL_TX_NEG_Msk;
     /* Enable the automatic hardware slave select function. Select the SPI0_SS0 pin and configure as low-active. */
-    SPI0->SSR = SPI_SSR_AUTOSS_Msk | SPI_SS0;
+    SPI0->SSR = SPI_SSR_AUTOSS_Msk | SPI_SS;
     /* Set IP clock divider. SPI clock rate = HCLK / ((35+1)*2) = 1 MHz */
     SPI0->DIVIDER = (SPI0->DIVIDER & (~SPI_DIVIDER_DIVIDER_Msk)) | 35;
     
@@ -298,5 +295,5 @@ void SpiLoopTest_WithPDMA(void)
     return;
 }
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

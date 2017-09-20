@@ -3,7 +3,7 @@
  * @brief    NUC2201 series USBD HID transfer sample file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 /*!<Includes */

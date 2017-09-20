@@ -1,14 +1,11 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V3.0
- * $Revision: 1 $
- * $Date: 15/04/16 2:13p $
+ * @version  V3.00
  * @brief
  *           Configure SPI0 as Slave mode and demonstrate how to communicate with an off-chip SPI Master device with FIFO mode. 
  *           This sample code needs to work with SPI_MasterFifoMode sample code.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -80,10 +77,10 @@ int main(void)
     {
         /* Check TX FULL flag and TX data count */
         if((SPI_GET_TX_FIFO_FULL_FLAG(SPI0) == 0) && (u32TxDataCount < TEST_COUNT))
-            SPI_WRITE_TX0(SPI0, g_au32SourceData[u32TxDataCount++]); /* Write to TX FIFO */
+            SPI_WRITE_TX(SPI0, g_au32SourceData[u32TxDataCount++]); /* Write to TX FIFO */
         /* Check RX EMPTY flag */
         if(SPI_GET_RX_FIFO_EMPTY_FLAG(SPI0) == 0)
-            g_au32DestinationData[u32RxDataCount++] = SPI_READ_RX0(SPI0); /* Read RX FIFO */
+            g_au32DestinationData[u32RxDataCount++] = SPI_READ_RX(SPI0); /* Read RX FIFO */
     }
 
     /* Print the received data */
@@ -157,6 +154,5 @@ void SPI_Init(void)
     SPI_Open(SPI0, SPI_SLAVE, SPI_MODE_0, 32, NULL);
 }
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
-
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

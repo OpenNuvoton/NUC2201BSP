@@ -1,11 +1,9 @@
 /******************************************************************************
  * @file     usbd_hid.h
  * @brief    USB driver header file
- * @version  2.0.0
- * @date     22, March, 2013
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_HID_H__
 #define __USBD_HID_H__
@@ -70,4 +68,4 @@ void HID_UpdateMouseData(void);
 
 #endif  /* __USBD_HID_H_ */
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

@@ -1,12 +1,10 @@
 /**************************************************************************//**
  * @file     spi.c
  * @version  V3.00
- * $Revision: 4 $
- * $Date: 15/05/20 11:15p $
  * @brief    NUC2201 series SPI driver source file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include "NUC2201.h"
 /** @addtogroup Standard_Driver Standard Driver
@@ -71,23 +69,9 @@ uint32_t SPI_Open(SPI_T *spi,
             else
                 u32ClkSrc = CLK_GetPLLClockFreq();
         }
-        else if(spi == SPI1)
-        {
-            if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI1_S_Msk) == CLK_CLKSEL1_SPI1_S_HCLK)
-                u32ClkSrc = u32HCLKFreq;
-            else
-                u32ClkSrc = CLK_GetPLLClockFreq();
-        }
-        else if(spi == SPI2)
-        {
-            if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI2_S_Msk) == CLK_CLKSEL1_SPI2_S_HCLK)
-                u32ClkSrc = u32HCLKFreq;
-            else
-                u32ClkSrc = CLK_GetPLLClockFreq();
-        }
         else
         {
-            if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI3_S_Msk) == CLK_CLKSEL1_SPI3_S_HCLK)
+            if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI1_S_Msk) == CLK_CLKSEL1_SPI1_S_HCLK)
                 u32ClkSrc = u32HCLKFreq;
             else
                 u32ClkSrc = CLK_GetPLLClockFreq();
@@ -98,12 +82,8 @@ uint32_t SPI_Open(SPI_T *spi,
             /* Select HCLK as the clock source of SPI */
             if(spi == SPI0)
                 CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI0_S_Msk)) | CLK_CLKSEL1_SPI0_S_HCLK;
-            else if(spi == SPI1)
-                CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI1_S_Msk)) | CLK_CLKSEL1_SPI1_S_HCLK;
-            else if(spi == SPI2)
-                CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI2_S_Msk)) | CLK_CLKSEL1_SPI2_S_HCLK;
             else
-                CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI3_S_Msk)) | CLK_CLKSEL1_SPI3_S_HCLK;
+                CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI1_S_Msk)) | CLK_CLKSEL1_SPI1_S_HCLK;
 
             /* Set DIVIDER = 0 */
             spi->DIVIDER = 0;
@@ -157,12 +137,8 @@ uint32_t SPI_Open(SPI_T *spi,
         /* Select HCLK as the clock source of SPI */
         if(spi == SPI0)
             CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI0_S_Msk)) | CLK_CLKSEL1_SPI0_S_HCLK;
-        else if(spi == SPI1)
-            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI1_S_Msk)) | CLK_CLKSEL1_SPI1_S_HCLK;
-        else if(spi == SPI2)
-            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI2_S_Msk)) | CLK_CLKSEL1_SPI2_S_HCLK;
         else
-            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI3_S_Msk)) | CLK_CLKSEL1_SPI3_S_HCLK;
+            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI1_S_Msk)) | CLK_CLKSEL1_SPI1_S_HCLK;
 
         /* Set DIVIDER = 0 */
         spi->DIVIDER = 0;
@@ -186,23 +162,11 @@ void SPI_Close(SPI_T *spi)
         SYS->IPRSTC2 |= SYS_IPRSTC2_SPI0_RST_Msk;
         SYS->IPRSTC2 &= ~SYS_IPRSTC2_SPI0_RST_Msk;
     }
-    else if(spi == SPI1)
+    else
     {
         /* Reset SPI */
         SYS->IPRSTC2 |= SYS_IPRSTC2_SPI1_RST_Msk;
         SYS->IPRSTC2 &= ~SYS_IPRSTC2_SPI1_RST_Msk;
-    }
-    else if(spi == SPI2)
-    {
-        /* Reset SPI */
-        SYS->IPRSTC2 |= SYS_IPRSTC2_SPI2_RST_Msk;
-        SYS->IPRSTC2 &= ~SYS_IPRSTC2_SPI2_RST_Msk;
-    }
-    else
-    {
-        /* Reset SPI */
-        SYS->IPRSTC2 |= SYS_IPRSTC2_SPI3_RST_Msk;
-        SYS->IPRSTC2 &= ~SYS_IPRSTC2_SPI3_RST_Msk;
     }
 }
 
@@ -242,7 +206,7 @@ void SPI_DisableAutoSS(SPI_T *spi)
 /**
   * @brief  Enable the automatic slave selection function.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @param[in]  u32SSPinMask Specifies slave selection pins. (SPI_SS0, SPI_SS1)
+  * @param[in]  u32SSPinMask Specifies slave selection pin. (SPI_SS)
   * @param[in]  u32ActiveLevel Specifies the active level of slave selection signal. (SPI_SS_ACTIVE_HIGH, SPI_SS_ACTIVE_LOW)
   * @return None
   * @details This function will enable the automatic slave selection function. Only available in Master mode.
@@ -282,23 +246,9 @@ uint32_t SPI_SetBusClock(SPI_T *spi, uint32_t u32BusClock)
         else
             u32ClkSrc = CLK_GetPLLClockFreq();
     }
-    else if(spi == SPI1)
-    {
-        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI1_S_Msk) == CLK_CLKSEL1_SPI1_S_HCLK)
-            u32ClkSrc = u32HCLKFreq;
-        else
-            u32ClkSrc = CLK_GetPLLClockFreq();
-    }
-    else if(spi == SPI2)
-    {
-        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI2_S_Msk) == CLK_CLKSEL1_SPI2_S_HCLK)
-            u32ClkSrc = u32HCLKFreq;
-        else
-            u32ClkSrc = CLK_GetPLLClockFreq();
-    }
     else
     {
-        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI3_S_Msk) == CLK_CLKSEL1_SPI3_S_HCLK)
+        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI1_S_Msk) == CLK_CLKSEL1_SPI1_S_HCLK)
             u32ClkSrc = u32HCLKFreq;
         else
             u32ClkSrc = CLK_GetPLLClockFreq();
@@ -309,12 +259,8 @@ uint32_t SPI_SetBusClock(SPI_T *spi, uint32_t u32BusClock)
         /* Select HCLK as the clock source of SPI */
         if(spi == SPI0)
             CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI0_S_Msk)) | CLK_CLKSEL1_SPI0_S_HCLK;
-        else if(spi == SPI1)
-            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI1_S_Msk)) | CLK_CLKSEL1_SPI1_S_HCLK;
-        else if(spi == SPI2)
-            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI2_S_Msk)) | CLK_CLKSEL1_SPI2_S_HCLK;
         else
-            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI3_S_Msk)) | CLK_CLKSEL1_SPI3_S_HCLK;
+            CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_SPI1_S_Msk)) | CLK_CLKSEL1_SPI1_S_HCLK;
 
         /* Set DIVIDER = 0 */
         spi->DIVIDER = 0;
@@ -410,23 +356,9 @@ uint32_t SPI_GetBusClock(SPI_T *spi)
         else
             u32ClkSrc = CLK_GetPLLClockFreq();
     }
-    else if(spi == SPI1)
-    {
-        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI1_S_Msk) == CLK_CLKSEL1_SPI1_S_HCLK)
-            u32ClkSrc = CLK_GetHCLKFreq();
-        else
-            u32ClkSrc = CLK_GetPLLClockFreq();
-    }
-    else if(spi == SPI2)
-    {
-        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI2_S_Msk) == CLK_CLKSEL1_SPI2_S_HCLK)
-            u32ClkSrc = CLK_GetHCLKFreq();
-        else
-            u32ClkSrc = CLK_GetPLLClockFreq();
-    }
     else
     {
-        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI3_S_Msk) == CLK_CLKSEL1_SPI3_S_HCLK)
+        if((CLK->CLKSEL1 & CLK_CLKSEL1_SPI1_S_Msk) == CLK_CLKSEL1_SPI1_S_HCLK)
             u32ClkSrc = CLK_GetHCLKFreq();
         else
             u32ClkSrc = CLK_GetPLLClockFreq();
@@ -632,4 +564,4 @@ uint32_t SPI_GetStatus(SPI_T *spi, uint32_t u32Mask)
 
 /*@}*/ /* end of group Standard_Driver */
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

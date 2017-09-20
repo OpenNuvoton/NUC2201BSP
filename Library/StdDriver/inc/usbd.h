@@ -1,13 +1,10 @@
 /**************************************************************************//**
  * @file     usbd.h
- * @version  V3.0
- * $Revision: 7 $
- * $Date: 15/09/03 10:49a $
+ * @version  V3.00
  * @brief    NUC2201 series USB driver header file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 #ifndef __USBD_H__
@@ -658,4 +655,4 @@ void USBD_LockEpStall(uint32_t u32EpBitmap);
 
 #endif //__USBD_H__
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

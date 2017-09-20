@@ -1,20 +1,18 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V2.0
- * $Revision: 2 $
- * $Date: 15/04/16 1:04p $
- * @brief    NUC2201 Series SPI Driver Sample Code
- *
+ * @version  V3.00
+ * @brief
+ *           Configure SPI0 as Slave mode and demonstrate how to communicate with an off-chip SPI Master device with FIFO mode. 
+ *           This sample code needs to work with SPI_MasterFifoMode sample code.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
 
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 
-#define TEST_COUNT 16
+#define TEST_COUNT          16
 
 uint32_t g_au32SourceData[TEST_COUNT];
 uint32_t g_au32DestinationData[TEST_COUNT];
@@ -79,10 +77,10 @@ int main(void)
     while(u32RxDataCount < TEST_COUNT) {
         /* Check TX FULL flag and TX data count */
         if(((SPI0->STATUS & SPI_STATUS_TX_FULL_Msk) == 0) && (u32TxDataCount < TEST_COUNT))
-            SPI0->TX[0] = g_au32SourceData[u32TxDataCount++]; /* Write to TX FIFO */
+            SPI0->TX = g_au32SourceData[u32TxDataCount++]; /* Write to TX FIFO */
         /* Check RX EMPTY flag */
         if((SPI0->STATUS & SPI_STATUS_RX_EMPTY_Msk) == 0)
-            g_au32DestinationData[u32RxDataCount++] = SPI0->RX[0]; /* Read RX FIFO */
+            g_au32DestinationData[u32RxDataCount++] = SPI0->RX; /* Read RX FIFO */
     }
 
     /* Print the received data */
@@ -178,6 +176,5 @@ void SPI_Init(void)
     SPI0->DIVIDER = 0;
 }
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
-
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

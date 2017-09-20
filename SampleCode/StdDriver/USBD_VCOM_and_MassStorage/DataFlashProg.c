@@ -3,8 +3,7 @@
  * @brief    Data Flash Access API
  *
  * @note
- * Copyright (C) 2011 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 

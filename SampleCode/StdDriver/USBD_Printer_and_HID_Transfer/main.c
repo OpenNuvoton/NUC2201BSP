@@ -4,9 +4,8 @@
  *           Demonstrate how to implement a composite device.(USB micro printer device and HID Transfer).
  *           Transfer data between USB device and PC through USB HID interface. 
  *           A windows tool is also included in this sample code to connect with a USB device.
- *           
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -126,5 +125,5 @@ int32_t main(void)
 
 
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

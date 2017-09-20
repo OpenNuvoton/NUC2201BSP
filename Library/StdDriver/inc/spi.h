@@ -1,13 +1,10 @@
 /**************************************************************************//**
  * @file     spi.h
- * @version  V3.0
- * $Revision: 7 $
- * $Date: 15/05/28 9:57p $
+ * @version  V3.00
  * @brief    NUC2201 Series SPI Driver Header File
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __SPI_H__
 #define __SPI_H__
@@ -38,8 +35,7 @@ extern "C"
 #define SPI_SLAVE         (SPI_CNTRL_SLAVE_Msk)                           /*!< Set as slave */
 #define SPI_MASTER        (0x0)                                           /*!< Set as master */
 
-#define SPI_SS0               (1<<SPI_SSR_SSR_Pos)                       /*!< Select SPIn_SS0 */
-#define SPI_SS1               (2<<SPI_SSR_SSR_Pos)                       /*!< Select SPIn_SS1 */
+#define SPI_SS                (1<<SPI_SSR_SSR_Pos)                        /*!< Select SPIn_SS */
 #define SPI_SS_ACTIVE_HIGH    (SPI_SSR_SS_LVL_Msk)                        /*!< SS active high */
 #define SPI_SS_ACTIVE_LOW     (0x0)                                       /*!< SS active low */
 
@@ -56,7 +52,7 @@ extern "C"
 #define SPI_TX_EMPTY_MASK                (0x08)                           /*!< TX empty status mask */
 #define SPI_TX_FULL_MASK                 (0x10)                           /*!< TX full status mask */
 
-#define SPI_FIFO_SIZE                    (8)                              /*!< NUC230/NUC240 provides separate 8-layer transmit and receive FIFO buffers */
+#define SPI_FIFO_SIZE                    (8)                              /*!< NUC2201 provides separate 8-layer transmit and receive FIFO buffers */
 
 /*@}*/ /* end of group SPI_EXPORTED_CONSTANTS */
 
@@ -90,14 +86,6 @@ extern "C"
 #define SPI_CLR_UNIT_TRANS_INT_FLAG(spi)   ((spi)->STATUS = SPI_STATUS_IF_Msk)
 
 /**
-  * @brief      Disable 2-bit Transfer mode.
-  * @param[in]  spi The pointer of the specified SPI module.
-  * @return     None.
-  * @details    Clear TWOB bit of SPI_CNTRL register to disable 2-bit Transfer mode.
-  */
-#define SPI_DISABLE_2BIT_MODE(spi)   ((spi)->CNTRL &= ~SPI_CNTRL_TWOB_Msk)
-
-/**
   * @brief      Disable Slave 3-wire mode.
   * @param[in]  spi The pointer of the specified SPI module.
   * @return     None.
@@ -112,14 +100,6 @@ extern "C"
   * @details    Clear DUAL_IO_EN bit of SPI_CNTRL2 register to disable Dual I/O mode.
   */
 #define SPI_DISABLE_DUAL_MODE(spi)   ((spi)->CNTRL2 &= ~SPI_CNTRL2_DUAL_IO_EN_Msk)
-
-/**
-  * @brief      Enable 2-bit Transfer mode.
-  * @param[in]  spi The pointer of the specified SPI module.
-  * @return     None.
-  * @details    Set TWOB bit of SPI_CNTRL register to enable 2-bit Transfer mode.
-  */
-#define SPI_ENABLE_2BIT_MODE(spi)   ((spi)->CNTRL |= SPI_CNTRL_TWOB_Msk)
 
 /**
   * @brief      Enable Slave 3-wire mode.
@@ -198,81 +178,47 @@ extern "C"
 #define SPI_GET_TX_FIFO_FULL_FLAG(spi)   (((spi)->STATUS & SPI_STATUS_TX_FULL_Msk)>>SPI_STATUS_TX_FULL_Pos)
 
 /**
-  * @brief      Get the datum read from RX0 register.
+  * @brief      Get the datum read from RX register.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @return     Data in RX0 register.
-  * @details    Read SPI_RX0 register to get the received datum.
+  * @return     Data in RX register.
+  * @details    Read SPI_RX register to get the received datum.
   */
-#define SPI_READ_RX0(spi)   ((spi)->RX[0])
+#define SPI_READ_RX(spi)   ((spi)->RX)
 
 /**
-  * @brief      Get the datum read from RX1 register.
-  * @param[in]  spi The pointer of the specified SPI module.
-  * @return     Data in RX1 register.
-  * @details    Read SPI_RX1 register to get the received datum.
-  */
-#define SPI_READ_RX1(spi)   ((spi)->RX[1])
-
-/**
-  * @brief      Write datum to TX0 register.
+  * @brief      Write datum to TX register.
   * @param[in]  spi The pointer of the specified SPI module.
   * @param[in]  u32TxData The datum which user attempt to transfer through SPI bus.
   * @return     None.
-  * @details    Write u32TxData to TX0 register.
+  * @details    Write u32TxData to TX register.
   */
-#define SPI_WRITE_TX0(spi, u32TxData)   ((spi)->TX[0] = (u32TxData))
+#define SPI_WRITE_TX(spi, u32TxData)   ((spi)->TX = (u32TxData))
 
 /**
-  * @brief      Write datum to TX1 register.
+  * @brief      Set SPIn_SS pin to high or low state.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @param[in]  u32TxData The datum which user attempt to transfer through SPI bus.
+  * @param[in]  ss  0 = Set SPIn_SS to low. 1 = Set SPIn_SS to high.
   * @return     None.
-  * @details    Write u32TxData to TX1 register.
-  */
-#define SPI_WRITE_TX1(spi, u32TxData)   ((spi)->TX[1] = (u32TxData))
-
-/**
-  * @brief      Set SPIn_SS0, SPIn_SS1 pin to high or low state.
-  * @param[in]  spi The pointer of the specified SPI module.
-  * @param[in]  ss0 0 = Set SPIn_SS0 to low. 1 = Set SPIn_SS0 to high.
-  * @param[in]  ss1 0 = Set SPIn_SS1 to low. 1 = Set SPIn_SS1 to high.
-  * @return     None.
-  * @details    Disable automatic slave selection function and set SPIn_SS0/SPIn_SS1 pin to specified high/low state.
+  * @details    Disable automatic slave selection function and set SPIn_SS pin to specified high/low state.
   *             Only available in Master mode.
   */
-#define SPI_SET_SS_LEVEL(spi, ss0, ss1)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SSR_SSR_Msk)) | (((ss1)^1) << 1) | ((ss0)^1))
+#define SPI_SET_SS_LEVEL(spi, ss)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SSR_SSR_Msk)) | ((ss)^1))
 
 /**
-  * @brief      Set SPIn_SS0 pin to high state.
+  * @brief      Set SPIn_SS pin to high state.
   * @param[in]  spi The pointer of the specified SPI module.
   * @return     None.
-  * @details    Disable automatic slave selection function and set SPIn_SS0 pin to high state. Only available in Master mode.
+  * @details    Disable automatic slave selection function and set SPIn_SS pin to high state. Only available in Master mode.
   */
-#define SPI_SET_SS0_HIGH(spi)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SS0)))
+#define SPI_SET_SS_HIGH(spi)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SS)))
 
 /**
-  * @brief      Set SPIn_SS1 pin to high state.
+  * @brief      Set SPIn_SS pin to low state.
   * @param[in]  spi The pointer of the specified SPI module.
   * @return     None.
-  * @details    Disable automatic slave selection function and set SPIn_SS1 pin to high state. Only available in Master mode.
+  * @details    Disable automatic slave selection function and set SPIn_SS pin to low state. Only available in Master mode.
   */
-#define SPI_SET_SS1_HIGH(spi)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SS1)))
-
-/**
-  * @brief      Set SPIn_SS0 pin to low state.
-  * @param[in]  spi The pointer of the specified SPI module.
-  * @return     None.
-  * @details    Disable automatic slave selection function and set SPIn_SS0 pin to low state. Only available in Master mode.
-  */
-#define SPI_SET_SS0_LOW(spi)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SS0)) | SPI_SS0)
-
-/**
-  * @brief      Set SPIn_SS1 pin to low state.
-  * @param[in]  spi The pointer of the specified SPI module.
-  * @return     None.
-  * @details    Disable automatic slave selection function and set SPIn_SS1 pin to low state. Only available in Master mode.
-  */
-#define SPI_SET_SS1_LOW(spi)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SS1)) | SPI_SS1)
+#define SPI_SET_SS_LOW(spi)   ((spi)->SSR = ((spi)->SSR & ~(SPI_SSR_AUTOSS_Msk|SPI_SSR_SS_LVL_Msk|SPI_SS)) | SPI_SS)
 
 /**
   * @brief      Enable Byte Reorder function.
@@ -341,7 +287,7 @@ extern "C"
   * @return     None.
   * @details    If FIFO mode is disabled, user can use this macro to trigger the data transfer after all configuration is ready.
   *             If FIFO mode is enabled, user should not use this macro to trigger the data transfer. SPI controller will trigger the data transfer
-  *             automatically after user write to SPI_TX0/1 register.
+  *             automatically after user write to SPI_TX register.
   */
 #define SPI_TRIGGER(spi)   ((spi)->CNTRL |= SPI_CNTRL_GO_BUSY_Msk)
 
@@ -381,3 +327,4 @@ uint32_t SPI_GetStatus(SPI_T *spi, uint32_t u32Mask);
 
 #endif
 
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

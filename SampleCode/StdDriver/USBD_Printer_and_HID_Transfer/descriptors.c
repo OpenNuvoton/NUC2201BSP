@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     descriptors.c
- * @brief    NUC230/240 series USBD descriptor file
+ * @brief    NUC2201 series USBD descriptor file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 /*!<Includes */
 #include "NUC2201.h"

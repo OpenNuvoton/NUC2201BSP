@@ -3,7 +3,7 @@
  * @brief    USB mass storage header file
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_MASS_H__
 #define __USBD_MASS_H__
@@ -167,4 +167,4 @@ void EP3_Handler(void);
 
 #endif  /* __USBD_MASS_H_ */
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

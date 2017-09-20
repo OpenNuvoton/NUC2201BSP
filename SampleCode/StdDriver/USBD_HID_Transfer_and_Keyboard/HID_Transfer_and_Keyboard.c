@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     USBD_HID_Transfer_and_Keyboard.c
- * @brief    NUC230/240 series USBD HID transfer + keyboard sample file
+ * @brief    NUC2201 series USBD HID transfer + keyboard sample file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 /*!<Includes */

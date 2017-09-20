@@ -1598,7 +1598,7 @@ typedef struct
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
  * |[31:0]  |ISPADR    |ISP Address
- * |        |          |NuMicro NUC230/240 series has a maximum of 32Kx32 (128 KB) embedded Flash,
+ * |        |          |NuMicro NUC2201 series has a maximum of 32Kx32 (128 KB) embedded Flash,
  * |        |          |which supports word program only. ISPADR[1:0] must be kept 00b for ISP operation.
  * @var FMC_T::ISPDAT
  * Offset: 0x08  ISP Data Register
@@ -4925,11 +4925,6 @@ typedef struct
  * |        |          |the GO_BUSY bit will be cleared to 0.
  * |        |          |3. After clearing this bit to 0, user must wait for at least 2 peripheral clock periods before
  * |        |          |setting this bit to 1 again.
- * |[22]    |TWOB      |2-Bit Transfer Mode Enable
- * |        |          |0 = 2-bit Transfer mode Disabled.
- * |        |          |1 = 2-bit Transfer mode Enabled.
- * |        |          |Note: When 2-bit Transfer mode is enabled, the serial transmitted 2-bit data are from SPI_TX1/0,
- * |        |          |and the received 2-bit data input are put in SPI_RX1/0.
  * |[23]    |VARCLK_EN |Variable Clock Enable (Master Only)
  * |        |          |0 = SPI clock output frequency is fixed and decided only by the value of DIVIDER.
  * |        |          |1 = SPI clock output frequency is variable.
@@ -4977,27 +4972,27 @@ typedef struct
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
- * |[1:0]   |SSR       |Slave Select Control Bits (Master Only)
- * |        |          |If AUTOSS bit is cleared, writing 1 to any bit of this field sets the proper SPIn_SPISS0/1
+ * |[0]     |SSR       |Slave Select Control Bits (Master Only)
+ * |        |          |If AUTOSS bit is cleared, writing 1 to bit of this field sets the proper SPIn_SS
  * |        |          |line to an active state and writing 0 sets the line back to inactive state.
- * |        |          |If the AUTOSS bit is set, writing 0 to any bit location of this field will keep the
+ * |        |          |If the AUTOSS bit is set, writing 0 to bit location of this field will keep the
  * |        |          |corresponding
- * |        |          |SPIn_SPISS0/1 line at inactive state; writing 1 to any bit location of this field will select
- * |        |          |appropriate SPIn_SPISS0/1 line to be automatically driven to active state for the duration of
+ * |        |          |SPIn_SS line at inactive state; writing 1 to bit location of this field will select
+ * |        |          |appropriate SPIn_SS line to be automatically driven to active state for the duration of
  * |        |          |the
  * |        |          |transmit/receive, and will be driven to inactive state for the rest of the time.
- * |        |          |The active state of SPIn_SPISS0/1 is specified in SS_LVL.
- * |        |          |Note: SPIn_SPISS0 is defined as the slave select input in Slave mode.
+ * |        |          |The active state of SPIn_SS is specified in SS_LVL.
+ * |        |          |Note: SPIn_SS is defined as the slave select input in Slave mode.
  * |[2]     |SS_LVL    |Slave Select Active Level
- * |        |          |This bit defines the active status of slave select signal (SPIn_SPISS0/1).
- * |        |          |0 = The slave select signal SPIn_SPISS0/1 is active on low-level/falling-edge.
- * |        |          |1 = The slave select signal SPIn_SPISS0/1 is active on high-level/rising-edge.
+ * |        |          |This bit defines the active status of slave select signal (SPIn_SS).
+ * |        |          |0 = The slave select signal SPIn_SS is active on low-level/falling-edge.
+ * |        |          |1 = The slave select signal SPIn_SS is active on high-level/rising-edge.
  * |[3]     |AUTOSS    |Automatic Slave Select Function Enable (Master Only)
  * |        |          |0 = If this bit is cleared, slave select signals will be asserted/de-asserted by setting
  * |        |          |/clearing
- * |        |          |    the corresponding bits of SPI_SSR[1:0].
- * |        |          |1 = If this bit is set, SPIn_SPISS0/1 signals will be generated automatically.
- * |        |          | It means that device/slave select signal, which is set in SPI_SSR[1:0], will be asserted by the
+ * |        |          |    the corresponding bits of SPI_SSR[0].
+ * |        |          |1 = If this bit is set, SPIn_SS signal will be generated automatically.
+ * |        |          | It means that device/slave select signal, which is set in SPI_SSR[0], will be asserted by the
  * |        |          | SPI controller when transmit/receive is started, and will be de-asserted after each
  * |        |          |transmit/receive is finished.
  * |[4]     |SS_LTRIG  |Slave Select Level Trigger Enable (Slave Only)
@@ -5016,7 +5011,7 @@ typedef struct
  * |        |          |peripheral clock periods plus 1 system clock period.
  * |        |          |In FIFO mode, this bit has no meaning.
  * @var SPI_T::RX
- * Offset: 0x10  Data Receive Register 0
+ * Offset: 0x10  Data Receive Register
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
@@ -5029,7 +5024,7 @@ typedef struct
  * |        |          |FIFO buffer can be accessed through software by reading this register. This is a read-only
  * |        |          |register.
  * @var SPI_T::TX
- * Offset: 0x20  Data Transmit Register 0
+ * Offset: 0x20  Data Transmit Register
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
@@ -5242,18 +5237,20 @@ typedef struct
     __IO uint32_t DIVIDER;       /* Offset: 0x04  Clock Divider Register                                             */
     __IO uint32_t SSR;           /* Offset: 0x08  Slave Select Register                                              */
     __I  uint32_t RESERVE0;     
-    __I  uint32_t RX[2];         /* Offset: 0x10  Data Receive Register 0                                            */
+    __I  uint32_t RX;            /* Offset: 0x10  Data Receive Register                                              */
     __I  uint32_t RESERVE1;     
     __I  uint32_t RESERVE2;     
-    __O  uint32_t TX[2];         /* Offset: 0x14  Data Receive Register 1                                            */
     __I  uint32_t RESERVE3;     
+    __O  uint32_t TX;            /* Offset: 0x20  Data Transmit Register                                             */
     __I  uint32_t RESERVE4;     
     __I  uint32_t RESERVE5;     
-    __IO uint32_t VARCLK;        /* Offset: 0x20  Data Transmit Register 0                                           */
-    __IO uint32_t DMA;           /* Offset: 0x24  Data Transmit Register 1                                           */
-    __IO uint32_t CNTRL2;        /* Offset: 0x34  Variable Clock Pattern Register                                    */
-    __IO uint32_t FIFO_CTL;      /* Offset: 0x38  SPI DMA Control Register                                           */
-    __IO uint32_t STATUS;        /* Offset: 0x3C  Control and Status Register 2                                      */
+    __I  uint32_t RESERVE6;     
+    __I  uint32_t RESERVE7;     
+    __IO uint32_t VARCLK;        /* Offset: 0x34  Variable Clock Pattern Register                                    */
+    __IO uint32_t DMA;           /* Offset: 0x38  SPI DMA Control Register                                           */
+    __IO uint32_t CNTRL2;        /* Offset: 0x3C  Control and Status Register 2                                      */
+    __IO uint32_t FIFO_CTL;      /* Offset: 0x40  SPI FIFO Control Register                                          */
+    __IO uint32_t STATUS;        /* Offset: 0x44  SPI Status Register                                                */
 
 } SPI_T;
 
@@ -5280,9 +5277,6 @@ typedef struct
 
 #define SPI_CNTRL_VARCLK_EN_Pos    23                                     /*!< SPI_T::CNTRL: VARCLK_EN Position */
 #define SPI_CNTRL_VARCLK_EN_Msk    (1ul << SPI_CNTRL_VARCLK_EN_Pos)       /*!< SPI_T::CNTRL: VARCLK_EN Mask     */
-
-#define SPI_CNTRL_TWOB_Pos         22                                     /*!< SPI_T::CNTRL: TWOB Position */
-#define SPI_CNTRL_TWOB_Msk         (1ul << SPI_CNTRL_TWOB_Pos)            /*!< SPI_T::CNTRL: TWOB Mask     */
 
 #define SPI_CNTRL_FIFO_Pos         21                                     /*!< SPI_T::CNTRL: FIFO Position */
 #define SPI_CNTRL_FIFO_Msk         (1ul << SPI_CNTRL_FIFO_Pos)            /*!< SPI_T::CNTRL: FIFO Mask     */
@@ -5341,7 +5335,7 @@ typedef struct
 #define SPI_SSR_SS_LVL_Msk         (1ul << SPI_SSR_SS_LVL_Pos)       /*!< SPI_T::SSR: SS_LVL Mask */
 
 #define SPI_SSR_SSR_Pos            0                                 /*!< SPI_T::SSR: SSR Position */
-#define SPI_SSR_SSR_Msk            (3ul << SPI_SSR_SSR_Pos)          /*!< SPI_T::SSR: SSR Mask */
+#define SPI_SSR_SSR_Msk            (1ul << SPI_SSR_SSR_Pos)          /*!< SPI_T::SSR: SSR Mask */
 
 /* SPI_DMA Bit Field Definitions */
 #define SPI_DMA_PDMA_RST_Pos   2                                     /*!< SPI_T::DMA: PDMA_RST Position */

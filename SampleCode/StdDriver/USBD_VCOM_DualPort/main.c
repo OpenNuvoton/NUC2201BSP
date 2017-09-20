@@ -3,8 +3,7 @@
  * @brief
  *           Demonstrate how to implement a USB dual virtual COM port device.
  * @note
- *
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -490,5 +489,5 @@ int32_t main(void)
 
 
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

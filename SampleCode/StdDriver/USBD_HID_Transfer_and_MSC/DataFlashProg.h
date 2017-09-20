@@ -3,7 +3,7 @@
  * @brief    Data flash programming driver header
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __DATA_FLASH_PROG_H__
 #define __DATA_FLASH_PROG_H__
@@ -15,4 +15,4 @@
 
 #endif  /* __DATA_FLASH_PROG_H__ */
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

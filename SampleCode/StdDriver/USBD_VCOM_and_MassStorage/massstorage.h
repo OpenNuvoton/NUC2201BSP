@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     massstorage.h
- * @brief    NUC230/240 series USB mass storage header file
+ * @brief    NUC2201 series USB mass storage header file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_MASS_H__
 #define __USBD_MASS_H__
@@ -125,4 +125,4 @@ void MSC_ProcessCmd(void);
 
 #endif  /* __USBD_MASS_H_ */
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

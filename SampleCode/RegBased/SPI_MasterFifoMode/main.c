@@ -1,20 +1,18 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V2.0
- * $Revision: 2 $
- * $Date: 15/04/16 1:01p $
- * @brief    NUC2201 Series SPI Driver Sample Code
- *
+ * @version  V3.00
+ * @brief
+ *           Configure SPI0 as Master mode and demonstrate how to communicate with an off-chip SPI Slave device with FIFO mode. 
+ *           This sample code needs to work with SPI_SlaveFifoMode sample code.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
 
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 
-#define TEST_COUNT 16
+#define TEST_COUNT          16
 
 uint32_t g_au32SourceData[TEST_COUNT];
 uint32_t g_au32DestinationData[TEST_COUNT];
@@ -173,7 +171,7 @@ void SPI_Init(void)
     /* Configure SPI0 as a master, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */
     SPI0->CNTRL = SPI_CNTRL_FIFO_Msk | SPI_MASTER | SPI_CNTRL_TX_NEG_Msk;
     /* Enable the automatic hardware slave select function. Select the SPI0_SS0 pin and configure as low-active. */
-    SPI0->SSR = SPI_SSR_AUTOSS_Msk | SPI_SS0;
+    SPI0->SSR = SPI_SSR_AUTOSS_Msk | SPI_SS;
     /* Set IP clock divider. SPI clock rate = HCLK / ((35+1)*2) = 1 MHz */
     SPI0->DIVIDER = (SPI0->DIVIDER & (~SPI_DIVIDER_DIVIDER_Msk)) | 35;
 }
@@ -183,12 +181,12 @@ void SPI0_IRQHandler(void)
     /* Check RX EMPTY flag */
     while((SPI0->STATUS & SPI_STATUS_RX_EMPTY_Msk) == 0) {
         /* Read RX FIFO */
-        g_au32DestinationData[g_u32RxDataCount++] = SPI0->RX[0];
+        g_au32DestinationData[g_u32RxDataCount++] = SPI0->RX;
     }
     /* Check TX FULL flag and TX data count */
     while(((SPI0->STATUS & SPI_STATUS_TX_FULL_Msk) == 0) && (g_u32TxDataCount < TEST_COUNT)) {
         /* Write to TX FIFO */
-        SPI0->TX[0] = g_au32SourceData[g_u32TxDataCount++];
+        SPI0->TX = g_au32SourceData[g_u32TxDataCount++];
     }
     if(g_u32TxDataCount >= TEST_COUNT)
         SPI0->FIFO_CTL &= (~SPI_FIFO_CTL_TX_INTEN_Msk); /* Disable TX FIFO threshold interrupt */
@@ -197,10 +195,10 @@ void SPI0_IRQHandler(void)
     if(SPI0->STATUS & SPI_STATUS_TIMEOUT_Msk) {
         /* If RX FIFO is not empty, read RX FIFO. */
         while((SPI0->STATUS & SPI_STATUS_RX_EMPTY_Msk) == 0)
-            g_au32DestinationData[g_u32RxDataCount++] = SPI0->RX[0];
+            g_au32DestinationData[g_u32RxDataCount++] = SPI0->RX;
     }
 }
 
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

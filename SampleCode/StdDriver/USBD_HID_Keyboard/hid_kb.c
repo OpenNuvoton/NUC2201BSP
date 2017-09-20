@@ -1,10 +1,9 @@
 /******************************************************************************
  * @file     hid_kb.c
  * @brief    USBD HID keyboard sample file
- * @version  2.0.0
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 /*!<Includes */

@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     micro_printer_and_hid_transfer.h
- * @brief    NUC230/240 series USB composite device header file
+ * @brief    NUC2201 series USB composite device header file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_PRINTER_H__
 #define __USBD_PRINTER_H__
@@ -91,4 +91,4 @@ void HID_GetOutReport(uint8_t *pu8EpBuf, uint32_t u32Size);
 
 #endif  /* __USBD_PRINTER_H_ */
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

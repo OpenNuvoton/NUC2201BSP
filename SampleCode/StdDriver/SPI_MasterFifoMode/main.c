@@ -1,14 +1,11 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V3.0
- * $Revision: 2 $
- * $Date: 15/04/16 2:19p $
+ * @version  V3.00
  * @brief
  *           Configure SPI0 as Master mode and demonstrate how to communicate with an off-chip SPI Slave device with FIFO mode. 
  *           This sample code needs to work with SPI_SlaveFifoMode sample code.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
- *
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -156,7 +153,7 @@ void SPI_Init(void)
     SPI_Open(SPI0, SPI_MASTER, SPI_MODE_0, 32, 1000000);
 
     /* Enable the automatic hardware slave select function. Select the SS pin and configure as low-active. */
-    SPI_EnableAutoSS(SPI0, SPI_SS0, SPI_SS_ACTIVE_LOW);
+    SPI_EnableAutoSS(SPI0, SPI_SS, SPI_SS_ACTIVE_LOW);
 }
 
 void SPI0_IRQHandler(void)
@@ -165,13 +162,13 @@ void SPI0_IRQHandler(void)
     while(SPI_GET_RX_FIFO_EMPTY_FLAG(SPI0) == 0)
     {
         /* Read RX FIFO */
-        g_au32DestinationData[g_u32RxDataCount++] = SPI_READ_RX0(SPI0);
+        g_au32DestinationData[g_u32RxDataCount++] = SPI_READ_RX(SPI0);
     }
     /* Check TX FULL flag and TX data count */
     while((SPI_GET_TX_FIFO_FULL_FLAG(SPI0) == 0) && (g_u32TxDataCount < TEST_COUNT))
     {
         /* Write to TX FIFO */
-        SPI_WRITE_TX0(SPI0, g_au32SourceData[g_u32TxDataCount++]);
+        SPI_WRITE_TX(SPI0, g_au32SourceData[g_u32TxDataCount++]);
     }
     if(g_u32TxDataCount >= TEST_COUNT)
          SPI_DisableInt(SPI0, SPI_FIFO_TX_INT_MASK); /* Disable TX FIFO threshold interrupt */
@@ -181,10 +178,10 @@ void SPI0_IRQHandler(void)
     {
         /* If RX FIFO is not empty, read RX FIFO. */
         while((SPI0->STATUS & SPI_STATUS_RX_EMPTY_Msk) == 0)
-            g_au32DestinationData[g_u32RxDataCount++] = SPI_READ_RX0(SPI0);
+            g_au32DestinationData[g_u32RxDataCount++] = SPI_READ_RX(SPI0);
     }
 }
 
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
 

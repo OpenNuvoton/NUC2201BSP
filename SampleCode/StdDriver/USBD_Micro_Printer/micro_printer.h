@@ -1,9 +1,9 @@
 /******************************************************************************
  * @file     micro_printer.h
- * @brief    NUC230/240 series USB micro printer header file
+ * @brief    NUC2201 series USB micro printer header file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_PRINTER_H__
 #define __USBD_PRINTER_H__
@@ -60,4 +60,4 @@ void PTR_Data_Receive(void);
 
 #endif  /* __USBD_PRINTER_H_ */
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
