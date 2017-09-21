@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     uart.c
  * @version  V3.00
- * $Revision: 7 $
- * $Date: 16/03/04 9:24a $
  * @brief    NUC2201 series UART driver source file
  *
  * @note

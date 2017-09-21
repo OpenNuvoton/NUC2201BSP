@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     retarget.c
  * @version  V3.00
- * $Revision: 6 $
- * $Date: 15/11/03 8:49a $
  * @brief    Debug Port and Semihost Setting Source File
  *
  * @note

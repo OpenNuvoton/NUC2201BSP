@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     GPIO.h
  * @version  V3.00
- * $Revision: 4 $
- * $Date: 15/05/06 10:18a $
  * @brief    NUC2201 Series General Purpose I/O Driver Header File
  *
  * @note

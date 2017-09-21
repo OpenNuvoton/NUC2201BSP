@@ -1,8 +1,6 @@
 /****************************************************************************
  * @file     main.c
  * @version  V2.00
- * $Revision: 3 $
- * $Date: 15/04/10 2:42p $
  * @brief    NUC2201 Series UART Interface Controller Driver Sample Code
  *
  * @note

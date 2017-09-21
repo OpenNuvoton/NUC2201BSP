@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V2.00
- * $Revision: 3 $
- * $Date: 15/04/10 10:26a $
  * @brief    NUC2201 Series GPIO Driver Sample Code
  *
  * @note

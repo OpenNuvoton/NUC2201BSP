@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     sys.h
  * @version  V3.00
- * $Revision: 16 $
- * $Date: 15/07/21 2:45p $
  * @brief    NUC2201 Series SYS Driver Header File
  *
  * @note

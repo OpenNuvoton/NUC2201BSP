@@ -1,9 +1,7 @@
 /****************************************************************************
  * @file     main.c
  * @version  V2.00
- * $Revision: 3 $
- * $Date: 15/04/10 10:31a $
- * @brief    NUC2201 Series UART Interface Controller Driver Sample Code
+ * @brief    NUC2201 Series SYS Driver Sample Code
  *
  * @note
  * Copyright (C) 2011 Nuvoton Technology Corp. All rights reserved.
