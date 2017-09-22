@@ -269,7 +269,7 @@ int32_t main(void)
     */
 
     printf("+--------------------------------------------+\n");
-    printf("|    NUC2201 System Driver Sample Code    |\n");
+    printf("|     NUC2201 System Driver Sample Code      |\n");
     printf("+--------------------------------------------+\n");
 
     if(M32(FLAG_ADDR) == SIGNATURE) {

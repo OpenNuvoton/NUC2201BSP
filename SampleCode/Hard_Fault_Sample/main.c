@@ -1,8 +1,6 @@
 /****************************************************************************
  * @file     main.c
  * @version  V2.00
- * $Revision: 1 $
- * $Date: 15/04/10 4:55p $
  * @brief    Show hard fault information when hard fault happened.
  *
  * @note
