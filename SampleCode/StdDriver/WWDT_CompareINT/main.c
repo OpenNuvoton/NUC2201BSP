@@ -136,7 +136,7 @@ int main(void)
     printf("# WWDT Settings: \n");
     printf("  Clock source is HCLK/2048(%d Hz); Enable interrupt; Window Compare value is 32;\n", SystemCoreClock / 2048);
     printf("  Select max WWDT time-out period is 1024 * (64 * WWDT_clock);\n");
-    printf("# When WWDT start counting, system will generate first WWDT compare match interrupt after %.2f us.\n", dPeriodTime);
+    printf("# When WWDT start counting, system will generate first WWDT compare match interrupt after %d us.\n", (uint32_t)dPeriodTime);
     printf("  1.) reload WWDT counter value to 0x3F when WWDT interrupt count less than 10 to avoid WWDT reset occurred.\n");
     printf("  2.) system will be reset by WWDT counting time-out while WWDT interrupt count reaches to 10.\n\n");
 
