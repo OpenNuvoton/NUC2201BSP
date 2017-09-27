@@ -45,8 +45,8 @@ extern "C"
 /*---------------------------------------------------------------------------------------------------------*/
 #define PWM_CH0                             0x0                         /*!< PWM Group A/B channel 0 */
 #define PWM_CH1                             0x1                         /*!< PWM Group A/B channel 1 */
-#define PWM_CH2                             0x2                         /*!< PWM Group A/B channel 2 */
-#define PWM_CH3                             0x3                         /*!< PWM Group A/B channel 3 */
+#define PWM_CH2                             0x2                         /*!< PWM Group A channel 2 */
+#define PWM_CH3                             0x3                         /*!< PWM Group A channel 3 */
 #define PWM_CCR_MASK                        0x000F000F                  /*!< PWM CCR0/CCR2 bit0~3 and bit16~19 mask */
 
 /*@}*/ /* end of group PWM_EXPORTED_CONSTANTS */
@@ -65,6 +65,7 @@ extern "C"
  *                           Bit 0 represents channel 0, bit 1 represents channel 1...
  * @return None
  * @details This macro is used to enable capture input inverter for specified channel(s).
+ * @note PWMB only supports channel 0 ~ 1.
  * \hideinitializer
  */
 #define PWM_ENABLE_OUTPUT_INVERTER(pwm, u32ChannelMask) \
@@ -85,6 +86,7 @@ extern "C"
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return The timer counter, 0~0xFFFF
  * @details This macro is used to get captured rising data for specified channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_GET_CAPTURE_RISING_DATA(pwm, u32ChannelNum) (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CRLR0)) + (u32ChannelNum) * 8))))
 
@@ -96,6 +98,7 @@ extern "C"
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return The timer counter, 0~0xFFFF
  * @details This macro is used to get captured falling data for specified channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_GET_CAPTURE_FALLING_DATA(pwm, u32ChannelNum) (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CFLR0)) + (u32ChannelNum) * 8))))
 
@@ -110,6 +113,7 @@ extern "C"
  * @details This macro is used to set timer pre-scale for specified channel.
  * @note If u32Prescaler = 0, corresponding PWM-timer will be stopped.
  * @note If u32Prescaler = x (x not equal to 0), it means Clock input is divided by (x + 1) before it is fed to the corresponding PWM counter.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_SET_PRESCALER(pwm, u32ChannelNum, u32Prescaler) \
     ((pwm)->PPR = ((pwm)->PPR & ~(PWM_PPR_CP01_Msk << (((u32ChannelNum) >> 1) * 8))) | ((u32Prescaler) << (((u32ChannelNum) >> 1) * 8)))
@@ -128,6 +132,7 @@ extern "C"
  *              - \ref PWM_CLK_DIV_16
  * @return None
  * @details This macro is used to set Timer clock source divider selection for specified channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_SET_DIVIDER(pwm, u32ChannelNum, u32Divider) \
     ((pwm)->CSR = ((pwm)->CSR & ~(PWM_CSR_CSR0_Msk << ((u32ChannelNum) * 4))) | ((u32Divider) << ((u32ChannelNum) * 4)))
@@ -142,6 +147,7 @@ extern "C"
  * @return None
  * @details This macro is used to set PWM Comparator value for specified channel.
  * @note This new setting will take effect on next PWM period.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_SET_CMR(pwm, u32ChannelNum, u32CMR) (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CMR0)) + (u32ChannelNum) * 12))) = (u32CMR))
 
@@ -157,6 +163,7 @@ extern "C"
  *          Loaded value determines the PWM period.
  * @note This new setting will take effect on next PWM period.
  * @note PWM counter will stop if period length set to 0.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_SET_CNR(pwm, u32ChannelNum, u32CNR)  (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CNR0)) + (u32ChannelNum) * 12))) = (u32CNR))
 
@@ -173,6 +180,7 @@ extern "C"
  * @return None
  * @details This macro is used to set the PWM aligned type.
  * @note PWM trigger ADC function is only supported when PWM operating at Center-aligned type.
+ * @note PWMB only supports channel 0 ~ 1.
  * \hideinitializer
  */
 #define PWM_SET_ALIGNED_TYPE(pwm, u32ChannelMask, u32AlignedType) \

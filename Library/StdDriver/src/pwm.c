@@ -31,6 +31,7 @@
  * @param[in] u32CaptureEdge The condition to latch the counter. This parameter is not used
  * @return The nearest unit time in nano second.
  * @details This function is used to configure PWM capture and get the nearest unit time.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 uint32_t PWM_ConfigCaptureChannel(PWM_T *pwm,
                                   uint32_t u32ChannelNum,
@@ -58,8 +59,8 @@ uint32_t PWM_ConfigCaptureChannel(PWM_T *pwm,
     {
         if(u32ChannelNum < 2)/* channel 0 and channel 1 */
             u32Src = ((CLK->CLKSEL2 & (CLK_CLKSEL2_PWM45_S_EXT_Msk)) >> (CLK_CLKSEL2_PWM45_S_EXT_Pos - 2)) | (CLK->CLKSEL2 & (CLK_CLKSEL2_PWM45_S_Msk)) >> (CLK_CLKSEL2_PWM45_S_Pos);
-        else /* channel 2 and channel 3 */
-            u32Src = ((CLK->CLKSEL2 & (CLK_CLKSEL2_PWM67_S_EXT_Msk)) >> (CLK_CLKSEL2_PWM67_S_EXT_Pos - 2)) | (CLK->CLKSEL2 & (CLK_CLKSEL2_PWM67_S_Msk)) >> (CLK_CLKSEL2_PWM67_S_Pos);
+        else /* PWMB channel 2 and channel 3 are not supported */
+            return 0;
     }
 
     if(u32Src == 2)
@@ -120,6 +121,7 @@ uint32_t PWM_ConfigCaptureChannel(PWM_T *pwm,
  * @details This function is used to configure PWM generator and get the nearest frequency in edge aligned auto-reload mode.
  * @note Since every two channels, (0 & 1), (2 & 3), shares a prescaler. Call this API to configure PWM frequency may affect
  *       existing frequency of other channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 uint32_t PWM_ConfigOutputChannel(PWM_T *pwm,
                                  uint32_t u32ChannelNum,
@@ -146,8 +148,8 @@ uint32_t PWM_ConfigOutputChannel(PWM_T *pwm,
     {
         if(u32ChannelNum < 2)/* channel 0 and channel 1 */
             u32Src = ((CLK->CLKSEL2 & (CLK_CLKSEL2_PWM45_S_EXT_Msk)) >> (CLK_CLKSEL2_PWM45_S_EXT_Pos - 2)) | (CLK->CLKSEL2 & (CLK_CLKSEL2_PWM45_S_Msk)) >> (CLK_CLKSEL2_PWM45_S_Pos);
-        else /* channel 2 and channel 3 */
-            u32Src = ((CLK->CLKSEL2 & (CLK_CLKSEL2_PWM67_S_EXT_Msk)) >> (CLK_CLKSEL2_PWM67_S_EXT_Pos - 2)) | (CLK->CLKSEL2 & (CLK_CLKSEL2_PWM67_S_Msk)) >> (CLK_CLKSEL2_PWM67_S_Pos);
+        else /* PWMB channel 2 and channel 3 are not supported */
+            return 0;
     }
 
     if(u32Src == 2)
@@ -223,6 +225,7 @@ uint32_t PWM_ConfigOutputChannel(PWM_T *pwm,
  *                           Bit 0 is channel 0, bit 1 is channel 1...
  * @return None
  * @details This function is used to start PWM module.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_Start(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -247,6 +250,7 @@ void PWM_Start(PWM_T *pwm, uint32_t u32ChannelMask)
  *                           Bit 0 is channel 0, bit 1 is channel 1...
  * @return None
  * @details This function is used to stop PWM module.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_Stop(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -269,6 +273,7 @@ void PWM_Stop(PWM_T *pwm, uint32_t u32ChannelMask)
  *                           Bit 0 is channel 0, bit 1 is channel 1...
  * @return None
  * @details This function is used to stop PWM generation immediately by clear channel enable bit.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_ForceStop(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -292,6 +297,7 @@ void PWM_ForceStop(PWM_T *pwm, uint32_t u32ChannelMask)
  * @return None
  * @details This function is used to enable selected channel to trigger ADC.
  * @note This function is only supported when PWM operating at Center-aligned type.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnableADCTrigger(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Condition)
 {
@@ -304,6 +310,7 @@ void PWM_EnableADCTrigger(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Condit
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return None
  * @details This function is used to disable selected channel to trigger ADC.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisableADCTrigger(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -317,6 +324,7 @@ void PWM_DisableADCTrigger(PWM_T *pwm, uint32_t u32ChannelNum)
  * @param[in] u32Condition This parameter is not used
  * @return None
  * @details This function is used to clear selected channel trigger ADC flag.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_ClearADCTriggerFlag(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Condition)
 {
@@ -330,6 +338,7 @@ void PWM_ClearADCTriggerFlag(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Con
  * @retval 0 The specified channel trigger ADC to start of conversion flag is not set
  * @retval 1 The specified channel trigger ADC to start of conversion flag is set
  * @details This function is used to get PWM trigger ADC to start of conversion flag for specified channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 uint32_t PWM_GetADCTriggerFlag(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -345,6 +354,7 @@ uint32_t PWM_GetADCTriggerFlag(PWM_T *pwm, uint32_t u32ChannelNum)
  *                           Bit 0 is channel 0, bit 1 is channel 1...
  * @return None
  * @details This function is used to enable capture of selected channel(s).
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnableCapture(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -376,6 +386,7 @@ void PWM_EnableCapture(PWM_T *pwm, uint32_t u32ChannelMask)
  *                           Bit 0 is channel 0, bit 1 is channel 1...
  * @return None
  * @details This function is used to disable capture of selected channel(s).
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisableCapture(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -406,6 +417,7 @@ void PWM_DisableCapture(PWM_T *pwm, uint32_t u32ChannelMask)
  *                           Set bit 0 to 1 enables channel 0 output, set bit 1 to 1 enables channel 1 output...
  * @return None
  * @details This function is used to enables PWM output generation of selected channel(s).
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnableOutput(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -421,6 +433,7 @@ void PWM_EnableOutput(PWM_T *pwm, uint32_t u32ChannelMask)
  *                           Set bit 0 to 1 disables channel 0 output, set bit 1 to 1 disables channel 1 output...
  * @return None
  * @details This function is used to disables PWM output generation of selected channel(s).
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisableOutput(PWM_T *pwm, uint32_t u32ChannelMask)
 {
@@ -437,6 +450,7 @@ void PWM_DisableOutput(PWM_T *pwm, uint32_t u32ChannelMask)
  *                        dead zone.
  * @return None
  * @details This function is used to enable Dead zone of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnableDeadZone(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Duration)
 {
@@ -456,6 +470,7 @@ void PWM_EnableDeadZone(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Duration
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return None
  * @details This function is used to disable Dead zone of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisableDeadZone(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -476,6 +491,7 @@ void PWM_DisableDeadZone(PWM_T *pwm, uint32_t u32ChannelNum)
  *              - \ref PWM_CAPTURE_INT_FALLING_LATCH
  * @return None
  * @details This function is used to enable capture interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnableCaptureInt(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Edge)
 {
@@ -497,6 +513,7 @@ void PWM_EnableCaptureInt(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Edge)
  *              - \ref PWM_CAPTURE_INT_FALLING_LATCH
  * @return None
  * @details This function is used to disable capture interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisableCaptureInt(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Edge)
 {
@@ -517,6 +534,7 @@ void PWM_DisableCaptureInt(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Edge)
  *              - \ref PWM_CAPTURE_INT_FALLING_LATCH
  * @return None
  * @details This function is used to clear capture interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_ClearCaptureIntFlag(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Edge)
 {
@@ -538,6 +556,7 @@ void PWM_ClearCaptureIntFlag(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32Edg
  * @retval 2 Falling edge latch interrupt
  * @retval 3 Rising and falling latch interrupt
  * @details This function is used to get capture interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 uint32_t PWM_GetCaptureIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -561,6 +580,7 @@ uint32_t PWM_GetCaptureIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
  * @return None
  * @details This function is used to enable duty interrupt of selected channel.
  *          Every two channels, (0 & 1), (2 & 3), shares the duty interrupt type setting.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnableDutyInt(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32IntDutyType)
 {
@@ -575,6 +595,7 @@ void PWM_EnableDutyInt(PWM_T *pwm, uint32_t u32ChannelNum, uint32_t u32IntDutyTy
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return None
  * @details This function is used to disable duty interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisableDutyInt(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -587,6 +608,7 @@ void PWM_DisableDutyInt(PWM_T *pwm, uint32_t u32ChannelNum)
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return None
  * @details This function is used to clear duty interrupt flag of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_ClearDutyIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -600,6 +622,7 @@ void PWM_ClearDutyIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
  * @retval 0 Duty interrupt did not occur
  * @retval 1 Duty interrupt occurred
  * @details This function is used to get duty interrupt flag of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 uint32_t PWM_GetDutyIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -616,6 +639,7 @@ uint32_t PWM_GetDutyIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
  * @return None
  * @details This function is used to enable period interrupt of selected channel.
  *          Every two channels, (0 & 1), (2 & 3), shares the period interrupt type setting.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_EnablePeriodInt(PWM_T *pwm, uint32_t u32ChannelNum,  uint32_t u32IntPeriodType)
 {
@@ -629,6 +653,7 @@ void PWM_EnablePeriodInt(PWM_T *pwm, uint32_t u32ChannelNum,  uint32_t u32IntPer
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return None
  * @details This function is used to disable period interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_DisablePeriodInt(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -641,6 +666,7 @@ void PWM_DisablePeriodInt(PWM_T *pwm, uint32_t u32ChannelNum)
  * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
  * @return None
  * @details This function is used to clear period interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 void PWM_ClearPeriodIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
 {
@@ -654,6 +680,7 @@ void PWM_ClearPeriodIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
  * @retval 0 Period interrupt did not occur
  * @retval 1 Period interrupt occurred
  * @details This function is used to get period interrupt of selected channel.
+ * @note PWMB only supports channel 0 ~ 1.
  */
 uint32_t PWM_GetPeriodIntFlag(PWM_T *pwm, uint32_t u32ChannelNum)
 {

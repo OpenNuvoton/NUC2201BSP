@@ -34,11 +34,11 @@ void PWMB_IRQHandler(void)
     uint32_t u32CapIntFlag1;
 
     /* Handle PWMB Capture function */
-    u32CapIntFlag1 = PWMB->CCR2;
+    u32CapIntFlag1 = PWMB->CCR0;
 
-    /* PWMB channel 2 Capture interrupt */
-    if(u32CapIntFlag1 & PWM_CCR2_CAPIF2_Msk) {
-        PWMB->CCR2 &= (PWM_CCR_MASK | PWM_CCR2_CAPIF2_Msk);
+    /* PWMB channel 0 Capture interrupt */
+    if(u32CapIntFlag1 & PWM_CCR0_CAPIF0_Msk) {
+        PWMB->CCR0 &= (PWM_CCR_MASK | PWM_CCR0_CAPIF0_Msk);
     }
 }
 
@@ -62,36 +62,36 @@ void CalPeriodTime()
     uint16_t u16RisingTime, u16FallingTime, u16HighPeroid, u16LowPeroid, u16TotalPeroid;
 
     /* Clear Capture Falling Indicator (Time A) */
-    PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CFLRI2_Msk;
+    PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | PWM_CCR0_CFLRI0_Msk;
 
     /* Wait for Capture Falling Indicator  */
-    while((PWMB->CCR2 >> PWM_CCR2_CFLRI2_Pos & 1) == 0);
+    while((PWMB->CCR0 >> PWM_CCR0_CFLRI0_Pos & 1) == 0);
     /* Clear Capture Falling Indicator (Time B)*/
-    PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CFLRI2_Msk;
+    PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | PWM_CCR0_CFLRI0_Msk;
 
     u32i = 0;
 
     while(u32i < 4) {
         /* Wait for Capture Falling Indicator */
-        while((PWMB->CCR2 >> PWM_CCR2_CFLRI2_Pos & 1) == 0);
+        while((PWMB->CCR0 >> PWM_CCR0_CFLRI0_Pos & 1) == 0);
 
         /* Clear Capture Falling Indicator */
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CFLRI2_Msk;
+        PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | PWM_CCR0_CFLRI0_Msk;
 
         /* Clear Capture Rising Indicator */
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CRLRI2_Msk;
+        PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | PWM_CCR0_CRLRI0_Msk;
 
         /* Get Capture Falling Latch Counter Data */
-        u32Count[u32i++] = PWMB->CFLR2;
+        u32Count[u32i++] = PWMB->CFLR0;
 
         /* Wait for Capture Rising Indicator */
-        while((PWMB->CCR2 >> PWM_CCR2_CRLRI2_Pos & 1) == 0);
+        while((PWMB->CCR0 >> PWM_CCR0_CRLRI0_Pos & 1) == 0);
 
         /* Clear Capture Rising Indicator */
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CRLRI2_Msk;
+        PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | PWM_CCR0_CRLRI0_Msk;
 
         /* Get Capture Rising Latch Counter Data */
-        u32Count[u32i++] = PWMB->CRLR2;
+        u32Count[u32i++] = PWMB->CRLR0;
     }
 
     u16RisingTime = u32Count[1];
@@ -154,19 +154,19 @@ void SYS_Init(void)
     CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
 
     /* Enable IP clock */
-    CLK->APBCLK = CLK_APBCLK_UART0_EN_Msk | CLK_APBCLK_PWM45_EN_Msk | CLK_APBCLK_PWM67_EN_Msk;
+    CLK->APBCLK = CLK_APBCLK_UART0_EN_Msk | CLK_APBCLK_PWM45_EN_Msk;
 
     /* Select UART module clock source */
     CLK->CLKSEL1 &= ~CLK_CLKSEL1_UART_S_Msk;
     CLK->CLKSEL1 |= CLK_CLKSEL1_UART_S_HXT;
 
     /* Select PWM clock source */
-    CLK->CLKSEL2 = (CLK->CLKSEL2 & ~(CLK_CLKSEL2_PWM45_S_Msk | CLK_CLKSEL2_PWM45_S_E_Msk | CLK_CLKSEL2_PWM67_S_Msk | CLK_CLKSEL2_PWM67_S_E_Msk)) | \
-                   (CLK_CLKSEL2_PWM45_S_HXT | CLK_CLKSEL2_PWM45_EXT_HXT) | (CLK_CLKSEL2_PWM67_S_HXT | CLK_CLKSEL2_PWM67_EXT_HXT);
+    CLK->CLKSEL2 = (CLK->CLKSEL2 & ~(CLK_CLKSEL2_PWM45_S_Msk | CLK_CLKSEL2_PWM45_S_E_Msk)) | \
+                   (CLK_CLKSEL2_PWM45_S_HXT | CLK_CLKSEL2_PWM45_EXT_HXT);
 
     /* User can select PWM module clock source from LIRC as below */
-    //CLK->CLKSEL2 = (CLK->CLKSEL2 & ~(CLK_CLKSEL2_PWM45_S_Msk | CLK_CLKSEL2_PWM45_S_E_Msk | CLK_CLKSEL2_PWM67_S_Msk | CLK_CLKSEL2_PWM67_S_E_Msk)) | \
-    //               (CLK_CLKSEL2_PWM45_S_LIRC | CLK_CLKSEL2_PWM45_EXT_LIRC) | (CLK_CLKSEL2_PWM67_S_LIRC | CLK_CLKSEL2_PWM67_EXT_LIRC);
+    //CLK->CLKSEL2 = (CLK->CLKSEL2 & ~(CLK_CLKSEL2_PWM45_S_Msk | CLK_CLKSEL2_PWM45_S_E_Msk)) | \
+    //               (CLK_CLKSEL2_PWM45_S_LIRC | CLK_CLKSEL2_PWM45_EXT_LIRC);
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -176,8 +176,10 @@ void SYS_Init(void)
     SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk);
     SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD);
 
-    /* Set GPE multi-function pins for PWMB Channel1 and channel2 */
-    SYS->GPE_MFP = SYS_GPE_MFP_PE5_PWM5 | SYS_GPE_MFP_PE0_PWM6;
+    /* Set GPE multi-function pins for PWMB Channel1 and channel0 */
+    SYS->GPE_MFP = SYS_GPE_MFP_PE5_PWM5;
+    SYS->GPB_MFP = (SYS->GPB_MFP & ~(SYS_GPB_MFP_PB11_Msk)) | SYS_GPB_MFP_PB11_PWM4;
+    SYS->ALT_MFP = (SYS->ALT_MFP & ~(SYS_ALT_MFP_PB11_Msk)) | SYS_ALT_MFP_PB11_PWM4;
 
 }
 
@@ -218,17 +220,17 @@ int main(void)
     printf("|                          PWM Driver Sample Code                        |\n");
     printf("|                                                                        |\n");
     printf("+------------------------------------------------------------------------+\n");
-    printf("  This sample code will use PWMB channel 2 to capture\n  the signal from PWMB channel 1.\n");
+    printf("  This sample code will use PWMB channel 0 to capture\n  the signal from PWMB channel 1.\n");
     printf("  I/O configuration:\n");
-    printf("    PWM5(PE.5 PWMB channel 1) <--> PWM6(PE.0 PWMB channel 2)\n\n");
-    printf("Use PWMB Channel 2(PE.0) to capture the PWMB Channel 1(PE.5) Waveform\n");
+    printf("    PWM5(PE.5 PWMB channel 1) <--> PWM4(PB.11 PWMB channel 0)\n\n");
+    printf("Use PWMB Channel 0(PB.11) to capture the PWMB Channel 1(PE.5) Waveform\n");
 
     while(1) {
         printf("Press any key to start PWM Capture Test\n");
         getchar();
 
         /*--------------------------------------------------------------------------------------*/
-        /* Set the PWMB Channel 1 as PWM output function.                                               */
+        /* Set the PWMB Channel 1 as PWM output function.                                       */
         /*--------------------------------------------------------------------------------------*/
 
         /* Assume PWM output frequency is 250Hz and duty ratio is 30%, user can calculate PWM settings by follows.
@@ -267,7 +269,7 @@ int main(void)
         PWMB->PCR |= PWM_PCR_CH1EN_Msk;
 
         /*--------------------------------------------------------------------------------------*/
-        /* Set the PWMB channel 2  for capture function                                         */
+        /* Set the PWMB channel 0  for capture function                                         */
         /*--------------------------------------------------------------------------------------*/
 
         /* If input minimum frequency is 250Hz, user can calculate capture settings by follows.
@@ -279,19 +281,19 @@ int main(void)
            (Note: In capture mode, user should set CNR to 0xFFFF to increase capture frequency range.)
         */
         /*Set Pwm mode*/
-        PWMB->PCR |= PWM_PCR_CH2MOD_Msk;
+        PWMB->PCR |= PWM_PCR_CH0MOD_Msk;
 
         /*Set PWM Timer clock prescaler*/
-        PWMB->PPR = (PWMB->PPR & ~(PWM_PPR_CP23_Msk)) | (1 << PWM_PPR_CP23_Pos);
+        PWMB->PPR = (PWMB->PPR & ~(PWM_PPR_CP01_Msk)) | (1 << PWM_PPR_CP01_Pos);
 
         /*Set PWM Timer clock divider select*/
-        PWMB->CSR = (PWMB->CSR & ~(PWM_CSR_CSR2_Msk)) | (PWM_CLK_DIV_1 << PWM_CSR_CSR2_Pos);
+        PWMB->CSR = (PWMB->CSR & ~(PWM_CSR_CSR0_Msk)) | (PWM_CLK_DIV_1 << PWM_CSR_CSR0_Pos);
 
         /*Set PWM Timer loaded value*/
-        PWMB->CNR2 = 0xFFFF;
+        PWMB->CNR0 = 0xFFFF;
 
-        /* Enable capture falling edge interrupt for PWMB channel 2 */
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CFL_IE2_Msk;
+        /* Enable capture falling edge interrupt for PWMB channel 0 */
+        PWMB->CCR0 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR0_CFL_IE0_Msk;
 
         /* Enable Backward Compatible: write 1 to clear CFLRI0~3 and CRLRI0~3 */
         PWMB->PBCR = 1;
@@ -299,17 +301,17 @@ int main(void)
         /* Enable PWMB NVIC interrupt */
         NVIC_EnableIRQ((IRQn_Type)(PWMB_IRQn));
 
-        /* Enable Capture Function for PWMB channel 2 */
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | PWM_CCR2_CAPCH2EN_Msk;
+        /* Enable Capture Function for PWMB channel 0 */
+        PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | PWM_CCR0_CAPCH0EN_Msk;
 
-        /* Enable Timer for PWMB channel 2  */
-        PWMB->PCR |= PWM_PCR_CH2EN_Msk;
+        /* Enable Timer for PWMB channel 0 */
+        PWMB->PCR |= PWM_PCR_CH0EN_Msk;
 
-        /* Wait until PWMB channel 2 Timer start to count */
-        while(PWMB->PDR2 == 0);
+        /* Wait until PWMB channel 0 Timer start to count */
+        while(PWMB->PDR0 == 0);
 
-        /* Enable capture input path for PWMB channel 2 */
-        PWMB->CAPENR |= PWM_CAPENR_CINEN2_Msk;
+        /* Enable capture input path for PWMB channel 0 */
+        PWMB->CAPENR |= PWM_CAPENR_CINEN0_Msk;
 
         /* Capture the Input Waveform Data */
         CalPeriodTime();
@@ -331,30 +333,30 @@ int main(void)
         PWMB->POE &= ~PWM_POE_POE1_Msk;
 
         /*------------------------------------------------------------------------------------------------------*/
-        /* Stop PWMB channel 2 (Recommended procedure method 1)                                                 */
+        /* Stop PWMB channel 0 (Recommended procedure method 1)                                                 */
         /* Set PWM Timer loaded value(CNR) as 0. When PWM internal counter(PDR) reaches to 0, disable PWM Timer */
         /*------------------------------------------------------------------------------------------------------*/
 
         /* Disable PWMB NVIC */
         NVIC_DisableIRQ((IRQn_Type)(PWMB_IRQn));
 
-        /* Set loaded value as 0 for PWMB channel 2 */
-        PWMB->CNR2 = 0;
+        /* Set loaded value as 0 for PWMB channel 0 */
+        PWMB->CNR0 = 0;
 
-        /* Wait until PWMB channel 2 current counter reach to 0 */
-        while(PWMB->PDR2 != 0);
+        /* Wait until PWMB channel 0 current counter reach to 0 */
+        while(PWMB->PDR0 != 0);
 
-        /* Disable Timer for PWMB channel 2 */
-        PWMB->PCR &= ~PWM_PCR_CH2EN_Msk;
+        /* Disable Timer for PWMB channel 0 */
+        PWMB->PCR &= ~PWM_PCR_CH0EN_Msk;
 
-        /* Disable Capture Function for  PWMB channel 2*/
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) & ~PWM_CCR2_CAPCH2EN_Msk;
+        /* Disable Capture Function for  PWMB channel 0 */
+        PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) & ~PWM_CCR0_CAPCH0EN_Msk;
 
-        /* Clear Capture Interrupt flag for PWMB channel 2*/
-        PWMB->CCR2 = (PWMB->CCR2 & PWM_CCR_MASK) | (PWM_CCR2_CAPIF2_Msk);
+        /* Clear Capture Interrupt flag for PWMB channel 0*/
+        PWMB->CCR0 = (PWMB->CCR0 & PWM_CCR_MASK) | (PWM_CCR0_CAPIF0_Msk);
 
-        /* Disable Capture Input path for PWMB channel 2 */
-        PWMB->CAPENR &= ~PWM_CAPENR_CINEN2_Msk;
+        /* Disable Capture Input path for PWMB channel 0 */
+        PWMB->CAPENR &= ~PWM_CAPENR_CINEN0_Msk;
     }
 }
 
