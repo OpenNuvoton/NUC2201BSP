@@ -32,7 +32,7 @@
   *                       - \ref ADC_ADCR_ADMD_SINGLE               :Single mode.
   *                       - \ref ADC_ADCR_ADMD_SINGLE_CYCLE         :Single cycle scan mode.
   *                       - \ref ADC_ADCR_ADMD_CONTINUOUS           :Continuous scan mode.
-  * @param[in] u32ChMask Channel enable bit. Each bit corresponds to a input channel. Bit 0 is channel 0, bit 1 is channel 1..., bit 7 is channel 7.
+  * @param[in] u32ChMask Channel enable bit. Each bit corresponds to a input channel. Bit 0 is channel 0, bit 1 is channel 1..., bit 11 is channel 11.
   * @return  None
   * @details Before starting A/D conversion function, ADEN(ADCR[0]) should be set to 1.
   * @note NUC2201 series MCU ADC can only convert 1 channel at a time. If more than 1 channels are enabled, only channel
@@ -49,7 +49,7 @@ void ADC_Open(ADC_T *adc,
                 u32InputMode | \
                 u32OpMode;
 
-    adc->ADCHER  = (adc->ADCHER & ~ADC_ADCHER_CHEN_Msk) | (u32ChMask);
+    adc->ADCHER  = (adc->ADCHER & ~(ADC_ADCHER_CHEN_Msk|ADC_ADCHER_CHEN1_Msk)) | (u32ChMask & ADC_ADCHER_CHEN_Msk) | ((u32ChMask & (ADC_ADCHER_CHEN1_Msk >> 2)) << 2);
 
     return;
 }

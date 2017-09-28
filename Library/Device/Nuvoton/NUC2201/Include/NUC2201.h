@@ -125,7 +125,7 @@ typedef struct
 
 /**
  * @var ADC_T::ADDR
- * Offset: 0x00-0x1C  ADC Data Register  
+ * Offset: 0x00-0x1C  ADC Data Register  0 ~ 7
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
@@ -222,7 +222,7 @@ typedef struct
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
- * |[7:0]   |CHEN      |Analog Input Channel Enable
+ * |[7:0]   |CHEN      |Analog Input Channel Enable Bit
  * |        |          |Set CHEN[7:0] to enable the corresponding analog input channel 7 ~ 0.
  * |        |          |If DIFFEN bit (ADCR[10]) is set to 1, only the even number channels need to be enabled.
  * |        |          |0 = ADC input channel Disabled.
@@ -235,6 +235,11 @@ typedef struct
  * |        |          |Note:
  * |        |          |When software select the band-gap voltage as the analog input source of ADC channel 7, ADC clock
  * |        |          |rate needs to be limited to slower than 300 kHz.
+ * |[13:10] |CHEN1     |Analog Input Channel Enable Bit 1
+ * |        |          |Set CHEN[13:10] to enable the corresponding analog input channel 11 ~ 8.
+ * |        |          |If DIFFEN bit (ADCR[10]) is set to 1, only the even number channels need to be enabled.
+ * |        |          |0 = ADC input channel Disabled.
+ * |        |          |1 = ADC input channel Enabled.
  * @var ADC_T::ADCMPR
  * Offset: 0x28  ADC Compare Register
  * ---------------------------------------------------------------------------------------------------
@@ -258,15 +263,19 @@ typedef struct
  * |        |          |the 12-bit CMPD (ADCMPR0/1[27:16]), the internal match counter will increase one.
  * |        |          |Note: When the internal counter reaches the value to (CMPMATCNT (ADCMPR0/1[11:8])+1), the
  * |        |          |CMPF0/1 bit (ADSR[1]/[2]) will be set.
- * |[5:3]   |CMPCH     |Compare Channel Selection
- * |        |          |000 = Channel 0 conversion result is selected to be compared.
- * |        |          |001 = Channel 1 conversion result is selected to be compared.
- * |        |          |010 = Channel 2 conversion result is selected to be compared.
- * |        |          |011 = Channel 3 conversion result is selected to be compared.
- * |        |          |100 = Channel 4 conversion result is selected to be compared.
- * |        |          |101 = Channel 5 conversion result is selected to be compared.
- * |        |          |110 = Channel 6 conversion result is selected to be compared.
- * |        |          |111 = Channel 7 conversion result is selected to be compared.
+ * |[6:3]   |CMPCH     |Compare Channel Selection
+ * |        |          |0000 = Channel 0 conversion result is selected to be compared.
+ * |        |          |0001 = Channel 1 conversion result is selected to be compared.
+ * |        |          |0010 = Channel 2 conversion result is selected to be compared.
+ * |        |          |0011 = Channel 3 conversion result is selected to be compared.
+ * |        |          |0100 = Channel 4 conversion result is selected to be compared.
+ * |        |          |0101 = Channel 5 conversion result is selected to be compared.
+ * |        |          |0110 = Channel 6 conversion result is selected to be compared.
+ * |        |          |0111 = Channel 7 conversion result is selected to be compared.
+ * |        |          |1000 = Channel 8 conversion result is selected to be compared.
+ * |        |          |1001 = Channel 9 conversion result is selected to be compared.
+ * |        |          |1010 = Channel 10 conversion result is selected to be compared.
+ * |        |          |1011 = Channel 11 conversion result is selected to be compared.
  * |[11:8]  |CMPMATCNT |Compare Match Count
  * |        |          |When the specified A/D channel analog conversion result matches the compare condition defined by
  * |        |          |CMPCOND (ADCMPR0/1[2]), the internal match counter will increase 1.
@@ -308,7 +317,7 @@ typedef struct
  * |        |          |1 = A/D converter is busy at conversion.
  * |        |          |This bit is mirror of as ADST bit (ADCR[11]).
  * |        |          |It is read only.
- * |[6:4]   |CHANNEL   |Current Conversion Channel
+ * |[7:4]   |CHANNEL   |Current Conversion Channel
  * |        |          |This field reflects the current conversion channel when BUSY = 1 (ADSR[3]).
  * |        |          |When BUSY = 0, it shows the number of the next converted channel.
  * |        |          |It is read only.
@@ -317,6 +326,12 @@ typedef struct
  * |        |          |It is read only.
  * |[23:16] |OVERRUN   |Overrun Flag
  * |        |          |It is a mirror to OVERRUN bit (ADDR0~7[16]).
+ * |        |          |It is read only.
+ * |[27:24] |VALID1    |Data Valid Flag 1
+ * |        |          |It is a mirror of VALID bit (ADDR8~11[17]).
+ * |        |          |It is read only.
+ * |[31:28] |OVERRUN   |Overrun Flag 1
+ * |        |          |It is a mirror to OVERRUN bit (ADDR8~11[16]).
  * |        |          |It is read only.
  * @var ADC_T::ADPDMA
  * Offset: 0x40  ADC PDMA Current Transfer Data Register
@@ -327,15 +342,42 @@ typedef struct
  * |        |          |When PDMA transferring, read this register can monitor current PDMA transfer data.
  * |        |          |Current PDMA transfer data is the content of ADDR0 ~ ADDR7.
  * |        |          |This is a read only register.
+ * @var ADC_T::ADDR1
+ * Offset: 0x50-0x5C  ADC Data Register  8 ~ 11
+ * ---------------------------------------------------------------------------------------------------
+ * |Bits    |Field     |Descriptions
+ * | :----: | :----:   | :---- |
+ * |[15:0]  |RSLT      |A/D Conversion Result
+ * |        |          |This field contains conversion result of ADC.
+ * |        |          |When DMOF bit (ADCR[31]) set to 0, 12-bit ADC conversion result with unsigned format will be
+ * |        |          |filled in RSLT (ADDRx[11:0], x=8~11) and zero will be filled in RSLT (ADDRx[15:12], x=8~11).
+ * |        |          |When DMOF bit (ADCR[31]) set to 1, 12-bit ADC conversion result with 2'complement format will be
+ * |        |          |filled in RSLT(ADDRx[11:0], x=8~11) and signed bits to will be filled in RSLT (ADDRx[15:12],
+ * |        |          |x=0~7).
+ * |[16]    |OVERRUN   |Overrun Flag
+ * |        |          |0 = Data in RSLT (ADDRx[15:0], x=8~11) is recent conversion result.
+ * |        |          |1 = Data in RSLT (ADDRx[15:0], x=8~11) is overwritten.
+ * |        |          |If converted data in RSLT has not been read before new conversion result is loaded to this
+ * |        |          |register, OVERRUN is set to 1 and previous conversion result is gone.
+ * |        |          |It is cleared by hardware after ADDR register is read.
+ * |        |          |This is a read only bit.
+ * |[17]    |VALID     |Valid Flag
+ * |        |          |0 = Data in RSLT bits (ADDRx[15:0], x=8~11) is not valid.
+ * |        |          |1 = Data in RSLT bits (ADDRx[15:0], x=8~11) is valid.
+ * |        |          |This bit is set to 1 when corresponding channel analog input conversion is completed and cleared
+ * |        |          |by hardware after ADDR register is read.
+ * |        |          |This is a read only bit
  */
 
-    __I  uint32_t ADDR[8];       /* Offset: 0x00-0x1C  ADC Data Register                                             */
+    __I  uint32_t ADDR[8];       /* Offset: 0x00-0x1C  ADC Data Register 0 ~ 7                                       */
     __IO uint32_t ADCR;          /* Offset: 0x20  ADC Control Register                                               */
     __IO uint32_t ADCHER;        /* Offset: 0x24  ADC Channel Enable Register                                        */
     __IO uint32_t ADCMPR[2];     /* Offset: 0x28  ADC Compare Register                                               */
     __IO uint32_t ADSR;          /* Offset: 0x30  ADC Status Register                                                */
     __I  uint32_t RESERVE0[3];  
     __I  uint32_t ADPDMA;        /* Offset: 0x40  ADC PDMA Current Transfer Data Register                            */
+    __I  uint32_t RESERVE1[3];  
+    __I  uint32_t ADDR1[4];       /* Offset: 0x50-0x5C  ADC Data Register 8 ~ 11                                     */
 
 } ADC_T;
 
@@ -389,6 +431,9 @@ typedef struct
 #define ADC_ADCR_ADEN_Msk       (1ul << ADC_ADCR_ADEN_Pos)        /*!< ADC_T::ADCR: ADEN Mask */
 
 /* ADCHER Bit Field Definitions */
+#define ADC_ADCHER_CHEN1_Pos    10                                /*!< ADC_T::ADCHER: CHEN1 Position */
+#define ADC_ADCHER_CHEN1_Msk    (0xFul << ADC_ADCHER_CHEN1_Pos)   /*!< ADC_T::ADCHER: CHEN1 Mask */
+
 #define ADC_ADCHER_PRESEL_Pos   8                                 /*!< ADC_T::ADCHER: PRESEL Position */
 #define ADC_ADCHER_PRESEL_Msk   (3ul << ADC_ADCHER_PRESEL_Pos)    /*!< ADC_T::ADCHER: PRESEL Mask */
 
@@ -403,7 +448,7 @@ typedef struct
 #define ADC_ADCMPR_CMPMATCNT_Msk   (0xFul << ADC_ADCMPR_CMPMATCNT_Pos)   /*!< ADC_T::ADCMPR: CMPMATCNT Mask */
 
 #define ADC_ADCMPR_CMPCH_Pos       3                                     /*!< ADC_T::ADCMPR: CMPCH Position */
-#define ADC_ADCMPR_CMPCH_Msk       (7ul << ADC_ADCMPR_CMPCH_Pos)         /*!< ADC_T::ADCMPR: CMPCH Mask */
+#define ADC_ADCMPR_CMPCH_Msk       (0xFul << ADC_ADCMPR_CMPCH_Pos)       /*!< ADC_T::ADCMPR: CMPCH Mask */
 
 #define ADC_ADCMPR_CMPCOND_Pos     2                                     /*!< ADC_T::ADCMPR: CMPCOND Position */
 #define ADC_ADCMPR_CMPCOND_Msk     (1ul << ADC_ADCMPR_CMPCOND_Pos)       /*!< ADC_T::ADCMPR: CMPCOND Mask */
@@ -415,6 +460,12 @@ typedef struct
 #define ADC_ADCMPR_CMPEN_Msk       (1ul << ADC_ADCMPR_CMPEN_Pos)         /*!< ADC_T::ADCMPR: CMPEN Mask */
 
 /* ADSR Bit Field Definitions */
+#define ADC_ADSR_OVERRUN1_Pos      28                                    /*!< ADC_T::ADSR: OVERRUN1 Position */
+#define ADC_ADSR_OVERRUN1_Msk      (0xFul << ADC_ADSR_OVERRUN1_Pos)      /*!< ADC_T::ADSR: OVERRUN1 Mask */
+
+#define ADC_ADSR_VALID1_Pos        24                                    /*!< ADC_T::ADSR: VALID1 Position */
+#define ADC_ADSR_VALID1_Msk        (0xFul << ADC_ADSR_VALID1_Pos)        /*!< ADC_T::ADSR: VALID1 Mask */
+
 #define ADC_ADSR_OVERRUN_Pos       16                                    /*!< ADC_T::ADSR: OVERRUN Position */
 #define ADC_ADSR_OVERRUN_Msk       (0xFFul << ADC_ADSR_OVERRUN_Pos)      /*!< ADC_T::ADSR: OVERRUN Mask */
 
@@ -422,7 +473,7 @@ typedef struct
 #define ADC_ADSR_VALID_Msk         (0xFFul << ADC_ADSR_VALID_Pos)        /*!< ADC_T::ADSR: VALID Mask */
 
 #define ADC_ADSR_CHANNEL_Pos       4                                     /*!< ADC_T::ADSR: CHANNEL Position */
-#define ADC_ADSR_CHANNEL_Msk       (7ul << ADC_ADSR_CHANNEL_Pos)         /*!< ADC_T::ADSR: CHANNEL Mask */
+#define ADC_ADSR_CHANNEL_Msk       (0xFul << ADC_ADSR_CHANNEL_Pos)       /*!< ADC_T::ADSR: CHANNEL Mask */
 
 #define ADC_ADSR_BUSY_Pos          3                                     /*!< ADC_T::ADSR: BUSY Position */
 #define ADC_ADSR_BUSY_Msk          (1ul << ADC_ADSR_BUSY_Pos)            /*!< ADC_T::ADSR: BUSY Mask */
@@ -439,6 +490,17 @@ typedef struct
 /* ADPDMA Bit Field Definitions */
 #define ADC_ADPDMA_AD_PDMA_Pos     0                                     /*!< ADC_T::ADPDMA: AD_PDMA Position */
 #define ADC_ADPDMA_AD_PDMA_Msk     (0x3FFFFul << ADC_ADPDMA_AD_PDMA_Pos) /*!< ADC_T::ADPDMA: AD_PDMA Mask */
+
+/* ADDR Bit 1 Field Definitions */
+#define ADC_ADDR1_VALID_Pos      17                                 /*!< ADC_T::ADDR1: VALID Position */
+#define ADC_ADDR1_VALID_Msk      (1ul << ADC_ADDR1_VALID_Pos)       /*!< ADC_T::ADDR1: VALID Mask */
+
+#define ADC_ADDR1_OVERRUN_Pos    16                                 /*!< ADC_T::ADDR1: OVERRUN Position */
+#define ADC_ADDR1_OVERRUN_Msk    (1ul << ADC_ADDR1_OVERRUN_Pos)     /*!< ADC_T::ADDR1: OVERRUN Mask */
+
+#define ADC_ADDR1_RSLT_Pos       0                                  /*!< ADC_T::ADDR1: RSLT Position */
+#define ADC_ADDR1_RSLT_Msk       (0xFFFFul << ADC_ADDR1_RSLT_Pos)   /*!< ADC_T::ADDR1: RSLT Mask */
+
 /*@}*/ /* end of group ADC_CONST */
 /*@}*/ /* end of group ADC */
 
@@ -3257,12 +3319,12 @@ typedef struct
  * |         |          |So corresponding PWM-timer will also be stopped.
  * |[23:16]  |DZI01     |Dead-Zone Interval For Pair Of Channel 0 And Channel 1 (PWM0 And PWM1 Pair For PWM Group A, PWM4 And PWM5 Pair For PWM Group B)
  * |         |          |These 8-bit determine the Dead-zone length.
- * |        |          |The unit time of Dead-zone length = [(prescale+1)*(clock source divider)]/ PWMxy_CLK (where xy
- * |        |          |could be 01 or 45, depends on selected PWM channel.).
+ * |         |          |The unit time of Dead-zone length = [(prescale+1)*(clock source divider)]/ PWMxy_CLK (where xy
+ * |         |          |could be 01 or 45, depends on selected PWM channel.).
  * |[31:24]  |DZI23     |Dead-Zone Interval For Pair Of Channel2 And Channel3 (PWM2 And PWM3 Pair For PWM Group A, PWM6 And PWM7 Pair For PWM Group B)
  * |         |          |These 8-bit determine the Dead-zone length.
- * |        |          |The unit time of Dead-zone length = [(prescale+1)*(clock source divider)]/ PWMxy_CLK (where xy
- * |        |          |could be 23 or 67, depends on selected PWM channel.).
+ * |         |          |The unit time of Dead-zone length = [(prescale+1)*(clock source divider)]/ PWMxy_CLK (where xy
+ * |         |          |could be 23 or 67, depends on selected PWM channel.).
  * @var PWM_T::CSR
  * Offset: 0x04  PWM Clock Source Divider Select Register
  * ---------------------------------------------------------------------------------------------------
@@ -3306,13 +3368,13 @@ typedef struct
  * |[4]      |DZEN01        |Dead-Zone 0 Generator Enable (PWM0 And PWM1 Pair For PWM Group A, PWM4 And PWM5 Pair For PWM Group B)
  * |         |              |0 = Disabled.
  * |         |              |1 = Enabled.
- * |        |          |Note: When Dead-zone generator is enabled, the pair of PWM0 and PWM1 becomes a complementary
- * |        |          |pair for PWM group A and the pair of PWM4 and PWM5 becomes a complementary pair for PWM group B.
+ * |         |              |Note: When Dead-zone generator is enabled, the pair of PWM0 and PWM1 becomes a complementary
+ * |         |              |pair for PWM group A and the pair of PWM4 and PWM5 becomes a complementary pair for PWM group B.
  * |[5]      |DZEN23        |Dead-Zone 2 Generator Enable (PWM2 And PWM3 Pair For PWM Group A, PWM6 And PWM7 Pair For PWM Group B)
  * |         |              |0 = Disabled.
  * |         |              |1 = Enabled.
- * |        |          |Note: When Dead-zone generator is enabled, the pair of PWM2 and PWM3 becomes a complementary
- * |        |          |pair for PWM group A and the pair of PWM6 and PWM7 becomes a complementary pair for PWM group B.
+ * |         |              |Note: When Dead-zone generator is enabled, the pair of PWM2 and PWM3 becomes a complementary
+ * |         |              |pair for PWM group A and the pair of PWM6 and PWM7 becomes a complementary pair for PWM group B.
  * |[8]      |CH1EN         |PWM-Timer 1 Enable (PWM Timer 1 For Group A And PWM Timer 5 For Group B)
  * |         |              |0 = Corresponding PWM-Timer Stopped.
  * |         |              |1 = Corresponding PWM-Timer Start Running.

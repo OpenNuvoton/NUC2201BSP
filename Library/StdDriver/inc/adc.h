@@ -150,11 +150,11 @@ extern "C"
 /**
   * @brief Get conversion data of specified channel.
   * @param[in] adc The pointer of the specified ADC module.
-  * @param[in] u32ChNum  ADC Channel, valid value are from 0 to 7.
+  * @param[in] u32ChNum  ADC Channel, valid value are from 0 to 11.
   * @return 16-bit data.
   * @details Read RSLT bit field to get conversion data.
   */
-#define ADC_GET_CONVERSION_DATA(adc, u32ChNum) ((adc)->ADDR[(u32ChNum)] & ADC_ADDR_RSLT_Msk)
+  #define ADC_GET_CONVERSION_DATA(adc, u32ChNum) (((u32ChNum) < 8)?((adc)->ADDR[(u32ChNum)] & ADC_ADDR_RSLT_Msk):((adc)->ADDR1[(u32ChNum) - 8] & ADC_ADDR_RSLT_Msk))
 
 /**
   * @brief Return the user-specified interrupt flags.
@@ -194,22 +194,24 @@ extern "C"
 /**
   * @brief Check if the ADC conversion data is over written or not.
   * @param[in] adc The pointer of the specified ADC module.
-  * @param[in] u32ChNum ADC Channel, valid value are from 0 to 7.
+  * @param[in] u32ChNum ADC Channel, valid value are from 0 to 11.
   * @retval 0 ADC data is not overrun.
   * @retval 1 ADC data is overrun.
-  * @details OVERRUN (ADSR[23:16]) is a mirror to OVERRUN (ADDR0~7[16]).
+  * @details OVERRUN (ADSR[23:16]) is a mirror to OVERRUN (ADDR0~7[16]), OVERRUN1 (ADSR[13:28]) is a mirror to OVERRUN (ADDR8~11[16]).
   */
-#define ADC_IS_DATA_OVERRUN(adc, u32ChNum) ((adc)->ADSR & (0x1 << (ADC_ADSR_OVERRUN_Pos + (u32ChNum))) ? 1 : 0)
+  #define ADC_IS_DATA_OVERRUN(adc, u32ChNum) (((u32ChNum) < 8)?((adc)->ADSR & (0x1 << (ADC_ADSR_OVERRUN_Pos + (u32ChNum))) ? 1 : 0): \
+                                              ((adc)->ADSR & (0x1 << (ADC_ADSR_OVERRUN1_Pos + ((u32ChNum) - 8))) ? 1 : 0))
 
 /**
   * @brief Check if the ADC conversion data is valid or not.
   * @param[in] adc The pointer of the specified ADC module.
-  * @param[in] u32ChNum ADC Channel, valid value are from 0 to 7.
+  * @param[in] u32ChNum ADC Channel, valid value are from 0 to 11.
   * @retval 0 ADC data is not valid.
   * @retval 1 ADC data is valid.
-  * @details VALID (ADDR0~7[17]) is set to 1 when corresponding channel analog input conversion is completed and cleared by hardware after ADDR register is read.
+  * @details VALID (ADDR0~11[17]) is set to 1 when corresponding channel analog input conversion is completed and cleared by hardware after ADDR register is read.
   */
-#define ADC_IS_DATA_VALID(adc, u32ChNum) ((adc)->ADSR & (0x1<<(ADC_ADSR_VALID_Pos+(u32ChNum))) ? 1 : 0)
+  #define ADC_IS_DATA_VALID(adc, u32ChNum) (((u32ChNum) < 8)?((adc)->ADSR & (0x1<<(ADC_ADSR_VALID_Pos+(u32ChNum))) ? 1 : 0): \
+                                            ((adc)->ADSR & (0x1<<(ADC_ADSR_VALID1_Pos+((u32ChNum) - 8))) ? 1 : 0))
 
 /**
   * @brief Power down ADC module.
@@ -231,7 +233,7 @@ extern "C"
 /**
   * @brief Configure the comparator 0 and enable it.
   * @param[in] adc The pointer of the specified ADC module.
-  * @param[in] u32ChNum  Specifies the source channel, valid value are from 0 to 7.
+  * @param[in] u32ChNum  Specifies the source channel, valid value are from 0 to 11.
   * @param[in] u32Condition Specifies the compare condition. Valid values are:
   *                          - \ref ADC_ADCMPR_CMPCOND_LESS_THAN            :The compare condition is "less than the compare value".
   *                          - \ref ADC_ADCMPR_CMPCOND_GREATER_OR_EQUAL     :The compare condition is "greater than or equal to the compare value.
@@ -264,7 +266,7 @@ extern "C"
 /**
   * @brief Configure the comparator 1 and enable it.
   * @param[in] adc The pointer of the specified ADC module.
-  * @param[in] u32ChNum  Specifies the source channel, valid value are from 0 to 7.
+  * @param[in] u32ChNum  Specifies the source channel, valid value are from 0 to 11.
   * @param[in] u32Condition Specifies the compare condition. Valid values are:
   *                          - \ref ADC_ADCMPR_CMPCOND_LESS_THAN            :The compare condition is "less than the compare value".
   *                          - \ref ADC_ADCMPR_CMPCOND_GREATER_OR_EQUAL     :The compare condition is "greater than or equal to the compare value.
@@ -297,13 +299,14 @@ extern "C"
 /**
   * @brief Set ADC input channel.
   * @param[in] adc The pointer of the specified ADC module.
-  * @param[in] u32Mask  Channel enable bit. Each bit corresponds to a input channel. Bit 0 is channel 0, bit 1 is channel 1..., bit 7 is channel 7.
+  * @param[in] u32Mask  Channel enable bit. Each bit corresponds to a input channel. Bit 0 is channel 0, bit 1 is channel 1..., bit 11 is channel 11.
   * @return None
   * @details Enabled channel will be converted while ADC starts.
   * @note NUC2201 series MCU ADC can only convert 1 channel at a time. If more than 1 channels are enabled, only channel
   *       with smallest number will be convert.
   */
-#define ADC_SET_INPUT_CHANNEL(adc, u32Mask) ((adc)->ADCHER = ((adc)->ADCHER & ~ADC_ADCHER_CHEN_Msk) | (u32Mask))
+#define ADC_SET_INPUT_CHANNEL(adc, u32Mask) ((adc)->ADCHER = ((adc)->ADCHER & ~(ADC_ADCHER_CHEN_Msk|ADC_ADCHER_CHEN1_Msk)) | \
+                                             (u32ChMask & ADC_ADCHER_CHEN_Msk) | ((u32ChMask & (ADC_ADCHER_CHEN1_Msk >> 2)) << 2))
 
 /**
   * @brief Set the output format mode.
