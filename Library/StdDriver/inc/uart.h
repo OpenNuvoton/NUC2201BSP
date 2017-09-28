@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     UART.h
  * @version  V3.0
- * $Revision: 11 $
- * $Date: 15/06/04 11:14a $
  * @brief    NUC2201 Series UART Interface Controller Driver Header File
  *
  * @note

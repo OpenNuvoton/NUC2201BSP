@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     clk.h
  * @version  V3.0
- * $Revision: 14 $
- * $Date: 17/07/20 1:57p $
  * @brief    NUC2201 Series Clock Control Driver Header File
  *
  * @note

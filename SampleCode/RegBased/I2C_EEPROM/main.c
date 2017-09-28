@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V3.00
- * $Revision: 4 $
- * $Date: 15/05/18 4:11p $
  * @brief    NUC2201 Series I2C Driver Sample Code for EEPROM 24LC64
  *
  * @note

@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     clk.c
  * @version  V3.00
- * $Revision: 16 $
- * $Date: 15/10/19 9:23a $
  * @brief    NUC2201 series CLK driver source file
  *
  * @note

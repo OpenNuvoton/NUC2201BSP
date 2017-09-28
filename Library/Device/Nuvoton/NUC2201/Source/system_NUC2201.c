@@ -1,8 +1,6 @@
 /**************************************************************************//**
  * @file     system_NUC2201.c
  * @version  V3.0
- * $Revision: 1 $
- * $Date: 14/10/01 5:16p $
  * @brief    NUC2201 Series CMSIS System File
  *
  * @note
