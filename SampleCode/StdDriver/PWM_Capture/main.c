@@ -34,15 +34,14 @@
  */
 void PWMB_IRQHandler(void)
 {
-//    uint32_t u32PwmIntFlag;
     uint32_t u32CapIntFlag1;
 
     /* Handle PWMB Capture function */
-    u32CapIntFlag1 = PWMB->CCR2;
+    u32CapIntFlag1 = PWMB->CCR0;
 
-    /* PWMB channel 2 Capture interrupt */
-    if(u32CapIntFlag1 & PWM_CCR2_CAPIF2_Msk) {
-        PWMB->CCR2 &= (PWM_CCR_MASK | PWM_CCR2_CAPIF2_Msk);
+    /* PWMB channel 0 Capture interrupt */
+    if(u32CapIntFlag1 & PWM_CCR0_CAPIF0_Msk) {
+        PWMB->CCR0 &= (PWM_CCR_MASK | PWM_CCR0_CAPIF0_Msk);
     }
 }
 
@@ -147,21 +146,18 @@ void SYS_Init(void)
 
     /* Enable PWM module clock */
     CLK_EnableModuleClock(PWM45_MODULE);
-    CLK_EnableModuleClock(PWM67_MODULE);
 
     /* Select UART module clock source */
     CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HXT, CLK_CLKDIV_UART(1));
 
     /* Select PWM module clock source */
     CLK_SetModuleClock(PWM45_MODULE, CLK_CLKSEL2_PWM45_S_HXT | CLK_CLKSEL2_PWM45_EXT_HXT, 0);
-    CLK_SetModuleClock(PWM67_MODULE, CLK_CLKSEL2_PWM67_S_HXT | CLK_CLKSEL2_PWM67_EXT_HXT, 0);
 
     /* User can select PWM module clock source from LIRC as below */
     //CLK_SetModuleClock(PWM45_MODULE, CLK_CLKSEL2_PWM45_S_LIRC | CLK_CLKSEL2_PWM45_EXT_LIRC, 0);
-    //CLK_SetModuleClock(PWM67_MODULE, CLK_CLKSEL2_PWM67_S_LIRC | CLK_CLKSEL2_PWM67_EXT_LIRC, 0);
 
-    /* Reset PWMB channel0~channel3 */
-    SYS_ResetModule(PWM47_RST);
+    /* Reset PWMB channel0~channel1 */
+    SYS_ResetModule(PWM45_RST);
 
     /* Update System Core Clock */
     /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
@@ -177,8 +173,11 @@ void SYS_Init(void)
     SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk);
     SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD);
 
-    /* Set GPE multi-function pins for PWMB Channel1 and channel2 */
-    SYS->GPE_MFP = SYS_GPE_MFP_PE5_PWM5 | SYS_GPE_MFP_PE0_PWM6;
+    /* Set GPE multi-function pins for PWMB Channel1 and channel0 */
+    SYS->GPE_MFP = SYS_GPE_MFP_PE5_PWM5;
+    SYS->GPB_MFP = (SYS->GPB_MFP & ~(SYS_GPB_MFP_PB11_Msk)) | SYS_GPB_MFP_PB11_PWM4;
+    SYS->ALT_MFP = (SYS->ALT_MFP & ~(SYS_ALT_MFP_PB11_Msk)) | SYS_ALT_MFP_PB11_PWM4;
+
 }
 
 void UART0_Init()
@@ -222,17 +221,17 @@ int32_t main(void)
     printf("|                          PWM Driver Sample Code                        |\n");
     printf("|                                                                        |\n");
     printf("+------------------------------------------------------------------------+\n");
-    printf("  This sample code will use PWMB channel 2 to capture\n  the signal from PWMB channel 1.\n");
+    printf("  This sample code will use PWMB channel 0 to capture\n  the signal from PWMB channel 1.\n");
     printf("  I/O configuration:\n");
-    printf("    PWM5(PE.5 PWMB channel 1) <--> PWM6(PE.0 PWMB channel 2)\n\n");
-    printf("Use PWMB Channel 2(PE.0) to capture the PWMB Channel 1(PE.5) Waveform\n");
+    printf("    PWM5(PE.5 PWMB channel 1) <--> PWM4(PB.11 PWMB channel 0)\n\n");
+    printf("Use PWMB Channel 0(PB.11) to capture the PWMB Channel 1(PE.5) Waveform\n");
 
     while(1) {
         printf("Press any key to start PWM Capture Test\n");
         getchar();
 
         /*--------------------------------------------------------------------------------------*/
-        /* Set the PWMB Channel 1 as PWM output function.                                               */
+        /* Set the PWMB Channel 1 as PWM output function.                                       */
         /*--------------------------------------------------------------------------------------*/
 
         /* Assume PWM output frequency is 250Hz and duty ratio is 30%, user can calculate PWM settings by follows.
@@ -260,7 +259,7 @@ int32_t main(void)
         PWM_Start(PWMB, 0x2);
 
         /*--------------------------------------------------------------------------------------*/
-        /* Set the PWMB channel 2  for capture function                                         */
+        /* Set the PWMB channel 0  for capture function                                         */
         /*--------------------------------------------------------------------------------------*/
 
         /* If input minimum frequency is 250Hz, user can calculate capture settings by follows.
@@ -272,29 +271,29 @@ int32_t main(void)
            (Note: In capture mode, user should set CNR to 0xFFFF to increase capture frequency range.)
         */
 
-        /* set PWMB channel 2 capture configuration */
-        PWM_ConfigCaptureChannel(PWMB, PWM_CH2, 166, 0);
+        /* set PWMB channel 0 capture configuration */
+        PWM_ConfigCaptureChannel(PWMB, PWM_CH0, 166, 0);
 
         /* Enable Backward Compatible: write 1 to clear CFLRI0~3 and CRLRI0~3 */
         PWMB->PBCR = 1;
 
-        /* Enable capture falling edge interrupt for PWMB channel 2 */
-        PWM_EnableCaptureInt(PWMB, PWM_CH2, PWM_CAPTURE_INT_FALLING_LATCH);
+        /* Enable capture falling edge interrupt for PWMB channel 0 */
+        PWM_EnableCaptureInt(PWMB, PWM_CH0, PWM_CAPTURE_INT_FALLING_LATCH);
 
         /* Enable PWMB NVIC interrupt */
         NVIC_EnableIRQ((IRQn_Type)(PWMB_IRQn));
 
-        /* Enable Timer for PWMB channel 2  */
-        PWM_Start(PWMB, 0x4);
+        /* Enable Timer for PWMB channel 0  */
+        PWM_Start(PWMB, 0x1);
 
-        /* Enable Capture Function for PWMB channel 2 */
-        PWM_EnableCapture(PWMB, 0x4);
+        /* Enable Capture Function for PWMB channel 0 */
+        PWM_EnableCapture(PWMB, 0x1);
 
-        /* Wait until PWMB channel 2 Timer start to count */
-        while(PWMB->PDR2 == 0);
+        /* Wait until PWMB channel 0 Timer start to count */
+        while(PWMB->PDR0 == 0);
 
         /* Capture the Input Waveform Data */
-        CalPeriodTime(PWMB, PWM_CH2);
+        CalPeriodTime(PWMB, PWM_CH0);
         /*------------------------------------------------------------------------------------------------------*/
         /* Stop PWMB channel 1 (Recommended procedure method 1)                                                 */
         /* Set PWM Timer loaded value(CNR) as 0. When PWM internal counter(PDR) reaches to 0, disable PWM Timer */
@@ -313,27 +312,27 @@ int32_t main(void)
         PWM_DisableOutput(PWMB, 0x2);
 
         /*------------------------------------------------------------------------------------------------------*/
-        /* Stop PWMB channel 2 (Recommended procedure method 1)                                                 */
+        /* Stop PWMB channel 0 (Recommended procedure method 1)                                                 */
         /* Set PWM Timer loaded value(CNR) as 0. When PWM internal counter(PDR) reaches to 0, disable PWM Timer */
         /*------------------------------------------------------------------------------------------------------*/
 
         /* Disable PWMB NVIC */
         NVIC_DisableIRQ((IRQn_Type)(PWMB_IRQn));
 
-        /* Set loaded value as 0 for PWMB channel 2 */
-        PWM_Stop(PWMB, 0x4);
+        /* Set loaded value as 0 for PWMB channel 0 */
+        PWM_Stop(PWMB, 0x1);
 
-        /* Wait until PWMB channel 2 current counter reach to 0 */
-        while(PWMB->PDR2 != 0);
+        /* Wait until PWMB channel 0 current counter reach to 0 */
+        while(PWMB->PDR0 != 0);
 
-        /* Disable Timer for PWMB channel 2 */
-        PWM_ForceStop(PWMB, 0x4);
+        /* Disable Timer for PWMB channel 0 */
+        PWM_ForceStop(PWMB, 0x1);
 
-        /* Disable Capture Function and Capture Input path for  PWMB channel 2*/
-        PWM_DisableCapture(PWMB, 0x4);
+        /* Disable Capture Function and Capture Input path for  PWMB channel 0 */
+        PWM_DisableCapture(PWMB, 0x1);
 
-        /* Clear Capture Interrupt flag for PWMB channel 2*/
-        PWM_ClearCaptureIntFlag(PWMB, PWM_CH2, PWM_CAPTURE_INT_FALLING_LATCH);
+        /* Clear Capture Interrupt flag for PWMB channel 0 */
+        PWM_ClearCaptureIntFlag(PWMB, PWM_CH0, PWM_CAPTURE_INT_FALLING_LATCH);
     }
 }
 

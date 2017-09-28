@@ -54,7 +54,7 @@ void SYS_Init(void)
     CLK_EnableModuleClock(ADC_MODULE);
 
     /* Select UART module clock source */
-    CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_PLL, CLK_CLKDIV_UART(1));
+    CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HIRC, CLK_CLKDIV_UART(1));
 
     /* ADC clock source is 22.1184MHz, set divider to 7, ADC clock is 22.1184/7 MHz */
     CLK_SetModuleClock(ADC_MODULE, CLK_CLKSEL1_ADC_S_HIRC, CLK_CLKDIV_ADC(7));
@@ -73,7 +73,6 @@ void SYS_Init(void)
     /* Configure the GPA0 - GPA3 ADC analog input pins */
     SYS->GPA_MFP &= ~(SYS_GPA_MFP_PA0_Msk | SYS_GPA_MFP_PA1_Msk | SYS_GPA_MFP_PA2_Msk | SYS_GPA_MFP_PA3_Msk) ;
     SYS->GPA_MFP |= SYS_GPA_MFP_PA0_ADC0 | SYS_GPA_MFP_PA1_ADC1 | SYS_GPA_MFP_PA2_ADC2 | SYS_GPA_MFP_PA3_ADC3 ;
-    SYS->ALT_MFP1 = 0;
 
 }
 
@@ -172,7 +171,7 @@ void AdcSingleCycleScanModeTest()
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 
-main(void)
+int32_t main(void)
 {
 
     /* Unlock protected registers */
