@@ -255,9 +255,9 @@ int32_t main(void)
         and Byte Read operations, and check if the read data is equal to the programmed data.
     */
 
-    printf("+------------------------------------------------------------+\n");
-    printf("|    NUC2201 I2C Driver Sample Code with EEPROM 24LC64    |\n");
-    printf("+------------------------------------------------------------+\n");
+    printf("+----------------------------------------------------------+\n");
+    printf("|    NUC2201 I2C Driver Sample Code with EEPROM 24LC64     |\n");
+    printf("+----------------------------------------------------------+\n");
 
     /* Init I2C0 to access EEPROM */
     I2C0_Init();

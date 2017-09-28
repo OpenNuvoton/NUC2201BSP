@@ -99,9 +99,9 @@ int main()
     UART0_Init();
 
     printf("\n\n");
-    printf("+----------------------------------------+\n");
-    printf("|          NUC2201 FMC Sample Code    |\n");
-    printf("+----------------------------------------+\n");
+    printf("+-------------------------------------+\n");
+    printf("|       NUC2201 FMC Sample Code       |\n");
+    printf("+-------------------------------------+\n");
 
     /* Enable FMC ISP functions */
     FMC->ISPCON |=  FMC_ISPCON_ISPEN_Msk | FMC_ISPCON_APUEN_Msk | FMC_ISPCON_LDUEN_Msk | FMC_ISPCON_CFGUEN_Msk;

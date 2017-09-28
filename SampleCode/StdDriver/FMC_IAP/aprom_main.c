@@ -145,7 +145,7 @@ int main()
 
     printf("\n\n");
     printf("+----------------------------------------+\n");
-    printf("|      NUC2201 FMC IAP Sample Code    |\n");
+    printf("|      NUC2201 FMC IAP Sample Code       |\n");
     printf("|           [APROM code]                 |\n");
     printf("+----------------------------------------+\n");
 
