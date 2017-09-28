@@ -4,7 +4,7 @@
  * @brief    NUC2201 Series GPIO Driver Sample Code
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -86,29 +86,29 @@ int main(void)
 
     printf("\n\nCPU @ %d Hz\n", SystemCoreClock);
     printf("+-------------------------------------------------+\n");
-    printf("|    PB.2(Output) and PE.1(Input) Sample Code     |\n");
+    printf("|    PB.2(Output) and PE.5(Input) Sample Code     |\n");
     printf("+-------------------------------------------------+\n\n");
-    printf("  >> Please connect PB.2 and PE.1 first << \n");
+    printf("  >> Please connect PB.2 and PE.5 first << \n");
     printf("     Press any key to start test by using [Pin Data Input/Output Control] \n\n");
     getchar();
     
     /* Configure PB.2 as Output mode and PE.1 as Input mode */
     GPIO_SetMode(PB, BIT2, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PE, BIT1, GPIO_PMD_INPUT);
+    GPIO_SetMode(PE, BIT5, GPIO_PMD_INPUT);
 
     i32Err = 0;
-    printf("GPIO PB.2(output mode) connect to PE.1(input mode) ......");
+    printf("GPIO PB.2(output mode) connect to PE.5(input mode) ......");
 
     /* Use Pin Data Input/Output Control to pull specified I/O or get I/O pin status */
     /* Pull PB.2 to Low and check PE.1 status */
     PB2 = 0;
-    if(PE1 != 0) {
+    if(PE5 != 0) {
         i32Err = 1;
     }
 
     /* Pull PB.2 to High and check PE.1 status */
     PB2 = 1;
-    if(PE1 != 1) {
+    if(PE5 != 1) {
         i32Err = 1;
     }
 
@@ -120,9 +120,9 @@ int main(void)
 
     /* Configure PB.2 and PE.1 to default Quasi-bidirectional mode */
     GPIO_SetMode(PB, BIT2, GPIO_PMD_QUASI);
-    GPIO_SetMode(PE, BIT1, GPIO_PMD_QUASI);
+    GPIO_SetMode(PE, BIT5, GPIO_PMD_QUASI);
 
     while(1);
 }
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/

@@ -4,7 +4,7 @@
  * @brief    NUC2201 Series GPIO Driver Sample Code
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC2201.h"
@@ -37,13 +37,13 @@ void GPAB_IRQHandler(void)
 }
 
 /**
- * @brief       GPIO PC/PD/PE/PF IRQ
+ * @brief       GPIO PC/PE/PF IRQ
  *
  * @param       None
  *
  * @return      None
  *
- * @details     The PC/PD/PE/PF default IRQ, declared in startup_NUC2201.s.
+ * @details     The PC/PE/PF default IRQ, declared in startup_NUC2201.s.
  */
 void GPCDEF_IRQHandler(void)
 {
@@ -52,9 +52,8 @@ void GPCDEF_IRQHandler(void)
         GPIO_CLR_INT_FLAG(PE, BIT5);
         printf("PE.5 INT occurred.\n");
     } else {
-        /* Un-expected interrupt. Just clear all PC, PD, PE and PF interrupts */
+        /* Un-expected interrupt. Just clear all PC, PE and PF interrupts */
         PC->ISRC = PC->ISRC;
-        PD->ISRC = PD->ISRC;
         PE->ISRC = PE->ISRC;
         PF->ISRC = PF->ISRC;
         printf("Un-expected interrupts.\n");
@@ -154,4 +153,4 @@ int main(void)
     while(1);
 }
 
-/*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
