@@ -96,7 +96,8 @@ void SYS_Init(void)
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Set PB multi-function pins for UART0 RXD, TXD */
-    SYS->GPB_MFP = SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD;
+    SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk);
+    SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD);
 }
 
 void UART0_Init(void)
@@ -136,10 +137,10 @@ int main(void)
     printf("+----------------------------------------------------+\n\n");
 
     /* Open RTC and start counting */
-    sWriteRTC.u32Year       = 2014;
-    sWriteRTC.u32Month      = 2;
-    sWriteRTC.u32Day        = 6;
-    sWriteRTC.u32DayOfWeek  = RTC_THURSDAY;
+    sWriteRTC.u32Year       = 2017;
+    sWriteRTC.u32Month      = 11;
+    sWriteRTC.u32Day        = 01;
+    sWriteRTC.u32DayOfWeek  = RTC_WEDNESDAY;
     sWriteRTC.u32Hour       = 15;
     sWriteRTC.u32Minute     = 30;
     sWriteRTC.u32Second     = 55;
@@ -147,10 +148,10 @@ int main(void)
     RTC_Open(&sWriteRTC);
 
     /* Set RTC alarm date/time */
-    sWriteRTC.u32Year       = 2014;
-    sWriteRTC.u32Month      = 2;
-    sWriteRTC.u32Day        = 6;
-    sWriteRTC.u32DayOfWeek  = RTC_THURSDAY;
+    sWriteRTC.u32Year       = 2017;
+    sWriteRTC.u32Month      = 11;
+    sWriteRTC.u32Day        = 1;
+    sWriteRTC.u32DayOfWeek  = RTC_WEDNESDAY;
     sWriteRTC.u32Hour       = 15;
     sWriteRTC.u32Minute     = 31;
     sWriteRTC.u32Second     = 05;
@@ -160,8 +161,8 @@ int main(void)
     NVIC_EnableIRQ(RTC_IRQn);
     RTC_EnableInt(RTC_RIER_AIER_Msk);
 
-    printf("# Set RTC current date/time: 2014/02/06 15:30:55.\n");
-    printf("# Set RTC alarm date/time:   2014/02/06 15:31:05.\n");
+    printf("# Set RTC current date/time: 2017/11/01 15:30:55.\n");
+    printf("# Set RTC alarm date/time:   2017/11/01 15:31:05.\n");
     printf("# Wait system waken-up by RTC alarm interrupt event.\n");
 
     g_u8IsRTCAlarmINT = 0;

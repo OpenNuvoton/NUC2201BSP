@@ -110,7 +110,8 @@ void SYS_Init(void)
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Set PB multi-function pins for UART0 RXD, TXD */
-    SYS->GPB_MFP = SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD;
+    SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk);
+    SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD);
 }
 
 void UART0_Init(void)
@@ -158,20 +159,20 @@ int main(void)
     /* Setting RTC current date/time */
     RTC_WaitAccessEnable();
     RTC->TSSR = RTC_CLOCK_24;
-    RTC->DWR  = RTC_THURSDAY;
-    RTC->CLR  = 0x00140206;         /* Date: 2014/02/06 */
+    RTC->DWR  = RTC_WEDNESDAY;
+    RTC->CLR  = 0x00171101;         /* Date: 2017/11/01 */
     RTC->TLR  = 0x00153055;         /* Time: 15:30:55 */
 
     /* Setting RTC alarm date/time and enable alarm interrupt */
-    RTC->CAR  = 0x00140206;         /* Date: 2014/02/06 */
+    RTC->CAR  = 0x00171101;         /* Date: 2017/11/01 */
     RTC->TAR  = 0x00153105;         /* Time: 15:31:05 */
     RTC->RIER = RTC_RIER_AIER_Msk;
 
     /* Enable RTC alarm interrupt and wake-up function will be enabled also */
     NVIC_EnableIRQ(RTC_IRQn);
 
-    printf("# Set RTC current date/time: 2014/02/06 15:30:55.\n");
-    printf("# Set RTC alarm date/time:   2014/02/06 15:31:05.\n");
+    printf("# Set RTC current date/time: 2017/11/01 15:30:55.\n");
+    printf("# Set RTC alarm date/time:   2017/11/01 15:31:05.\n");
     printf("# Wait system waken-up by RTC alarm interrupt event.\n");
 
     g_u8IsRTCAlarmINT = 0;
