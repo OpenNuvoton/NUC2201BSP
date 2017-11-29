@@ -6,7 +6,7 @@
  * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
-#include  "NUC2201.h"
+#include  "NuMicro.h"
 #include  "micro_printer.h"
 
 

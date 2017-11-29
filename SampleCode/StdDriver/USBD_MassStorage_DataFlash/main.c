@@ -5,7 +5,7 @@
  * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "massstorage.h"
 
 #define CONFIG_BASE      0x00300000

@@ -8,7 +8,7 @@
 
 /*!<Includes */
 #include <string.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "hid_mousekeyboard.h"
 
 signed char mouse_table[] = {-16, -16, -16, 0, 16, 16, 16, 0};

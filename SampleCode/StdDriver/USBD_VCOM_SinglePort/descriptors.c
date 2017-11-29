@@ -9,7 +9,7 @@
 #define __DESCRIPTORS_C__
 
 /*!<Includes */
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "usbd.h"
 #include "cdc_serial.h"
 

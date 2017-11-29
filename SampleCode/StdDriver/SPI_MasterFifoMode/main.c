@@ -8,7 +8,7 @@
  * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 
 #define TEST_COUNT 16
 

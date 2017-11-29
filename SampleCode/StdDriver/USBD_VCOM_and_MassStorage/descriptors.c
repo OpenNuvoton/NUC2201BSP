@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 /*!<Includes */
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "cdc_serial.h"
 #include "massstorage.h"
 

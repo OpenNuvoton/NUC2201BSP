@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 /*!<Includes */
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "HID_Transfer_and_MSC.h"
 #include "massstorage.h"
 

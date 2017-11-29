@@ -9,7 +9,7 @@
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 
 
 #define PLL_CLOCK       72000000

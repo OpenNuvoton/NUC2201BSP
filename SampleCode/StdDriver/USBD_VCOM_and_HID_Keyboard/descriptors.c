@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 /*!<Includes */
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "VCOM_and_HID_keyboard.h"
 
 /*!<USB HID Report Descriptor */

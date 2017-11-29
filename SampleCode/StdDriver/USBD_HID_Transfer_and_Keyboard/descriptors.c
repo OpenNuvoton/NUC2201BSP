@@ -6,7 +6,7 @@
  * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 /*!<Includes */
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "HID_Transfer_and_Keyboard.h"
 
 /*!<USB HID Report Descriptor */

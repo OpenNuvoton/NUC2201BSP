@@ -8,7 +8,7 @@
 
 /*!<Includes */
 #include <string.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "hid_mouse.h"
 
 #include "usbd.h"
