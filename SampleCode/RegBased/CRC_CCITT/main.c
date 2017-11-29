@@ -10,7 +10,7 @@
  ******************************************************************************/
 #include <stdio.h>
 #include <string.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 

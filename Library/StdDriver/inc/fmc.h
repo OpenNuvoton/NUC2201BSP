@@ -12,8 +12,6 @@
 #ifndef __FMC_H__
 #define __FMC_H__
 
-#include "NUC2201.h"
-
 #ifdef __cplusplus
 extern "C"
 {

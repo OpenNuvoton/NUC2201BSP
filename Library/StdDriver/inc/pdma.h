@@ -12,8 +12,6 @@
 #ifndef __PDMA_H__
 #define __PDMA_H__
 
-#include "NUC2201.h"
-
 
 /** @addtogroup Standard_Driver Standard Driver
   * @{

@@ -10,7 +10,7 @@
 
 
 #include <stdio.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 
 #if defined ( __CC_ARM   )
 #if (__ARMCC_VERSION < 400000)

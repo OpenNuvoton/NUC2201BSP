@@ -12,8 +12,6 @@
 #ifndef __ADC_H__
 #define __ADC_H__
 
-#include "NUC2201.h"
-
 #ifdef __cplusplus
 extern "C"
 {

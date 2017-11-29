@@ -8,7 +8,7 @@
 *****************************************************************************/
 
 #include <stdio.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 
 /** @addtogroup Standard_Driver Standard Driver
   @{

@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include <stdio.h>
 #include <string.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 
 
 #define PLL_CLOCK       72000000

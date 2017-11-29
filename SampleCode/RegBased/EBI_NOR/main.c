@@ -9,7 +9,7 @@
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
-#include "NUC2201.h"
+#include "NuMicro.h"
 #include "ebi_nor.h"
 
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
