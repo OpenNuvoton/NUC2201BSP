@@ -77,8 +77,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
-    /* Set PB multi-function pins for UART0 RXD, TXD */
-    SYS->GPB_MFP = SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD;
+    SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk);
+    SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD);
 }
 
 void UART0_Init(void)
@@ -119,10 +119,10 @@ int main(void)
     printf("+-----------------------------------------+\n\n");
 
     /* Open RTC and start counting */
-    sWriteRTC.u32Year       = 2014;
-    sWriteRTC.u32Month      = 2;
-    sWriteRTC.u32Day        = 6;
-    sWriteRTC.u32DayOfWeek  = RTC_THURSDAY;
+    sWriteRTC.u32Year       = 2017;
+    sWriteRTC.u32Month      = 11;
+    sWriteRTC.u32Day        = 1;
+    sWriteRTC.u32DayOfWeek  = RTC_WEDNESDAY;
     sWriteRTC.u32Hour       = 15;
     sWriteRTC.u32Minute     = 30;
     sWriteRTC.u32Second     = 30;
