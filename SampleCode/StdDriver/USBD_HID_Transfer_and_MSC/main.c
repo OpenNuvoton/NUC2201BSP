@@ -12,6 +12,8 @@
 #include "HID_Transfer_and_MSC.h"
 #include "massstorage.h"
 
+#define CRYSTAL_LESS        0
+
 #define CONFIG_BASE      0x00300000
 #define DATA_FLASH_BASE  MASS_STORAGE_OFFSET
 
@@ -45,6 +47,7 @@ void SYS_Init(void)
     /* Switch HCLK clock source to Internal RC and HCLK source divide 1 */
     CLK_SetHCLK(CLK_CLKSEL0_HCLK_S_HIRC, CLK_CLKDIV_HCLK(1));
 
+#if (!CRYSTAL_LESS)
     /* Enable external XTAL 12 MHz clock */
     CLK_EnableXtalRC(CLK_PWRCON_XTL12M_EN_Msk);
 
@@ -53,15 +56,28 @@ void SYS_Init(void)
 
     /* Set core clock */
     CLK_SetCoreClock(72000000);
+    
+    /* Select module clock source */
+    CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HIRC, CLK_CLKDIV_UART(1));
+    CLK_SetModuleClock(USBD_MODULE, 0, CLK_CLKDIV_USB(3));
+#else
+    /* Enable external XTAL 32 KHz clock */
+    CLK_EnableXtalRC(CLK_PWRCON_XTL32K_EN_Msk);
+
+    /* Waiting for external XTAL clock ready */
+    CLK_WaitClockReady(CLK_CLKSTATUS_XTL32K_STB_Msk);
+
+    /* Set core clock */
+    CLK_SetCoreClock(48000000);
+
+    /* Select module clock source */
+    CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HIRC, CLK_CLKDIV_UART(1));
+    CLK_SetModuleClock(USBD_MODULE, 0, CLK_CLKDIV_USB(1));
+#endif
 
     /* Enable module clock */
     CLK_EnableModuleClock(UART0_MODULE);
     CLK_EnableModuleClock(USBD_MODULE);
-
-    /* Select module clock source */
-    CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HXT, CLK_CLKDIV_UART(1));
-    CLK_SetModuleClock(USBD_MODULE, 0, CLK_CLKDIV_USB(3));
-
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -86,7 +102,7 @@ void UART0_Init(void)
     SYS->IPRSTC2 &= ~SYS_IPRSTC2_UART0_RST_Msk;
 
     /* Configure UART0 and set UART0 Baudrate */
-    UART0->BAUD = UART_BAUD_MODE2 | UART_BAUD_MODE2_DIVIDER(__HXT, 115200);
+    UART0->BAUD = UART_BAUD_MODE2 | UART_BAUD_MODE2_DIVIDER(__HIRC, 115200);
     UART0->LCR = UART_WORD_LEN_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
 }
 
@@ -149,12 +165,31 @@ int32_t main(void)
 
     /* Endpoint configuration */
     HID_MSC_Init();
+
     /* Start USB device */
     USBD_Start();
+
+#if CRYSTAL_LESS
+    /* Enable USB clock trim function */
+    SYS->IRCTRIMCTL = 0x01;
+#endif
+
     NVIC_EnableIRQ(USBD_IRQn);
 
     while(1)
     {
+#if CRYSTAL_LESS
+        /* Re-start auto trim when any error found */
+        if (SYS->IRCTRIMINT & (SYS_IRCTRIMINT_CLKERR_INT_Msk | SYS_IRCTRIMINT_TRIM_FAIL_INT_Msk))
+        {
+            SYS->IRCTRIMINT = SYS_IRCTRIMINT_CLKERR_INT_Msk | SYS_IRCTRIMINT_TRIM_FAIL_INT_Msk;
+
+            /* Re-enable Auto Trim */
+            SYS->IRCTRIMCTL = 0x01;
+            printf("USB trim fail. Just retry. SYS->IRCTRIMINT = 0x%x, SYS->IRCTRIMCTL = 0x%x\n", SYS->IRCTRIMINT, SYS->IRCTRIMCTL);
+        }
+#endif
+
         MSC_ProcessCmd();
     }
 }
