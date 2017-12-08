@@ -105,6 +105,8 @@ void SYS_Init(void)
     /* Set PB multi-function pins for TM1 */
     SYS->GPB_MFP &= ~SYS_GPB_MFP_PB9_Msk;
     SYS->GPB_MFP |= SYS_GPB_MFP_PB9_TM1;
+    SYS->ALT_MFP &= ~(SYS_ALT_MFP_PB9_Msk);
+    SYS->ALT_MFP |= SYS_ALT_MFP_PB9_TM1;
 }
 
 void UART0_Init(void)
