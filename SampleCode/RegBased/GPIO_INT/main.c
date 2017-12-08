@@ -55,7 +55,6 @@ void GPCDEF_IRQHandler(void)
     } else {
         /* Un-expected interrupt. Just clear all PC, PD, PE and PF interrupts */
         PC->ISRC = PC->ISRC;
-        PD->ISRC = PD->ISRC;
         PE->ISRC = PE->ISRC;
         PF->ISRC = PF->ISRC;
         printf("Un-expected interrupts.\n");
