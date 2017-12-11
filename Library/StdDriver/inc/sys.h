@@ -637,9 +637,9 @@ Example: If user want to set PA.0 as ADC0 and PA1 as ADC1 in initial function,
 #define SYS_ALT_MFP_PC6_GPIO        0x00000000UL        /*!< ALT_MFP PC.6 setting for GPIO */
 #define SYS_ALT_MFP2_PC6_GPIO       NULL                /*!< No ALT_MFP2 setting for PC.6 */
 
-#define SYS_GPC_MFP_PC6_ADC9        (1UL<<6)            /*!< GPC_MFP PC.6 setting for ADC9 */
-#define SYS_ALT_MFP_PC6_ADC9        0x00000000UL        /*!< ALT_MFP PC.6 setting for ADC9 */
-#define SYS_ALT_MFP2_PC6_ADC9       NULL                /*!< No ALT_MFP2 setting for PC.6 */
+#define SYS_GPC_MFP_PC6_ADC8        (1UL<<6)            /*!< GPC_MFP PC.6 setting for ADC8 */
+#define SYS_ALT_MFP_PC6_ADC8        0x00000000UL        /*!< ALT_MFP PC.6 setting for ADC8 */
+#define SYS_ALT_MFP2_PC6_ADC8       NULL                /*!< No ALT_MFP2 setting for PC.6 */
 
 #define SYS_GPC_MFP_PC6_AD4         (1UL<<6)            /*!< GPC_MFP PC.6 setting for AD4 */
 #define SYS_ALT_MFP_PC6_AD4         (1UL<<11)           /*!< ALT_MFP PC.6 setting for AD4 */
