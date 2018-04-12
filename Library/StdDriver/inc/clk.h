@@ -50,6 +50,8 @@ extern "C"
 #define CLK_CLKSEL0_STCLK_S_HIRC_DIV2   (0x7UL<<CLK_CLKSEL0_STCLK_S_Pos)  /*!< Setting STCLK clock source as internal 22.1184MHz RC clock/2 */
 #define CLK_CLKSEL0_STCLK_S_HCLK        (0x1UL<<SysTick_CTRL_CLKSOURCE_Pos)  /*!< Setting STCLK clock source as HCLK */
 
+#define CLK_CLKSEL0_USB_S_RC48M         (0x0U<<CLK_CLKSEL0_USB_S_Pos)  /*!< Setting USB clock source as 48 MHz high speed RC clock */
+#define CLK_CLKSEL0_USB_S_PLL           (0x1U<<CLK_CLKSEL0_USB_S_Pos)  /*!< Setting USB clock source as PLL */
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  CLKSEL1 constant definitions.                                                                          */
