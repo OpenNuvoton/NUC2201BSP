@@ -799,7 +799,11 @@ typedef struct
     __IO uint32_t IRCTRIMCTL;    /* Offset: 0x80  IRC Trim Control Register                                          */
     __IO uint32_t IRCTRIMIEN;    /* Offset: 0x84  IRC Trim Interrupt Enable Register                                 */
     __IO uint32_t IRCTRIMINT;    /* Offset: 0x88  IRC Trim Interrupt Status Register                                 */
-    __I  uint32_t RESERVE7[29]; 
+    __I  uint32_t RESERVE7[1];
+    __IO uint32_t HIRCTCTL;
+    __IO uint32_t HIRCTIEN;
+    __IO uint32_t HIRCTSTS;
+    __I  uint32_t RESERVE8[25];
     __IO uint32_t REGWRPROT;     /* Offset: 0x100  Register Write Protection Register                                */
 
 } GCR_T;
@@ -1055,6 +1059,38 @@ typedef struct
 
 #define SYS_IRCTRIMINT_FREQ_LOCK_Pos            0                                           /*!< GCR_T::IRCTRIMINT: FREQ_LOCK Position */
 #define SYS_IRCTRIMINT_FREQ_LOCK_Msk            (1ul << SYS_IRCTRIMINT_FREQ_LOCK_Pos)       /*!< GCR_T::IRCTRIMINT: FREQ_LOCK Mask */
+
+/* GCR HIRCTCTL Bit Field Definitions */
+#define SYS_HIRCTCTL_BOUNDARY_Pos               16                                          /*!< GCR_T::HIRCTCTL: BOUNDARY Position */
+#define SYS_HIRCTCTL_BOUNDARY_Msk               (0x1ful << SYS_HIRCTCTL_BOUNDARY_Pos)       /*!< GCR_T::HIRCTCTL: BOUNDARY Mask */
+
+#define SYS_HIRCTCTL_BOUNDEN_Pos                9                                           /*!< GCR_T::HIRCTCTL: BOUNDEN Position */
+#define SYS_HIRCTCTL_BOUNDEN_Msk                (1ul << SYS_HIRCTCTL_BOUNDEN_Pos)           /*!< GCR_T::HIRCTCTL: BOUNDEN Mask */
+
+#define SYS_HIRCTCTL_CESTOPEN_Pos               8                                           /*!< GCR_T::HIRCTCTL: CESTOPEN Position */
+#define SYS_HIRCTCTL_CESTOPEN_Msk               (1ul << SYS_HIRCTCTL_CESTOPEN_Pos)          /*!< GCR_T::HIRCTCTL: CESTOPEN Mask */
+
+#define SYS_HIRCTCTL_RETRYCNT_Pos               6                                           /*!< GCR_T::HIRCTCTL: RETRYCNT Position */
+#define SYS_HIRCTCTL_RETRYCNT_Msk               (3ul << SYS_HIRCTCTL_RETRYCNT_Pos)          /*!< GCR_T::HIRCTCTL: RETRYCNT Mask */
+
+#define SYS_HIRCTCTL_LOOPSEL_Pos                4                                           /*!< GCR_T::HIRCTCTL: LOOPSEL Position */
+#define SYS_HIRCTCTL_LOOPSEL_Msk                (3ul << SYS_HIRCTCTL_LOOPSEL_Pos)           /*!< GCR_T::HIRCTCTL: LOOPSEL Mask */
+
+#define SYS_HIRCTCTL_FREQSEL_Pos                0                                           /*!< GCR_T::HIRCTCTL: FREQSEL Position */
+#define SYS_HIRCTCTL_FREQSEL_Msk                (3ul << SYS_HIRCTCTL_FREQSEL_Pos)           /*!< GCR_T::HIRCTCTL: FREQSEL Mask */
+
+/* GCR HIRCTSTS Bit Field Definitions */
+#define SYS_HIRCTSTS_OVBDIF_Pos                 3                                           /*!< GCR_T::HIRCTSTS: OVBDIF Position */
+#define SYS_HIRCTSTS_OVBDIF_Msk                 (1ul << SYS_HIRCTSTS_OVBDIF_Pos)            /*!< GCR_T::HIRCTSTS: OVBDIF Mask */
+
+#define SYS_HIRCTSTS_CLKERIF_Pos                2                                           /*!< GCR_T::HIRCTSTS: CLKERIF Position */
+#define SYS_HIRCTSTS_CLKERIF_Msk                (1ul << SYS_HIRCTSTS_CLKERIF_Pos)           /*!< GCR_T::HIRCTSTS: CLKERIF Mask */
+
+#define SYS_HIRCTSTS_TFAILIF_Pos                1                                           /*!< GCR_T::HIRCTSTS: TFAILIF Position */
+#define SYS_HIRCTSTS_TFAILIF_Msk                (1ul << SYS_HIRCTSTS_TFAILIF_Pos)           /*!< GCR_T::HIRCTSTS: TFAILIF Mask */
+
+#define SYS_HIRCTSTS_FREQLOCK_Pos               0                                           /*!< GCR_T::HIRCTSTS: FREQLOCK Position */
+#define SYS_HIRCTSTS_FREQLOCK_Msk               (1ul << SYS_HIRCTSTS_FREQLOCK_Pos)          /*!< GCR_T::HIRCTSTS: FREQLOCK Mask */
 
 /* GCR REGWRPROT Bit Field Definitions */
 #define SYS_REGWRPROT_REGWRPROT_Pos             0                                           /*!< GCR_T::REGWRPROT: REGWRPROT Position */

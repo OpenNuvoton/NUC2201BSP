@@ -441,6 +441,9 @@ typedef struct
 
 
 /* CLK PWRCON Bit Field Definitions */
+#define CLK_PWRCON_OSC48M_EN_Pos             12                                   /*!< CLK_T::PWRCON: OSC48M_EN Position */
+#define CLK_PWRCON_OSC48M_EN_Msk             (1ul << CLK_PWRCON_OSC48M_EN_Pos)    /*!< CLK_T::PWRCON: OSC48M_EN Mask */
+
 #define CLK_PWRCON_PD_WAIT_CPU_Pos           8                                    /*!< CLK_T::PWRCON: PD_WAIT_CPU Position */
 #define CLK_PWRCON_PD_WAIT_CPU_Msk           (1ul << CLK_PWRCON_PD_WAIT_CPU_Pos)  /*!< CLK_T::PWRCON: PD_WAIT_CPU Mask */
 
@@ -544,6 +547,9 @@ typedef struct
 #define CLK_CLKSTATUS_CLK_SW_FAIL_Pos        7                                        /*!< CLK_T::CLKSTATUS: CLK_SW_FAIL Position */
 #define CLK_CLKSTATUS_CLK_SW_FAIL_Msk        (1ul << CLK_CLKSTATUS_CLK_SW_FAIL_Pos)   /*!< CLK_T::CLKSTATUS: CLK_SW_FAIL Mask */
 
+#define CLK_CLKSTATUS_OSC48M_STB_Pos         5                                        /*!< CLK_T::CLKSTATUS: OSC48M_STB Position */
+#define CLK_CLKSTATUS_OSC48M_STB_Msk         (1ul << CLK_CLKSTATUS_OSC48M_STB_Pos)    /*!< CLK_T::CLKSTATUS: OSC48M_STB Mask */
+
 #define CLK_CLKSTATUS_OSC22M_STB_Pos         4                                        /*!< CLK_T::CLKSTATUS: OSC22M_STB Position */
 #define CLK_CLKSTATUS_OSC22M_STB_Msk         (1ul << CLK_CLKSTATUS_OSC22M_STB_Pos)    /*!< CLK_T::CLKSTATUS: OSC22M_STB Mask */
 #define CLK_CLKSTATUS_IRC22M_STB_Pos         4                                        /*!< CLK_T::CLKSTATUS: IRC22M_STB Position */
@@ -564,6 +570,9 @@ typedef struct
 #define CLK_CLKSTATUS_XTL12M_STB_Msk         (1ul << CLK_CLKSTATUS_XTL12M_STB_Pos)    /*!< CLK_T::CLKSTATUS: XTL12M_STB Mask */
 
 /* CLK CLKSEL0 Bit Field Definitions */
+#define CLK_CLKSEL0_USB_S_Pos                8                                        /*!< CLK_T::CLKSEL0: USB_S Position */
+#define CLK_CLKSEL0_USB_S_Msk                (1ul << CLK_CLKSEL0_USB_S_Pos)           /*!< CLK_T::CLKSEL0: USB_S Mask */
+
 #define CLK_CLKSEL0_STCLK_S_Pos              3                                        /*!< CLK_T::CLKSEL0: STCLK_S Position */
 #define CLK_CLKSEL0_STCLK_S_Msk              (7ul << CLK_CLKSEL0_STCLK_S_Pos)         /*!< CLK_T::CLKSEL0: STCLK_S Mask */
 

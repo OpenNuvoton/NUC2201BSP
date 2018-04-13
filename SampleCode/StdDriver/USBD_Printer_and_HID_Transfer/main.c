@@ -5,13 +5,19 @@
  *           Transfer data between USB device and PC through USB HID interface. 
  *           A windows tool is also included in this sample code to connect with a USB device.
  * @note
+ *           Windows tool: User need to input the specific PID for the USB HID device connected to PC.
+ *                         PID format with hexadecimal.
+ *
+ *           -> PID is 0xAACC in this sample.
+ *
  * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
 #include "micro_printer_and_hid_transfer.h"
 
-#define CRYSTAL_LESS        0
+#define CRYSTAL_LESS        1
+#define TRIM_INIT           (GCR_BASE+0x118)
 
 void EnableCLKO(uint32_t u32ClkSrc, uint32_t u32ClkDiv)
 {
@@ -28,7 +34,6 @@ void EnableCLKO(uint32_t u32ClkSrc, uint32_t u32ClkDiv)
 /*--------------------------------------------------------------------------*/
 void SYS_Init(void)
 {
-
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -54,20 +59,20 @@ void SYS_Init(void)
     
     /* Select module clock source */
     CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HIRC, CLK_CLKDIV_UART(1));
-    CLK_SetModuleClock(USBD_MODULE, 0, CLK_CLKDIV_USB(3));
+    CLK_SetModuleClock(USBD_MODULE, CLK_CLKSEL0_USB_S_PLL, CLK_CLKDIV_USB(3));
 #else
-    /* Enable external XTAL 32 KHz clock */
-    CLK_EnableXtalRC(CLK_PWRCON_XTL32K_EN_Msk);
+    /* Enable Internal RC 48MHz clock */
+    CLK_EnableXtalRC(CLK_PWRCON_OSC48M_EN_Msk);
 
-    /* Waiting for external XTAL clock ready */
-    CLK_WaitClockReady(CLK_CLKSTATUS_XTL32K_STB_Msk);
+    /* Waiting for Internal RC clock ready */
+    CLK_WaitClockReady(CLK_CLKSTATUS_OSC48M_STB_Msk);
 
     /* Set core clock */
     CLK_SetCoreClock(48000000);
 
     /* Select module clock source */
     CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HIRC, CLK_CLKDIV_UART(1));
-    CLK_SetModuleClock(USBD_MODULE, 0, CLK_CLKDIV_USB(1));
+    CLK_SetModuleClock(USBD_MODULE, CLK_CLKSEL0_USB_S_RC48M, CLK_CLKDIV_USB(1));
 #endif
 
     /* Enable module clock */
@@ -108,6 +113,8 @@ void UART0_Init(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
+    uint32_t u32TrimInit;
+
     uint8_t Str[9];
     
     /* Unlock protected registers */
@@ -130,8 +137,11 @@ int32_t main(void)
     USBD_Start();
 
 #if CRYSTAL_LESS
-    /* Enable USB clock trim function */
-    SYS->IRCTRIMCTL = 0x01;
+    /* Backup init trim */
+    u32TrimInit = M32(TRIM_INIT);
+
+    /* Enable USB crystal-less */
+    SYS->HIRCTCTL = 0x01;
 #endif
 
     NVIC_EnableIRQ(USBD_IRQn);
@@ -141,8 +151,18 @@ int32_t main(void)
     while(1)
     {
 #if CRYSTAL_LESS
-    /* Enable USB clock trim function */
-    SYS->IRCTRIMCTL = 0x01;
+        /* Re-start crystal-less when any error found */
+        if (SYS->HIRCTSTS & (SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk))
+        {
+            SYS->HIRCTSTS = SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk;
+
+            /* Init TRIM */
+            M32(TRIM_INIT) = u32TrimInit;
+
+            /* Re-enable crystal-less */
+            SYS->HIRCTCTL = 0x01;
+            //printf("USB trim fail. Just retry. SYS->HIRCTSTS = 0x%x, SYS->HIRCTCTL = 0x%x\n", SYS->HIRCTSTS, SYS->HIRCTCTL);
+        }
 #endif
 
         CLK_SysTickDelay(2000);   // delay
