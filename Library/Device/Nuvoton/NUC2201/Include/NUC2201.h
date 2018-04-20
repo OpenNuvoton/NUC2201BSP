@@ -120,7 +120,6 @@ typedef enum IRQn {
 #include "gpio_reg.h"
 #include "i2c_reg.h"
 #include "pdma_reg.h"
-#include "ps2_reg.h"
 #include "pwm_reg.h"
 #include "rtc_reg.h"
 #include "spi_reg.h"

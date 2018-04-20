@@ -428,8 +428,7 @@ typedef struct
     __IO uint32_t CLKDIV;        /* Offset: 0x18  Clock Divider Number Register                                      */
     __IO uint32_t CLKSEL2;       /* Offset: 0x1C  Clock Source Select Control Register 2                             */
     __IO uint32_t PLLCON;        /* Offset: 0x20  PLL Control Register                                               */
-    __IO uint32_t FRQDIV;        /* Offset: 0x24  Frequency Divider Control Register                                 */
-    __IO uint32_t RESERVE[2];   
+    __IO uint32_t FRQDIV;        /* Offset: 0x24  Frequency Divider Control Register                                 */   
 
 } CLK_T;
 

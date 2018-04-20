@@ -715,9 +715,9 @@ typedef struct
  * |        |          |01 = Trim retry count limitation is 128.
  * |        |          |10 = Trim retry count limitation is 256.
  * |        |          |11 = Trim retry count limitation is 512.
- * |[8]     |CLKERR_STOP_EN|Clock Error Stop Enable
- * |        |          |When this bit is set to 0, the trim operation is keep going if clock is inaccuracy.
- * |        |          |When this bit is set to 1, the trim operation is stopped if clock is inaccuracy.
+ * |[8]     |CLKERR_STOP_EN|Clock Error Stop Enable Bit
+ * |        |          |0 = The trim operation is kept going if clock is inaccuracy.
+ * |        |          |1 = The trim operation is stopped if clock is inaccuracy.
  * @var GCR_T::IRCTRIMIEN
  * Offset: 0x84  IRC Trim Interrupt Enable Register
  * ---------------------------------------------------------------------------------------------------
@@ -759,6 +759,88 @@ typedef struct
  * |        |          |Write 1 to clear this to 0.
  * |        |          |0 = Clock frequency is accurate.
  * |        |          |1 = Clock frequency is inaccurate.
+ * @var GCR_T::HIRCTCTL
+ * Offset: 0x90  HIRC Trim Control Register
+ * ---------------------------------------------------------------------------------------------------
+ * |Bits    |Field     |Descriptions
+ * | :----: | :----:   | :---- |
+ * |[1:0]   |FREQSEL   |Trim Frequency Selection
+ * |        |          |This field indicates the target frequency of 48 MHz internal high speed RC oscillator (HIRC) auto trim.
+ * |        |          |During auto trim operation, if clock error detected with CESTOPEN is set to 1 or trim retry limitation count reached, this field will be cleared to 00 automatically.
+ * |        |          |00 = Disable HIRC auto trim function.
+ * |        |          |01 = Enable HIRC auto trim function and trim HIRC to 48 MHz.
+ * |        |          |10 = Reserved.
+ * |        |          |11 = Reserved.
+ * |[5:4]   |LOOPSEL   |Trim Calculation Loop Selection		
+ * |        |          |This field defines that trim value calculation is based on how many reference clocks.
+ * |        |          |00 = Trim value calculation is based on average difference in 4 clocks of reference clock.
+ * |        |          |01 = Trim value calculation is based on average difference in 8 clocks of reference clock.
+ * |        |          |10 = Trim value calculation is based on average difference in 16 clocks of reference clock.
+ * |        |          |11 = Trim value calculation is based on average difference in 32 clocks of reference clock.
+ * |        |          |Note: For example, if LOOPSEL is set as 00, auto trim circuit will calculate trim value based on the average frequency difference in 4 clocks of reference clock.
+ * |[7:6]   |RETRYCNT  |Trim Value Update Limitation Count	
+ * |        |          |This field defines that how many times the auto trim circuit will try to update the HIRC trim value before the frequency of HIRC locked.
+ * |        |          |Once the HIRC locked, the internal trim value update counter will be reset.
+ * |        |          |If the trim value update counter reached this limitation value and frequency of HIRC still does not lock, the auto trim operation will be disabled and FREQSEL will be cleared to 00.
+ * |        |          |00 = Trim retry count limitation is 64 loops.
+ * |        |          |01 = Trim retry count limitation is 128 loops.
+ * |        |          |10 = Trim retry count limitation is 256 loops.
+ * |        |          |11 = Trim retry count limitation is 512 loops.
+ * |[8]     |CESTOPEN  |Clock Error Stop Enable Bit	
+ * |        |          |0 = The trim operation is keep going if clock is inaccuracy.
+ * |        |          |1 = The trim operation is stopped if clock is inaccuracy.
+ * |[9]     |BOUNDEN   |Boundary Enable	 
+ * |        |          |0 = Boundary function is disable.
+ * |        |          |1 = Boundary function is enable.
+ * |[20:16] |BOUNDARY  |Boundary Selection		
+ * |        |          |Fill the boundary range from 1 to 31, 0 is reserved.
+ * |        |          |Note: This field is effective only when the BOUNDEN(SYS_HIRCTCTL[9]) is enable.
+ * @var GCR_T::HIRCTIEN
+ * Offset: 0x94  HIRC Trim Interrupt Enable Register
+ * ---------------------------------------------------------------------------------------------------
+ * |Bits    |Field     |Descriptions
+ * | :----: | :----:   | :---- |
+ * |[1]     |TFALIEN_IEN|Trim Failure Interrupt Enable Bit
+ * |        |          |This bit controls if an interrupt will be triggered while HIRC trim value update limitation count reached and HIRC frequency still not locked on target frequency set by FREQSEL(SYS_HIRCTCTL[1:0]).
+ * |        |          |If this bit is high and TFAILIF(SYS_HIRCTSTS[1]) is set during auto trim operation, an interrupt will be triggered to notify that HIRC trim value update limitation count was reached.
+ * |        |          |0 = Disable TFAILIF(SYS_HIRCTSTS[1]) status to trigger an interrupt to CPU.
+ * |        |          |1 = Enable TFAILIF(SYS_HIRCTSTS[1]) status to trigger an interrupt to CPU.
+ * |[2]     |CLKEIEN   |Clock Error Interrupt Enable Bit
+ * |        |          |This bit controls if CPU would get an interrupt while clock is inaccuracy during auto trim operation.
+ * |        |          |If this bit is set to1, and CLKERRIF(SYS_HIRCTSTS[2]) is set during auto trim operation, an interrupt will be triggered to notify the clock frequency is inaccuracy.
+ * |        |          |0 = Disable CLKERRIF(SYS_HIRCTSTS[2]) status to trigger an interrupt to CPU.
+ * |        |          |1 = Enable CLKERRIF(SYS_HIRCTSTS[2]) status to trigger an interrupt to CPU.
+ * @var GCR_T::HIRCTSTS
+ * Offset: 0x98  HIRC Trim Interrupt Status Register
+ * ---------------------------------------------------------------------------------------------------
+ * |Bits    |Field     |Descriptions
+ * | :----: | :----:   | :---- |
+ * |[0]     |FREQLOCK  |HIRC Frequency Lock Status 
+ * |        |          |This bit indicates the HIRC frequency is locked.
+ * |        |          |This is a status bit and does not trigger any interrupt
+ * |        |          |Write 1 to clear this to 0. This bit will be set automatically, if the frequecy is lock and the RC_TRIM is enabled. 
+ * |        |          |0 = The internal high-speed oscillator frequency does not lock at 48 MHz yet.
+ * |        |          |1 = The internal high-speed oscillator frequency locked at 48 MHz.
+ * |        |          |Note: Reset by power-on reset.
+ * |[1]     |TFAILIF   |Trim Failure Interrupt Status
+ * |        |          |This bit indicates that HIRC trim value update limitation count reached and the HIRC clock frequency still does not be locked. 
+ * |        |          |Once this bit is set, the auto trim operation stopped and FREQSEL(SYS_HIRCTCTL[1:0]) will be cleared to 00 by hardware automatically.
+ * |        |          |If this bit is set and TFAILIEN(SYS_HIRCTIEN[1]) is high, an interrupt will be triggered to notify that HIRC trim value update limitation count was reached. Write 1 to clear this to 0.
+ * |        |          |0 = Trim value update limitation count does not reach.
+ * |        |          |1 = Trim value update limitation count reached and HIRC frequency still not locked.
+ * |        |          |Note: Reset by power-on reset.
+ * |[2]     |CLKERIF   |Clock Error Interrupt Status
+ * |        |          |When the reference clock or 48MHz internal high speed RC oscillator (HIRC) is shift larger to unreasonable value, this bit will be set and to be an indicate that clock frequency is inaccuracy
+ * |        |          |Once this bit is set to 1, the auto trim operation stopped and FREQSEL(SYS_HIRCTCTL[1:0]) will be cleared to 00 by hardware automatically if CESTOPEN(SYS_HIRCTCTL[8]) is set to 1.
+ * |        |          |If this bit is set and CLKEIEN(SYS_HIRCTIEN[2]) is high, an interrupt will be triggered to notify the clock frequency is inaccuracy. Write 1 to clear this to 0.
+ * |        |          |0 = Clock frequency is accuracy.
+ * |        |          |1 = Clock frequency is inaccuracy.
+ * |        |          |Note: Reset by power-on reset.
+ * |[3]     |OVBDIF    |Over Boundary Status
+ * |        |          |When the over boundary function is set, if there occurs the over boundary condition, this flag will be set.
+ * |        |          |0 = Over boundary coundition did not occur.
+ * |        |          |1 = Over boundary coundition occurred.
+ * |        |          |Note: Write 1 to clear this flag.
  * @var GCR_T::REGWRPROT
  * Offset: 0x100  Register Write Protection Register
  * ---------------------------------------------------------------------------------------------------
@@ -800,9 +882,9 @@ typedef struct
     __IO uint32_t IRCTRIMIEN;    /* Offset: 0x84  IRC Trim Interrupt Enable Register                                 */
     __IO uint32_t IRCTRIMINT;    /* Offset: 0x88  IRC Trim Interrupt Status Register                                 */
     __I  uint32_t RESERVE7[1];
-    __IO uint32_t HIRCTCTL;
-    __IO uint32_t HIRCTIEN;
-    __IO uint32_t HIRCTSTS;
+    __IO uint32_t HIRCTCTL;      /* Offset: 0x90  HIRC Trim Control Register                                         */
+    __IO uint32_t HIRCTIEN;      /* Offset: 0x94  HIRC Trim Interrupt Enable Register                                */
+    __IO uint32_t HIRCTSTS;      /* Offset: 0x98  HIRC Trim Interrupt Status Register                                */
     __I  uint32_t RESERVE8[25];
     __IO uint32_t REGWRPROT;     /* Offset: 0x100  Register Write Protection Register                                */
 
@@ -1079,6 +1161,13 @@ typedef struct
 #define SYS_HIRCTCTL_FREQSEL_Pos                0                                           /*!< GCR_T::HIRCTCTL: FREQSEL Position */
 #define SYS_HIRCTCTL_FREQSEL_Msk                (3ul << SYS_HIRCTCTL_FREQSEL_Pos)           /*!< GCR_T::HIRCTCTL: FREQSEL Mask */
 
+/* GCR HIRCTIEN Bit Field Definitions */
+#define SYS_HIRCTIEN_CLKEIEN_Pos                2                                           /*!< GCR_T::HIRCTIEN: CLKEIEN Position */
+#define SYS_HIRCTIEN_CLKEIEN_Msk                (1ul << SYS_HIRCTIEN_CLKEIEN_Pos)           /*!< GCR_T::HIRCTIEN: CLKEIEN Mask */
+
+#define SYS_HIRCTIEN_TFALIEN_Pos                1                                           /*!< GCR_T::HIRCTIEN: TFALIEN Position */
+#define SYS_HIRCTIEN_TFALIEN_Msk                (1ul << SYS_HIRCTIEN_TFALIEN_Pos)           /*!< GCR_T::HIRCTIEN: TFALIEN Mask */
+
 /* GCR HIRCTSTS Bit Field Definitions */
 #define SYS_HIRCTSTS_OVBDIF_Pos                 3                                           /*!< GCR_T::HIRCTSTS: OVBDIF Position */
 #define SYS_HIRCTSTS_OVBDIF_Msk                 (1ul << SYS_HIRCTSTS_OVBDIF_Pos)            /*!< GCR_T::HIRCTSTS: OVBDIF Mask */
@@ -1140,7 +1229,6 @@ typedef struct
  * |        |          |IRQ_SRC[18].0 - I2C0 INT
  * |        |          |IRQ_SRC[19].0 - I2C1 INT
  * |        |          |IRQ_SRC[23].0 - USB INT
- * |        |          |IRQ_SRC[24].0 - PS2 INT
  * |        |          |IRQ_SRC[26].0 - PDMA INT
  * |        |          |IRQ_SRC[28].0 - Power Down Wake up INT
  * |        |          |IRQ_SRC[29].0 - ADC INT
