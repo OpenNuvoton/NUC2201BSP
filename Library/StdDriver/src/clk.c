@@ -355,7 +355,8 @@ void CLK_SetHCLK(uint32_t u32ClkSrc, uint32_t u32ClkDiv)
   * |\ref PWM45_MODULE   |\ref CLK_CLKSEL_PWM45_LIRC            | x                      |
   * |\ref WWDT_MODULE    |\ref CLK_CLKSEL2_WWDT_S_HCLK_DIV2048  | x                      |
   * |\ref WWDT_MODULE    |\ref CLK_CLKSEL2_WWDT_S_LIRC          | x                      |
-  * |\ref USBD_MODULE    | x                                    |\ref CLK_CLKDIV_USB(x)  |
+  * |\ref USBD_MODULE    |\ref CLK_CLKSEL0_USB_S_PLL            |\ref CLK_CLKDIV_USB(x)  |
+  * |\ref USBD_MODULE    |\ref CLK_CLKSEL0_USB_S_RC48M          |\ref CLK_CLKDIV_USB(x)  |  
   */
 
 void CLK_SetModuleClock(uint32_t u32ModuleIdx, uint32_t u32ClkSrc, uint32_t u32ClkDiv)
@@ -412,6 +413,7 @@ void CLK_SetSysTickClockSrc(uint32_t u32ClkSrc)
   *             - \ref CLK_PWRCON_XTL32K_EN_Msk
   *             - \ref CLK_PWRCON_OSC22M_EN_Msk
   *             - \ref CLK_PWRCON_OSC10K_EN_Msk
+  *             - \ref CLK_PWRCON_OSC48M_EN_Msk
   * @return     None
   * @details    This function enable clock source.
   */
@@ -427,6 +429,7 @@ void CLK_EnableXtalRC(uint32_t u32ClkMask)
   *             - \ref CLK_PWRCON_XTL32K_EN_Msk
   *             - \ref CLK_PWRCON_OSC22M_EN_Msk
   *             - \ref CLK_PWRCON_OSC10K_EN_Msk
+  *             - \ref CLK_PWRCON_OSC48M_EN_Msk
   * @return     None
   * @details    This function disable clock source.
   */
