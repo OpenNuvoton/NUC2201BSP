@@ -655,6 +655,7 @@ void CLK_DisablePLL(void)
   *             - \ref CLK_CLKSTATUS_OSC22M_STB_Msk
   *             - \ref CLK_CLKSTATUS_OSC10K_STB_Msk
   *             - \ref CLK_CLKSTATUS_PLL_STB_Msk
+  *             - \ref CLK_CLKSTATUS_OSC48M_STB_Msk
   *
   * @retval     0  clock is not stable
   * @retval     1  clock is stable

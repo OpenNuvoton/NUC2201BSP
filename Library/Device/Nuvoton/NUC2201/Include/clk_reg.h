@@ -216,7 +216,7 @@ typedef struct
  * |        |          |111 = Clock source from internal 22.1184 MHz high speed oscillator clock/2.
  * |        |          |Note1: These bits are write protected bit. Refer to the REGWRPROT register.
  * |        |          |Note2: if SysTick clock source is not from HCLK (i.e. SYST_CSR[2] = 0), SysTick clock source must less than or equal to HCLK/2.
- * |[8]     |USB_S     |USB Clock Source Selection
+ * |[8]     |USB_S     |USB Clock Source Selection (Write Protect)
  * |        |          |0 = Clock source from PLL clock.
  * |        |          |1 = Clock source from 48 MHz high speed RC oscillator clock.
  * |        |          |Note: This bit is write protected bit. Refer to the REGWRPROT register. 
@@ -415,7 +415,7 @@ typedef struct
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
  * |[3:0]   |FSEL      |Divider Output Frequency Selection Bits
- * |        |          |The formula of output frequency is Fout = Fin/2(N+1).
+ * |        |          |The formula of output frequency is Fout = Fin/(2^(N+1)).
  * |        |          |Fin is the input clock frequency.
  * |        |          |Fout is the frequency of divider output clock.
  * |        |          |N is the 4-bit value of FSEL[3:0].
