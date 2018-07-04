@@ -79,6 +79,10 @@ typedef struct
  * |        |          |0 = Chip enters Power-down mode when the PWR_DOWN_EN bit is set to 1.
  * |        |          |1 = Chip enters Power- down mode when the both PD_WAIT_CPU and PWR_DOWN_EN bits are set to 1 and CPU run WFI instruction.
  * |        |          |Note: This bit is write protected bit. Refer to the REGWRPROT register.
+ * |[12]    |OSC48M_EN |48 MHz Internal High Speed RC Oscillator (HIRC48) Enable Bit (Write Protect)
+ * |        |          |0 = 48 MHz internal high speed RC oscillator (HIRC48) Disabled.
+ * |        |          |1 = 48 MHz internal high speed RC oscillator (HIRC48) Enabled.
+ * |        |          |Note: This bit is write protected. Refer to the REGWRPROT register.
  * @var CLK_T::AHBCLK
  * Offset: 0x04  AHB Devices Clock Enable Control Register
  * ---------------------------------------------------------------------------------------------------
@@ -178,6 +182,9 @@ typedef struct
  * |[4]     |OSC22M_STB|Internal 22.1184 MHz High Speed Oscillator (HIRC) Clock Source Stable Flag (Read Only)
  * |        |          |0 = Internal 22.1184 MHz high speed oscillator (HIRC) clock is not stable or disabled.
  * |        |          |1 = Internal 22.1184 MHz high speed oscillator (HIRC) clock is stable and enabled.
+ * |[5]     |OSC48M_STB|48 MHz Internal High Speed RC Oscillator (HIRC48) Clock Source Stable Flag (Read Only)
+ * |        |          |0 = 48MHz internal high speed RC oscillator (HIRC48) clock is not stable or disabled.
+ * |        |          |1 = 48MHz internal high speed RC oscillator (HIRC48) clock is stable and enabled.
  * |[7]     |CLK_SW_FAIL|Clock Switching Fail Flag (Read Only)
  * |        |          |0 = Clock switching success.
  * |        |          |1 = Clock switching failure.
@@ -209,6 +216,10 @@ typedef struct
  * |        |          |111 = Clock source from internal 22.1184 MHz high speed oscillator clock/2.
  * |        |          |Note1: These bits are write protected bit. Refer to the REGWRPROT register.
  * |        |          |Note2: if SysTick clock source is not from HCLK (i.e. SYST_CSR[2] = 0), SysTick clock source must less than or equal to HCLK/2.
+ * |[8]     |USB_S     |USB Clock Source Selection (Write Protect)
+ * |        |          |0 = Clock source from PLL clock.
+ * |        |          |1 = Clock source from 48 MHz high speed RC oscillator clock.
+ * |        |          |Note: This bit is write protected bit. Refer to the REGWRPROT register. 
  * @var CLK_T::CLKSEL1
  * Offset: 0x14  Clock Source Select Control Register 1
  * ---------------------------------------------------------------------------------------------------
@@ -300,8 +311,8 @@ typedef struct
  * | :----: | :----:   | :---- |
  * |[3:0]   |HCLK_N    |HCLK Clock Divide Number from HCLK Clock Source
  * |        |          |HCLK clock frequency = (HCLK clock source frequency) / (HCLK_N + 1).
- * |[7:4]   |USB_N     |USB Clock Divide Number from PLL Clock
- * |        |          |USB clock frequency = (PLL frequency) / (USB_N + 1).
+ * |[7:4]   |USB_N     |USB Clock Divide Number from USB Clock Source
+ * |        |          |USB clock frequency = (USB clock source frequency) / (USB_N + 1).
  * |[11:8]  |UART_N    |UART Clock Divide Number from UART Clock Source
  * |        |          |UART clock frequency = (UART clock source frequency) / (UART_N + 1).
  * |[23:16] |ADC_N     |ADC Clock Divide Number from ADC Clock Source
@@ -404,7 +415,7 @@ typedef struct
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
  * |[3:0]   |FSEL      |Divider Output Frequency Selection Bits
- * |        |          |The formula of output frequency is Fout = Fin/2(N+1).
+ * |        |          |The formula of output frequency is Fout = Fin/(2^(N+1)).
  * |        |          |Fin is the input clock frequency.
  * |        |          |Fout is the frequency of divider output clock.
  * |        |          |N is the 4-bit value of FSEL[3:0].

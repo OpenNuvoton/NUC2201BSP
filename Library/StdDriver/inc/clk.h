@@ -50,8 +50,8 @@ extern "C"
 #define CLK_CLKSEL0_STCLK_S_HIRC_DIV2   (0x7UL<<CLK_CLKSEL0_STCLK_S_Pos)  /*!< Setting STCLK clock source as internal 22.1184MHz RC clock/2 */
 #define CLK_CLKSEL0_STCLK_S_HCLK        (0x1UL<<SysTick_CTRL_CLKSOURCE_Pos)  /*!< Setting STCLK clock source as HCLK */
 
-#define CLK_CLKSEL0_USB_S_RC48M         (0x0U<<CLK_CLKSEL0_USB_S_Pos)  /*!< Setting USB clock source as 48 MHz high speed RC clock */
-#define CLK_CLKSEL0_USB_S_PLL           (0x1U<<CLK_CLKSEL0_USB_S_Pos)  /*!< Setting USB clock source as PLL */
+#define CLK_CLKSEL0_USB_S_PLL           (0x0U<<CLK_CLKSEL0_USB_S_Pos)     /*!< Setting USB clock source as PLL */
+#define CLK_CLKSEL0_USB_S_RC48M         (0x1U<<CLK_CLKSEL0_USB_S_Pos)     /*!< Setting USB clock source as 48 MHz high speed RC clock */
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  CLKSEL1 constant definitions.                                                                          */
@@ -386,7 +386,8 @@ __STATIC_INLINE uint32_t CLK_GetPLLClockFreq(void)
 /**
   * @brief      This function execute delay function.
   * @param[in]  us  Delay time. The Max value is 2^24 / CPU Clock(MHz). Ex:
-  *                             50MHz => 335544us, 48MHz => 349525us, 28MHz => 699050us ...
+  *                             72MHz => 233016us, 50MHz => 335544us,
+  *                             48MHz => 349525us, 28MHz => 699050us ...
   * @return     None
   * @details    Use the SysTick to generate the delay time and the UNIT is in us.
   *             The SysTick clock source is from HCLK, i.e the same as system core clock.

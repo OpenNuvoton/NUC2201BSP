@@ -686,7 +686,7 @@ typedef struct
  * |        |          |(0, 0, 0, 1, 1) = TM3_EXT function is selected.
  * |        |          |(0, 0, 1, 0, 1) = TM3 function is selected.
  * |        |          |(1, 1, 0, 0, 1) = nWRH(EBI) function is selected.    
- * @var GCR_T::IRCTRIMCTL
+ * @var GCR_T::IRCTCTL
  * Offset: 0x80  IRC Trim Control Register
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
@@ -718,24 +718,24 @@ typedef struct
  * |[8]     |CLKERR_STOP_EN|Clock Error Stop Enable Bit
  * |        |          |0 = The trim operation is kept going if clock is inaccuracy.
  * |        |          |1 = The trim operation is stopped if clock is inaccuracy.
- * @var GCR_T::IRCTRIMIEN
+ * @var GCR_T::IRCTIEN
  * Offset: 0x84  IRC Trim Interrupt Enable Register
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
  * | :----: | :----:   | :---- |
  * |[1]     |TRIM_FAIL_IEN|Trim Failure Interrupt Enable
- * |        |          |This bit controls if an interrupt will be triggered while HIRC trim value update limitation count reached and HIRC frequency still not locked on target frequency set by TRIM_SEL (IRCTRIMCTL[1:0]).
- * |        |          |If this bit is high and TRIM_FAIL_INT (IRCTRIMINT[1]) is set during auto trim operation.
+ * |        |          |This bit controls if an interrupt will be triggered while HIRC trim value update limitation count reached and HIRC frequency still not locked on target frequency set by TRIM_SEL (IRCTCTL[1:0]).
+ * |        |          |If this bit is high and TRIM_FAIL_INT (IRCTSTS[1]) is set during auto trim operation.
  * |        |          |An interrupt will be triggered to notify that HIRC trim value update limitation count was reached.
- * |        |          |0 = TRIM_FAIL_INT (IRCTRIMINT[1]) status to trigger an interrupt to CPU Disabled.
- * |        |          |1 = TRIM_FAIL_INT (IRCTRIMINT[1]) status to trigger an interrupt to CPU Enabled.
+ * |        |          |0 = TRIM_FAIL_INT (IRCTSTS[1]) status to trigger an interrupt to CPU Disabled.
+ * |        |          |1 = TRIM_FAIL_INT (IRCTSTS[1]) status to trigger an interrupt to CPU Enabled.
  * |[2]     |CLKERR_IEN|Clock Error Interrupt Enable
  * |        |          |This bit controls if CPU would get an interrupt while clock is inaccuracy during auto trim operation.
- * |        |          |If this bit is set to1, and CLKERR_INT (IRCTRIMINT[2]) is set during auto trim operation.
+ * |        |          |If this bit is set to1, and CLKERR_INT (IRCTSTS[2]) is set during auto trim operation.
  * |        |          |An interrupt will be triggered to notify the clock frequency is inaccuracy.
- * |        |          |0 = CLKERR_INT (IRCTRIMINT[2]) status to trigger an interrupt to CPU Disabled.
- * |        |          |1 = CLKERR_INT (IRCTRIMINT[2]) status to trigger an interrupt to CPU Enabled.
- * @var GCR_T::IRCTRIMINT
+ * |        |          |0 = CLKERR_INT (IRCTSTS[2]) status to trigger an interrupt to CPU Disabled.
+ * |        |          |1 = CLKERR_INT (IRCTSTS[2]) status to trigger an interrupt to CPU Enabled.
+ * @var GCR_T::IRCTSTS
  * Offset: 0x88  IRC Trim Interrupt Status Register
  * ---------------------------------------------------------------------------------------------------
  * |Bits    |Field     |Descriptions
@@ -746,16 +746,16 @@ typedef struct
  * |[1]     |TRIM_FAIL_INT|Trim Failure Interrupt Status
  * |        |          |This bit indicates that internal 22.1184 MHz high speed oscillator trim value update limitation
  * |        |          |count reached and the internal 22.1184 MHz high speed oscillator clock frequency still doesn't be locked.
- * |        |          |Once this bit is set, the auto trim operation stopped and TRIM_SEL (IRCTRIMCTL [1:0]) will be cleared to 00 by hardware automatically.
- * |        |          |If this bit is set and TRIM_FAIL_IEN (IRCTRIMIEN[1]) is high, an interrupt will be triggered to notify that HIRC trim value update limitation count was reached.
+ * |        |          |Once this bit is set, the auto trim operation stopped and TRIM_SEL (IRCTCTL [1:0]) will be cleared to 00 by hardware automatically.
+ * |        |          |If this bit is set and TRIM_FAIL_IEN (IRCTIEN[1]) is high, an interrupt will be triggered to notify that HIRC trim value update limitation count was reached.
  * |        |          |Write 1 to clear this to 0.
  * |        |          |0 = Trim value update limitation count did not reach.
  * |        |          |1 = Trim value update limitation count reached and internal 22.1184 MHz high speed oscillator
  * |        |          |frequency was still not locked.
  * |[2]     |CLKERR_INT|Clock Error Interrupt Status
  * |        |          |When the frequency of external 32.768 kHz low speed crystal or internal 22.1184 MHz high speed oscillator is shift larger to unreasonable value, this bit will be set and to be an indicate that clock frequency is inaccuracy
- * |        |          |Once this bit is set to 1, the auto trim operation stopped and TRIM_SEL (IRCTRIMCTL [1:0]) will be cleared to 00 by hardware automatically if CLKERR_STOP_EN (IRCTRIMCTL [8]) is set to 1.
- * |        |          |If this bit is set and CLKERR_IEN (IRCTRIMIEN [2]) is high, an interrupt will be triggered to notify the clock frequency is inaccuracy.
+ * |        |          |Once this bit is set to 1, the auto trim operation stopped and TRIM_SEL (IRCTCTL [1:0]) will be cleared to 00 by hardware automatically if CLKERR_STOP_EN (IRCTCTL [8]) is set to 1.
+ * |        |          |If this bit is set and CLKERR_IEN (IRCTIEN [2]) is high, an interrupt will be triggered to notify the clock frequency is inaccuracy.
  * |        |          |Write 1 to clear this to 0.
  * |        |          |0 = Clock frequency is accurate.
  * |        |          |1 = Clock frequency is inaccurate.
@@ -807,7 +807,7 @@ typedef struct
  * |        |          |1 = Enable TFAILIF(SYS_HIRCTSTS[1]) status to trigger an interrupt to CPU.
  * |[2]     |CLKEIEN   |Clock Error Interrupt Enable Bit
  * |        |          |This bit controls if CPU would get an interrupt while clock is inaccuracy during auto trim operation.
- * |        |          |If this bit is set to1, and CLKERRIF(SYS_HIRCTSTS[2]) is set during auto trim operation, an interrupt will be triggered to notify the clock frequency is inaccuracy.
+ * |        |          |If this bit is set to 1, and CLKERRIF(SYS_HIRCTSTS[2]) is set during auto trim operation, an interrupt will be triggered to notify the clock frequency is inaccuracy.
  * |        |          |0 = Disable CLKERRIF(SYS_HIRCTSTS[2]) status to trigger an interrupt to CPU.
  * |        |          |1 = Enable CLKERRIF(SYS_HIRCTSTS[2]) status to trigger an interrupt to CPU.
  * @var GCR_T::HIRCTSTS
@@ -878,9 +878,9 @@ typedef struct
     __I  uint32_t RESERVE5[2];     
     __IO uint32_t ALT_MFP2;      /* Offset: 0x5C  Alternative Multiple Function Pin Control Register 2               */
     __I  uint32_t RESERVE6[8];  
-    __IO uint32_t IRCTRIMCTL;    /* Offset: 0x80  IRC Trim Control Register                                          */
-    __IO uint32_t IRCTRIMIEN;    /* Offset: 0x84  IRC Trim Interrupt Enable Register                                 */
-    __IO uint32_t IRCTRIMINT;    /* Offset: 0x88  IRC Trim Interrupt Status Register                                 */
+    __IO uint32_t IRCTCTL;       /* Offset: 0x80  IRC Trim Control Register                                          */
+    __IO uint32_t IRCTIEN;       /* Offset: 0x84  IRC Trim Interrupt Enable Register                                 */
+    __IO uint32_t IRCTSTS;       /* Offset: 0x88  IRC Trim Interrupt Status Register                                 */
     __I  uint32_t RESERVE7[1];
     __IO uint32_t HIRCTCTL;      /* Offset: 0x90  HIRC Trim Control Register                                         */
     __IO uint32_t HIRCTIEN;      /* Offset: 0x94  HIRC Trim Interrupt Enable Register                                */
@@ -1032,13 +1032,6 @@ typedef struct
 #define SYS_GPC_MFP_GPC_MFP_Pos                  0                                          /*!< GCR_T::GPC_MFP: GPC_MFP Position */
 #define SYS_GPC_MFP_GPC_MFP_Msk                  (0xFFFFul << SYS_GPC_MFP_GPC_MFP_Pos)      /*!< GCR_T::GPC_MFP: GPC_MFP Mask */
 
-/* GCR GPDMFP Bit Field Definitions */
-#define SYS_GPD_MFP_GPD_TYPE_Pos                 16                                         /*!< GCR_T::GPD_MFP: GPD_TYPE Position */
-#define SYS_GPD_MFP_GPD_TYPE_Msk                 (0xFFFFul << SYS_GPD_MFP_GPD_TYPE_Pos)     /*!< GCR_T::GPD_MFP: GPD_TYPE Mask */
-
-#define SYS_GPD_MFP_GPD_MFP_Pos                  0                                          /*!< GCR_T::GPD_MFP: GPD_MFP Position */
-#define SYS_GPD_MFP_GPD_MFP_Msk                  (0xFFFFul << SYS_GPD_MFP_GPD_MFP_Pos)      /*!< GCR_T::GPD_MFP: GPD_MFP Mask */
-
 /* GCR GPEMFP Bit Field Definitions */
 #define SYS_GPE_MFP_GPE_TYPE_Pos                 16                                         /*!< GCR_T::GPE_MFP: GPE_TYPE Position */
 #define SYS_GPE_MFP_GPE_TYPE_Msk                 (0xFFFFul << SYS_GPE_MFP_GPE_TYPE_Pos)     /*!< GCR_T::GPE_MFP: GPE_TYPE Mask */
@@ -1112,35 +1105,35 @@ typedef struct
 #define SYS_ALT_MFP2_PB14_15_EBI_Pos            0                                           /*!< GCR_T::ALT_MFP2: PB14_15_EBI Position */
 #define SYS_ALT_MFP2_PB14_15_EBI_Msk            (1ul << SYS_ALT_MFP2_PB14_15_EBI_Pos)       /*!< GCR_T::ALT_MFP2: PB14_15_EBI Mask */
 
-/* GCR IRCTRIMCTL Bit Field Definitions */
-#define SYS_IRCTRIMCTL_CLKERR_STOP_EN_Pos       8                                           /*!< GCR_T::IRCTRIMCTL: CLKERR_STOP_EN Position */
-#define SYS_IRCTRIMCTL_CLKERR_STOP_EN_Msk       (1ul << SYS_IRCTRIMCTL_CLKERR_STOP_EN_Pos)  /*!< GCR_T::IRCTRIMCTL: CLKERR_STOP_EN Mask */
+/* GCR IRCTCTL Bit Field Definitions */
+#define SYS_IRCTCTL_CLKERR_STOP_EN_Pos          8                                           /*!< GCR_T::IRCTCTL: CLKERR_STOP_EN Position */
+#define SYS_IRCTCTL_CLKERR_STOP_EN_Msk          (1ul << SYS_IRCTCTL_CLKERR_STOP_EN_Pos)     /*!< GCR_T::IRCTCTL: CLKERR_STOP_EN Mask */
 
-#define SYS_IRCTRIMCTL_TRIM_RETRY_CNT_Pos       6                                           /*!< GCR_T::IRCTRIMCTL: TRIM_RETRY_CNT Position */
-#define SYS_IRCTRIMCTL_TRIM_RETRY_CNT_Msk       (3ul << SYS_IRCTRIMCTL_TRIM_RETRY_CNT_Pos)  /*!< GCR_T::IRCTRIMCTL: TRIM_RETRY_CNT Mask */
+#define SYS_IRCTCTL_TRIM_RETRY_CNT_Pos          6                                           /*!< GCR_T::IRCTCTL: TRIM_RETRY_CNT Position */
+#define SYS_IRCTCTL_TRIM_RETRY_CNT_Msk          (3ul << SYS_IRCTCTL_TRIM_RETRY_CNT_Pos)     /*!< GCR_T::IRCTCTL: TRIM_RETRY_CNT Mask */
 
-#define SYS_IRCTRIMCTL_TRIM_LOOP_Pos            4                                           /*!< GCR_T::IRCTRIMCTL: TRIM_LOOP Position */
-#define SYS_IRCTRIMCTL_TRIM_LOOP_Msk            (3ul << SYS_IRCTRIMCTL_TRIM_LOOP_Pos)       /*!< GCR_T::IRCTRIMCTL: TRIM_LOOP Mask */
+#define SYS_IRCTCTL_TRIM_LOOP_Pos               4                                           /*!< GCR_T::IRCTCTL: TRIM_LOOP Position */
+#define SYS_IRCTCTL_TRIM_LOOP_Msk               (3ul << SYS_IRCTCTL_TRIM_LOOP_Pos)          /*!< GCR_T::IRCTCTL: TRIM_LOOP Mask */
 
-#define SYS_IRCTRIMCTL_TRIM_SEL_Pos             0                                           /*!< GCR_T::IRCTRIMCTL: TRIM_SEL Position */
-#define SYS_IRCTRIMCTL_TRIM_SEL_Msk             (3ul << SYS_IRCTRIMCTL_TRIM_SEL_Pos)        /*!< GCR_T::IRCTRIMCTL: TRIM_SEL Mask */
+#define SYS_IRCTCTL_TRIM_SEL_Pos                0                                           /*!< GCR_T::IRCTCTL: TRIM_SEL Position */
+#define SYS_IRCTCTL_TRIM_SEL_Msk                (3ul << SYS_IRCTCTL_TRIM_SEL_Pos)           /*!< GCR_T::IRCTCTL: TRIM_SEL Mask */
 
-/* GCR IRCTRIMIEN Bit Field Definitions */
-#define SYS_IRCTRIMIEN_CLKERR_IEN_Pos           2                                           /*!< GCR_T::IRCTRIMIEN: CLKERR_IEN Position */
-#define SYS_IRCTRIMIEN_CLKERR_IEN_Msk           (1ul << SYS_IRCTRIMIEN_CLKERR_IEN_Pos)      /*!< GCR_T::IRCTRIMIEN: CLKERR_IEN Mask */
+/* GCR IRCTIEN Bit Field Definitions */
+#define SYS_IRCTIEN_CLKERR_IEN_Pos              2                                           /*!< GCR_T::IRCTIEN: CLKERR_IEN Position */
+#define SYS_IRCTIEN_CLKERR_IEN_Msk              (1ul << SYS_IRCTIEN_CLKERR_IEN_Pos)         /*!< GCR_T::IRCTIEN: CLKERR_IEN Mask */
 
-#define SYS_IRCTRIMIEN_TRIM_FAIL_IEN_Pos        1                                           /*!< GCR_T::IRCTRIMIEN: TRIM_FAIL_IEN Position */
-#define SYS_IRCTRIMIEN_TRIM_FAIL_IEN_Msk        (1ul << SYS_IRCTRIMIEN_TRIM_FAIL_IEN_Pos)   /*!< GCR_T::IRCTRIMIEN: TRIM_FAIL_IEN Mask */
+#define SYS_IRCTIEN_TRIM_FAIL_IEN_Pos           1                                           /*!< GCR_T::IRCTIEN: TRIM_FAIL_IEN Position */
+#define SYS_IRCTIEN_TRIM_FAIL_IEN_Msk           (1ul << SYS_IRCTIEN_TRIM_FAIL_IEN_Pos)      /*!< GCR_T::IRCTIEN: TRIM_FAIL_IEN Mask */
 
-/* GCR IRCTRIMINT Bit Field Definitions */
-#define SYS_IRCTRIMINT_CLKERR_INT_Pos           2                                           /*!< GCR_T::IRCTRIMINT: CLKERR_INT Position */
-#define SYS_IRCTRIMINT_CLKERR_INT_Msk           (1ul << SYS_IRCTRIMINT_CLKERR_INT_Pos)      /*!< GCR_T::IRCTRIMINT: CLKERR_INT Mask */
+/* GCR IRCTSTS Bit Field Definitions */
+#define SYS_IRCTSTS_CLKERR_INT_Pos              2                                           /*!< GCR_T::IRCTSTS: CLKERR_INT Position */
+#define SYS_IRCTSTS_CLKERR_INT_Msk              (1ul << SYS_IRCTSTS_CLKERR_INT_Pos)         /*!< GCR_T::IRCTSTS: CLKERR_INT Mask */
 
-#define SYS_IRCTRIMINT_TRIM_FAIL_INT_Pos        1                                           /*!< GCR_T::IRCTRIMINT: TRIM_FAIL_INT Position */
-#define SYS_IRCTRIMINT_TRIM_FAIL_INT_Msk        (1ul << SYS_IRCTRIMINT_TRIM_FAIL_INT_Pos)   /*!< GCR_T::IRCTRIMINT: TRIM_FAIL_INT Mask */
+#define SYS_IRCTSTS_TRIM_FAIL_INT_Pos           1                                           /*!< GCR_T::IRCTSTS: TRIM_FAIL_INT Position */
+#define SYS_IRCTSTS_TRIM_FAIL_INT_Msk           (1ul << SYS_IRCTSTS_TRIM_FAIL_INT_Pos)      /*!< GCR_T::IRCTSTS: TRIM_FAIL_INT Mask */
 
-#define SYS_IRCTRIMINT_FREQ_LOCK_Pos            0                                           /*!< GCR_T::IRCTRIMINT: FREQ_LOCK Position */
-#define SYS_IRCTRIMINT_FREQ_LOCK_Msk            (1ul << SYS_IRCTRIMINT_FREQ_LOCK_Pos)       /*!< GCR_T::IRCTRIMINT: FREQ_LOCK Mask */
+#define SYS_IRCTSTS_FREQ_LOCK_Pos               0                                           /*!< GCR_T::IRCTSTS: FREQ_LOCK Position */
+#define SYS_IRCTSTS_FREQ_LOCK_Msk               (1ul << SYS_IRCTSTS_FREQ_LOCK_Pos)          /*!< GCR_T::IRCTSTS: FREQ_LOCK Mask */
 
 /* GCR HIRCTCTL Bit Field Definitions */
 #define SYS_HIRCTCTL_BOUNDARY_Pos               16                                          /*!< GCR_T::HIRCTCTL: BOUNDARY Position */

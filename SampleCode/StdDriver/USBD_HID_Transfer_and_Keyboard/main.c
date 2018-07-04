@@ -62,9 +62,6 @@ void SYS_Init(void)
     /* Waiting for Internal RC clock ready */
     CLK_WaitClockReady(CLK_CLKSTATUS_OSC48M_STB_Msk);
 
-    /* Set core clock */
-    CLK_SetCoreClock(48000000);
-
     /* Select module clock source */
     CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HIRC, CLK_CLKDIV_UART(1));
     CLK_SetModuleClock(USBD_MODULE, CLK_CLKSEL0_USB_S_RC48M, CLK_CLKDIV_USB(1));
@@ -149,7 +146,7 @@ int32_t main(void)
     u32TrimInit = M32(TRIM_INIT);
 
     /* Enable USB crystal-less */
-    SYS->HIRCTCTL = 0x01;
+    SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
 #endif
 
     NVIC_EnableIRQ(USBD_IRQn);
@@ -162,11 +159,12 @@ int32_t main(void)
         {
             SYS->HIRCTSTS = SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk;
 
-            /* Init TRIM */
-            M32(TRIM_INIT) = u32TrimInit;
-
-            /* Re-enable crystal-less */
-            SYS->HIRCTCTL = 0x01;
+            if((u32TrimInit < 0x1E6) || (u32TrimInit > 0x253))
+                /* Re-enable crystal-less */
+                SYS->HIRCTCTL = 0x201 | (1 << SYS_HIRCTCTL_BOUNDARY_Pos);
+            else
+                /* Re-enable crystal-less */
+                SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
             //printf("USB trim fail. Just retry. SYS->HIRCTSTS = 0x%x, SYS->HIRCTCTL = 0x%x\n", SYS->HIRCTSTS, SYS->HIRCTCTL);
         }
 #endif
