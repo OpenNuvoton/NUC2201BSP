@@ -124,31 +124,35 @@ int32_t main(void)
     HID_Init();
     USBD_Start();
 
-#if CRYSTAL_LESS
-    /* Backup init trim */
-    u32TrimInit = M32(TRIM_INIT);
-
-    /* Enable USB crystal-less */
-    SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
-#endif
-
     NVIC_EnableIRQ(USBD_IRQn);
+
+#if CRYSTAL_LESS
+    /* Backup default trim */
+    u32TrimInit = M32(TRIM_INIT);
+#endif
 
     while(1)
     {
 #if CRYSTAL_LESS
-        /* Re-start crystal-less when any error found */
-        if (SYS->HIRCTSTS & (SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk))
+        /* Start USB trim if it is not enabled. */
+        if((SYS->HIRCTCTL & SYS_HIRCTCTL_FREQSEL_Msk) != 1)
         {
-            SYS->HIRCTSTS = SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk;
+            /* Re-enable crystal-less */
+            SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
+        }
+
+        /* Disable USB Trim when error */
+        if(SYS->HIRCTSTS & (SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk))
+        {
+            /* Init TRIM */
+            M32(TRIM_INIT) = u32TrimInit;
 
             if((u32TrimInit < 0x1E6) || (u32TrimInit > 0x253))
                 /* Re-enable crystal-less */
                 SYS->HIRCTCTL = 0x201 | (1 << SYS_HIRCTCTL_BOUNDARY_Pos);
-            else
-                /* Re-enable crystal-less */
-                SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
-            //printf("USB trim fail. Just retry. SYS->HIRCTSTS = 0x%x, SYS->HIRCTCTL = 0x%x\n", SYS->HIRCTSTS, SYS->HIRCTCTL);
+
+            /* Clear error flags */
+            SYS->HIRCTSTS = SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk;
         }
 #endif
 
