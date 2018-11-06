@@ -18,6 +18,7 @@
 #define KEY_ADDR    0x20000FFC      /* The location of signature */
 #define SIGNATURE   0x21557899      /* The signature word is used by AP code to check if simple LD is finished */
 
+
 extern uint32_t loaderImageBase;
 extern uint32_t loaderImageLimit;
 
@@ -122,8 +123,10 @@ void FMC_LDROM_Test(void)
         printf("[OK]\n");
 
     printf("  Program Simple LD Code ..................... ");
+
     pu32Loader = (uint32_t *)&loaderImageBase;
     g_u32ImageSize = (uint32_t)&loaderImageLimit - (uint32_t)&loaderImageBase;
+
     for(i = 0; i < g_u32ImageSize; i += 4) {
         /* Erase page when necessary */
         if((i & (FMC_FLASH_PAGE_SIZE - 1)) == 0) {
@@ -215,6 +218,7 @@ int32_t main(void)
 
     if(getchar() == 'y') {
         /* Check LD image size */
+
         g_u32ImageSize = (uint32_t)&loaderImageLimit - (uint32_t)&loaderImageBase;
 
         if(g_u32ImageSize == 0) {
