@@ -11,6 +11,10 @@
 #include <stdio.h>
 #include "NuMicro.h"
 
+#if defined(__GNUC__)
+#define printf(...)
+#endif
+
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 #define PLL_CLOCK           72000000
 
@@ -68,6 +72,7 @@ int main()
     SYS_UnlockReg();
 
     SYS_Init();
+
     UART_Init();
 
     printf("\n\n");

@@ -11,6 +11,7 @@
  ******************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
+#define printf(...)
 
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 #define PLL_CLOCK           72000000
