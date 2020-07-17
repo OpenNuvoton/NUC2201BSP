@@ -46,6 +46,7 @@ volatile uint32_t gu32TxSize = 0;
 
 volatile int8_t gi8BulkOutReady = 0;
 
+int IsDebugFifoEmpty(void);
 
 /*--------------------------------------------------------------------------*/
 
@@ -216,7 +217,7 @@ void VCOM_TransferData(void)
 {
     int32_t i, i32Len;
 
-    /* Check whether USB is ready for next packet or not*/
+    /* Check whether USB is ready for next packet or not */
     if(gu32TxSize == 0)
     {
         /* Check whether we have new COM Rx data to send to USB or not */
@@ -293,13 +294,37 @@ void VCOM_TransferData(void)
     }
 }
 
+void PowerDown()
+{
+    /* Unlock protected registers */
+    SYS_UnlockReg();
+
+    printf("Enter power down ...\n");
+    while(!IsDebugFifoEmpty());
+
+    /* Wakeup Enable */
+    USBD_ENABLE_INT(USBD_INTEN_WAKEUP_EN_Msk);
+
+    CLK_PowerDown();
+
+    /* Clear PWR_DOWN_EN if it is not clear by itself */
+    if(CLK->PWRCON & CLK_PWRCON_PWR_DOWN_EN_Msk)
+        CLK->PWRCON ^= CLK_PWRCON_PWR_DOWN_EN_Msk;
+
+    printf("device wakeup!\n");
+
+    /* Lock protected registers */
+    SYS_LockReg();
+}
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Main Function                                                                                          */
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
+#if CRYSTAL_LESS
     uint32_t u32TrimInit;
+#endif
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -326,6 +351,9 @@ int32_t main(void)
     u32TrimInit = M32(TRIM_INIT);
 #endif
 
+    /* Clear SOF */
+    USBD->INTSTS = USBD_INTSTS_SOF_STS_Msk;
+
     NVIC_EnableIRQ(UART02_IRQn);
 
     while(1)
@@ -334,8 +362,15 @@ int32_t main(void)
         /* Start USB trim if it is not enabled. */
         if((SYS->HIRCTCTL & SYS_HIRCTCTL_FREQSEL_Msk) != 1)
         {
-            /* Re-enable crystal-less */
-            SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
+            /* Start USB trim only when SOF */
+            if(USBD->INTSTS & USBD_INTSTS_SOF_STS_Msk)
+            {
+                /* Clear SOF */
+                USBD->INTSTS = USBD_INTSTS_SOF_STS_Msk;
+
+                /* Re-enable crystal-less */
+                SYS->HIRCTCTL = 0x201 | (31 << SYS_HIRCTCTL_BOUNDARY_Pos);
+            }
         }
 
         /* Disable USB Trim when error */
@@ -350,8 +385,15 @@ int32_t main(void)
 
             /* Clear error flags */
             SYS->HIRCTSTS = SYS_HIRCTSTS_CLKERIF_Msk | SYS_HIRCTSTS_TFAILIF_Msk;
+
+            /* Clear SOF */
+            USBD->INTSTS = USBD_INTSTS_SOF_STS_Msk;
         }
 #endif
+
+        /* Enter power down when USB suspend */
+        if(g_u8Suspend)
+            PowerDown();
 
         VCOM_TransferData();
     }
