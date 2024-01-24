@@ -6,7 +6,8 @@
  *           SPI0 will be configured as Master mode and SPI1 will be configured as Slave mode.
  *           Both TX PDMA function and RX PDMA function will be enabled.
  * @note
- * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"

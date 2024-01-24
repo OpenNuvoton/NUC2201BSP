@@ -6,8 +6,9 @@
  * @brief    NUC2201 Series IAP function sample code
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
  *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
@@ -25,6 +26,8 @@ extern uint32_t loaderImageLimit;
 uint32_t g_u32ImageSize;
 
 uint32_t *g_au32funcTable = (uint32_t *)0x100e00; /* The location of function table */
+
+int32_t g_FMC_i32ErrCode;
 
 void SYS_Init(void)
 {
@@ -92,6 +95,9 @@ void UART0_Init(void)
     UART0->LCR = UART_WORD_LEN_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
 }
 
+#if defined ( __ICCARM__ )
+#pragma optimize=low
+#endif
 void FMC_LDROM_Test(void)
 {
     int32_t  i32Err;
@@ -192,9 +198,11 @@ int32_t main(void)
 
     /* Check IAP mode */
     u32Cfg = FMC_Read(FMC_CONFIG_BASE);
-    if((u32Cfg & 0xc0) != 0x80) {
-        printf("Do you want to set to new IAP mode (APROM boot + LDROM) y/n?\n");
-        if(getchar() == 'y') {
+    if((u32Cfg & 0xc0) != 0x80)
+    {
+        printf("Do you want to set to new IAP mode (APROM boot + LDROM) (y/n)?\n");
+        if(getchar() == 'y')
+        {
             FMC->ISPCON |= FMC_ISPCON_CFGUEN_Msk; /* Enable user configuration update */
 
             /* Set CBS to b'10 */
@@ -214,7 +222,7 @@ int32_t main(void)
         }
     }
 
-    printf("Do you want to write LDROM code to 0x100000\n");
+    printf("Do you want to write LDROM code to 0x100000 (y/n)?\n");
 
     if(getchar() == 'y') {
         /* Check LD image size */
@@ -235,15 +243,35 @@ int32_t main(void)
         FMC_LDROM_Test();
     }
 
-    for(i = 0; i < 4; i++) {
+#if defined(__GNUC_AP__)
+    for(i = 0; i < 4; i++)
+    {
         /* Call the function of LDROM */
         func = (int32_t (*)(int32_t))g_au32funcTable[i];
-        if(func(i + 1) == i + 1) {
+        if(func(i + 1) == ((i + 1)*(i + 1)))
+        {
             printf("Call LDROM function %d ok!\n", i);
-        } else {
+        }
+        else
+        {
             printf("Call LDROM function %d fail.\n", i);
         }
     }
+#else
+    for(i = 0; i < 4; i++)
+    {
+        /* Call the function of LDROM */
+        func = (int32_t (*)(int32_t))g_au32funcTable[i];
+        if(func(i + 1) == i + 1)
+        {
+            printf("Call LDROM function %d ok!\n", i);
+        }
+        else
+        {
+            printf("Call LDROM function %d fail.\n", i);
+        }
+    }
+ #endif
 
 lexit:
 

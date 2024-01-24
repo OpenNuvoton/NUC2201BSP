@@ -6,8 +6,9 @@
  * @brief    NUC2201 Series I2C Driver Sample Code for GC Mode (Slave)
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
  *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
@@ -244,7 +245,7 @@ int32_t main(void)
 
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
-    printf("| NUC2201 I2C Driver Sample Code (Slave) for access Slave (GC Mode)    |\n");
+    printf("| NUC2201 I2C Driver Sample Code (Slave) for access Slave (GC Mode) |\n");
     printf("|                                                                      |\n");
     printf("| I2C Master (I2C0) <---> I2C Slave(I2C0)(Address: 0x00)               |\n");
     printf("+----------------------------------------------------------------------+\n");
@@ -300,6 +301,3 @@ int32_t main(void)
 
     while(1);
 }
-
-
-

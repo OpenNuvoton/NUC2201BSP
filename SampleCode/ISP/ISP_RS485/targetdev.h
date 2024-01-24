@@ -4,14 +4,15 @@
  * @version  0x31
  *
  * @note
- * Copyright (C) 2019 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include "NuMicro.h"
 #include "uart_transfer.h"
 #include "isp_user.h"
 
 
-extern __align(4) uint8_t response_buff[64];
+extern __attribute__((aligned(4))) uint8_t response_buff[64];
 
 
 /* rename for uart_transfer.c */
