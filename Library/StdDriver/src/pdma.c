@@ -3,11 +3,11 @@
  * @version  V3.00
  * $Revision: 4 $
  * $Date: 15/08/18 1:15p $
- * @brief    NUC2201 series PDMA driver source file
+ * @brief    NUC029xEE series PDMA driver source file
  *
  * @note
- * SPDX-License-Identifier: Apache-2.0
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2018 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include "NuMicro.h"
 
@@ -156,9 +156,9 @@ void PDMA_SetTransferMode(uint32_t u32Ch, uint32_t u32Peripheral, uint32_t u32Sc
     if(u32Peripheral > PDMA_ADC) /* Memory-to-Memory */
         pdma->CSR = (pdma->CSR & ~(PDMA_CSR_MODE_SEL_Msk));
     else if(u32Peripheral > PDMA_I2S_TX) /* Peripheral-to-Memory */
-        pdma->CSR = (pdma->CSR & ~(PDMA_CSR_MODE_SEL_Msk) | (0x1 << PDMA_CSR_MODE_SEL_Pos));
+        pdma->CSR = (pdma->CSR & ~(PDMA_CSR_MODE_SEL_Msk)) | (0x1 << PDMA_CSR_MODE_SEL_Pos);
     else /* Memory-to-Peripheral */
-        pdma->CSR = (pdma->CSR & ~(PDMA_CSR_MODE_SEL_Msk) | (0x2 << PDMA_CSR_MODE_SEL_Pos));
+        pdma->CSR = (pdma->CSR & ~(PDMA_CSR_MODE_SEL_Msk)) | (0x2 << PDMA_CSR_MODE_SEL_Pos);
 
     switch(u32Peripheral)
     {
@@ -281,4 +281,4 @@ void PDMA_DisableInt(uint32_t u32Ch, uint32_t u32Mask)
 
 /*@}*/ /* end of group Standard_Driver */
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2018 Nuvoton Technology Corp. ***/

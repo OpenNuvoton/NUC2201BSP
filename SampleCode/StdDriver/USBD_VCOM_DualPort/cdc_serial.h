@@ -3,7 +3,8 @@
  * @brief    NUC2201 series USB VCOM header file
  *
  * @note
- * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_CDC_H__
 #define __USBD_CDC_H__
