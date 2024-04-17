@@ -3,7 +3,7 @@
  * @version  V3.00
  * $Revision: 4 $
  * $Date: 15/08/18 1:15p $
- * @brief    NUC029xEE series PDMA driver source file
+ * @brief    NUC2201 series PDMA driver source file
  *
  * @note
  * @copyright SPDX-License-Identifier: Apache-2.0
