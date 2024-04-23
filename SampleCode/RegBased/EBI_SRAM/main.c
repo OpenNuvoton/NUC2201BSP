@@ -92,8 +92,8 @@ void SYS_Init(void)
     SYS->ALT_MFP |= (SYS_ALT_MFP_PC6_AD4 | SYS_ALT_MFP_PC7_AD5);
     SYS->GPA_MFP |= (SYS_GPA_MFP_PA6_AD7);
     SYS->ALT_MFP |= (SYS_ALT_MFP_PA6_AD7);
-    SYS->ALT_MFP2 |= (SYS_ALT_MFP2_PB14_AD0 | SYS_ALT_MFP2_PB15_AD6); 
-   
+    SYS->ALT_MFP2 |= (SYS_ALT_MFP2_PB14_AD0 | SYS_ALT_MFP2_PB15_AD6);
+
     /* Set multi-function pins for EBI AD8 ~ AD15 */
     SYS->GPA_MFP &= ~(SYS_GPA_MFP_PA5_Msk | SYS_GPA_MFP_PA4_Msk |
                       SYS_GPA_MFP_PA3_Msk | SYS_GPA_MFP_PA2_Msk |
@@ -111,7 +111,7 @@ void SYS_Init(void)
                      SYS_ALT_MFP_PA3_AD10 | SYS_ALT_MFP_PA2_AD11 |
                      SYS_ALT_MFP_PA1_AD12 | SYS_ALT_MFP_PA12_AD13 |
                      SYS_ALT_MFP_PA13_AD14 | SYS_ALT_MFP_PA14_AD15);
-                         
+
     /* Set multi-function pins for EBI nCS, ALE and MCLK */
     SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB7_Msk | SYS_GPB_MFP_PB6_Msk);
     SYS->ALT_MFP &= ~(SYS_ALT_MFP_PB7_Msk | SYS_ALT_MFP_PB6_Msk);
@@ -267,7 +267,7 @@ int32_t AccessEBIWithPDMA(void)
     printf("[[ Access EBI with PDMA ]]\n");
 
     /* Enable PDMA clock source */
-    CLK->AHBCLK |= CLK_AHBCLK_PDMA_EN_Msk;    
+    CLK->AHBCLK |= CLK_AHBCLK_PDMA_EN_Msk;
 
     for(i=0; i<64; i++) {
         SrcArray[i] = 0x76570000 + i;

@@ -93,7 +93,7 @@ int32_t main(void)
     printf("     Press any key to start test by using [Pin Data Input/Output Control] \n\n");
     getchar();
 
-    /* Configure PB.2 as Output mode and PE.1 as Input mode */
+    /* Configure PB.2 as Output mode and PE.5 as Input mode */
     GPIO_SetMode(PB, BIT2, GPIO_PMD_OUTPUT);
     GPIO_SetMode(PE, BIT5, GPIO_PMD_INPUT);
 
@@ -101,13 +101,13 @@ int32_t main(void)
     printf("GPIO PB.2(output mode) connect to PE.5(input mode) ......");
 
     /* Use Pin Data Input/Output Control to pull specified I/O or get I/O pin status */
-    /* Pull PB.2 to Low and check PE.1 status */
+    /* Pull PB.2 to Low and check PE.5 status */
     PB2 = 0;
     if(PE5 != 0) {
         i32Err = 1;
     }
 
-    /* Pull PB.2 to High and check PE.1 status */
+    /* Pull PB.2 to High and check PE.5 status */
     PB2 = 1;
     if(PE5 != 1) {
         i32Err = 1;
@@ -119,7 +119,7 @@ int32_t main(void)
         printf("  [OK].\n");
     }
 
-    /* Configure PB.2 and PE.1 to default Quasi-bidirectional mode */
+    /* Configure PB.2 and PE.5 to default Quasi-bidirectional mode */
     GPIO_SetMode(PB, BIT2, GPIO_PMD_QUASI);
     GPIO_SetMode(PE, BIT5, GPIO_PMD_QUASI);
 

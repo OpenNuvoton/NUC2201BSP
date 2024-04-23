@@ -106,7 +106,7 @@ int32_t main(void)
     WDT->WTCR |= (WDT_TIMEOUT_2POW18 | WDT_WTCR_WTR_Msk);
 
     /* Init System, peripheral clock and multi-function I/O */
-    SYS_Init();
+    if( SYS_Init() < 0 ) goto _APROM;
 
     /* Init UART */
     UART_Init();
