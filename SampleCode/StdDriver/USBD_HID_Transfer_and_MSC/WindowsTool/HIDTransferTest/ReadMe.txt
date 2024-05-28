@@ -1,42 +1,42 @@
-========================================================================
-    主控台應用程式：HIDTransferTest 專案概觀
-========================================================================
+================================================== ======================
+Console Application : HIDTransferTest Project Overview
+================================================== ======================
 
-AppWizard 已經為您建立了這個 HIDTransferTest 應用程式。  
+AppWizard has built this HIDTransferTest application for you.
 
-這個檔案的內容摘要，包含各個構成 HIDTransferTest 應用程式的檔案。
+of this file , including the individual components that make up HIDTransferTest Application file.
 
 
 HIDTransferTest.vcproj
-    這是使用應用程式精靈所產生之 VC++ 專案的主要專案檔。 
-    它含有產生該檔案之 Visual C++ 的版本資訊，以及有關使用應用程式精靈
-    所選取之平台、組態和專案功能的資訊。
+This is the main project file for VC++ projects generated using the Application Wizard .
+    It contains information about the version of Visual C++ that generated the file, as well as information about using the application wizard
+Information about the selected platform, configuration, and project capabilities.
 
 HIDTransferTest.cpp
-    這是主要應用程式原始程式檔。
+This is the main application source file.
 
-/////////////////////////////////////////////////////////////////////////////
-AppWizard 已經建立了下列資源：
+///////////////////////////////////////////////////// //////////////////////////////
+AppWizard has created the following resources:
 
 HIDTransferTest.rc
-    這份清單包含了所有程式要使用的 Microsoft Windows 資源。其中包括了
-    儲存在 RES 子目錄下的圖示、點陣圖和游標。您可以直接在
-    Microsoft Visual C++ 內編輯這個檔案。
+This list contains all Microsoft Windows resources used by programs. which include
+    Graphics, bitmaps, and cursors are stored in the RES subdirectory. You can directly
+Edit this file within Microsoft Visual C++.
 
 Resource.h
-    這是標準標頭檔，它定義新的資源 ID。
-    Microsoft Visual C++ 會讀取和更新這個檔案。
+This is the standard header file that defines the new resource ID.
+    Microsoft Visual C++ reads and updates this file.
 
-/////////////////////////////////////////////////////////////////////////////
-其他標準檔案：
+///////////////////////////////////////////////////// //////////////////////////////
+Other standard files:
 
-StdAfx.h, StdAfx.cpp
-    這些檔案是用來建置名為 HIDTransferTest.pch 的先行編譯標頭 (PCH) 檔，
-    以及名為 StdAfx.obj 的先行編譯型別檔。
+StdAfx.h , StdAfx.cpp
+These files are used to build a look-ahead compiled header (PCH) file named HIDTransferTest.pch.
+    And a lookahead compiled type file named StdAfx.obj.
 
-/////////////////////////////////////////////////////////////////////////////
-其他注意事項：
+///////////////////////////////////////////////////// //////////////////////////////
+Other notes:
 
-AppWizard 使用 "TODO:" 來指示您應該加入或自訂的原始程式碼部分。
+AppWizard uses "TODO:" to indicate the portion of your source code that you should add or customize.
 
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////// //////////////////////////////
