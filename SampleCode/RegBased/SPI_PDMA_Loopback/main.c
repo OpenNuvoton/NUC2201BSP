@@ -33,7 +33,7 @@ uint32_t g_au32SlaveRxBuffer[TEST_COUNT];
 /* ------------- */
 int main(void)
 {
-    
+
     /* Unlock protected registers */
     SYS_UnlockReg();
     /* Init system, IP clock and multi-function I/O. */
@@ -73,6 +73,8 @@ int main(void)
 
 void SYS_Init(void)
 {
+	uint32_t u32TimeOutCnt;
+
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -80,26 +82,32 @@ void SYS_Init(void)
     CLK->PWRCON |= CLK_PWRCON_OSC22M_EN_Msk;
 
     /* Waiting for Internal RC clock ready */
-    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_OSC22M_STB_Msk));
-    
+    u32TimeOutCnt = __HIRC;
+    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_OSC22M_STB_Msk))
+		if(--u32TimeOutCnt == 0) break;
+
     /* Enable external 12 MHz XTAL */
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 
     /* Waiting for clock ready */
-    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_XTL12M_STB_Msk));
+    u32TimeOutCnt = __HIRC;
+    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_XTL12M_STB_Msk))
+		if(--u32TimeOutCnt == 0) break;
 
     /* Set PLL to Power-down mode and PLL_STB bit in CLKSTATUS register will be cleared by hardware.*/
     CLK->PLLCON |= CLK_PLLCON_PD_Msk;
-    
+
     /* Enable PLL and Set PLL frequency */
     CLK->PLLCON = PLLCON_SETTING;
 
     /* Waiting for clock ready */
-    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_PLL_STB_Msk));
+    u32TimeOutCnt = __HIRC;
+    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_PLL_STB_Msk))
+		if(--u32TimeOutCnt == 0) break;
 
     /* System optimization when CPU runs at 72 MHz */
     FMC->FATCON |= FMC_FATCON_FOMSEL1_Msk | FMC_FATCON_FOMSEL0_Msk;
-    
+
     /* Select PLL as the system clock source */
     CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_PLL;
 
@@ -158,7 +166,7 @@ void SPI_Init(void)
     SPI0->SSR = SPI_SSR_AUTOSS_Msk | SPI_SS;
     /* Set IP clock divider. SPI clock rate = HCLK / ((35+1)*2) = 1 MHz */
     SPI0->DIVIDER = (SPI0->DIVIDER & (~SPI_DIVIDER_DIVIDER_Msk)) | 35;
-    
+
     /* Configure SPI1 */
     /* Configure SPI1 as a slave, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */
     /* Eanble FIFO mode */
@@ -186,8 +194,8 @@ void SpiLoopTest_WithPDMA(void)
 
     /* SPI master PDMA TX channel configuration */
     /* Enable PDMA channel 3 clock */
-    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK3_EN_Msk; 
-    PDMA3->CSR = 
+    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK3_EN_Msk;
+    PDMA3->CSR =
         PDMA_CSR_PDMACEN_Msk  |  /* PDMA channel enable */
         PDMA_SAR_INC  |          /* Increment source address */
         PDMA_DAR_FIX  |          /* Fixed destination address */
@@ -198,11 +206,11 @@ void SpiLoopTest_WithPDMA(void)
     PDMA3->BCR = TEST_COUNT*4;          /* Transfer count */
     /* Service selection */
     PDMA_GCR->PDSSR0 = (PDMA_GCR->PDSSR0 & (~PDMA_PDSSR0_SPI0_TXSEL_Msk)) | (3<<PDMA_PDSSR0_SPI0_TXSEL_Pos);
-    
+
     /* SPI master PDMA RX channel configuration */
     /* Enable PDMA channel 2 clock */
-    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK2_EN_Msk; 
-    PDMA2->CSR = 
+    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK2_EN_Msk;
+    PDMA2->CSR =
         PDMA_CSR_PDMACEN_Msk |       /* PDMA channel enable */
         PDMA_SAR_FIX  |              /* Fixed source address */
         PDMA_DAR_INC  |              /* Increment destination address */
@@ -213,11 +221,11 @@ void SpiLoopTest_WithPDMA(void)
     PDMA2->BCR = TEST_COUNT*4;          /* Transfer count */
     /* Service selection */
     PDMA_GCR->PDSSR0 = (PDMA_GCR->PDSSR0 & (~PDMA_PDSSR0_SPI0_RXSEL_Msk)) | (2<<PDMA_PDSSR0_SPI0_RXSEL_Pos);
-    
+
     /* SPI slave PDMA RX channel configuration */
     /* Enable PDMA channel 1 clock */
-    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK1_EN_Msk; 
-    PDMA1->CSR = 
+    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK1_EN_Msk;
+    PDMA1->CSR =
         PDMA_CSR_PDMACEN_Msk |       /* PDMA channel enable */
         PDMA_SAR_FIX  |              /* Fixed source address */
         PDMA_DAR_INC  |              /* Increment destination address */
@@ -228,11 +236,11 @@ void SpiLoopTest_WithPDMA(void)
     PDMA1->BCR = TEST_COUNT*4;          /* Transfer count */
     /* Service selection */
     PDMA_GCR->PDSSR0 = (PDMA_GCR->PDSSR0 & (~PDMA_PDSSR0_SPI1_RXSEL_Msk)) | (1<<PDMA_PDSSR0_SPI1_RXSEL_Pos);
-    
+
     /* SPI slave PDMA TX channel configuration */
     /* Enable PDMA channel 0 clock */
-    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK0_EN_Msk; 
-    PDMA0->CSR = 
+    PDMA_GCR->GCRCSR |= PDMA_GCRCSR_CLK0_EN_Msk;
+    PDMA0->CSR =
         PDMA_CSR_PDMACEN_Msk  |  /* PDMA channel enable */
         PDMA_SAR_INC  |          /* Increment source address */
         PDMA_DAR_FIX  |          /* Fixed destination address */
@@ -243,7 +251,7 @@ void SpiLoopTest_WithPDMA(void)
     PDMA0->BCR = TEST_COUNT*4;          /* Transfer count */
     /* Service selection */
     PDMA_GCR->PDSSR0 = (PDMA_GCR->PDSSR0 & (~PDMA_PDSSR0_SPI1_TXSEL_Msk)) | (0<<PDMA_PDSSR0_SPI1_TXSEL_Pos);
-    
+
     /* Trigger PDMA */
     PDMA0->CSR |= PDMA_CSR_TRIG_EN_Msk;
     PDMA1->CSR |= PDMA_CSR_TRIG_EN_Msk;
@@ -251,7 +259,7 @@ void SpiLoopTest_WithPDMA(void)
     PDMA3->CSR |= PDMA_CSR_TRIG_EN_Msk;
     SPI1->DMA |= (SPI_DMA_RX_DMA_GO_Msk | SPI_DMA_TX_DMA_GO_Msk);
     SPI0->DMA |= (SPI_DMA_RX_DMA_GO_Msk | SPI_DMA_TX_DMA_GO_Msk);
-    
+
     /* Check Master RX DMA transfer done interrupt flag */
     u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
     while((PDMA2->ISR & PDMA_ISR_BLKD_IF_Msk)==0)
@@ -265,7 +273,7 @@ void SpiLoopTest_WithPDMA(void)
     }
     /* Clear the transfer done interrupt flag */
     PDMA2->ISR = PDMA_ISR_BLKD_IF_Msk;
-    
+
     /* Check Master TX DMA transfer done interrupt flag */
     u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
     while((PDMA3->ISR & PDMA_ISR_BLKD_IF_Msk)==0)
@@ -279,7 +287,7 @@ void SpiLoopTest_WithPDMA(void)
     }
     /* Clear the transfer done interrupt flag */
     PDMA3->ISR = PDMA_ISR_BLKD_IF_Msk;
-    
+
     /* Check Slave TX DMA transfer done interrupt flag */
     u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
     while((PDMA1->ISR & PDMA_ISR_BLKD_IF_Msk)==0)
@@ -293,7 +301,7 @@ void SpiLoopTest_WithPDMA(void)
     }
     /* Clear the transfer done interrupt flag */
     PDMA1->ISR = PDMA_ISR_BLKD_IF_Msk;
-    
+
     /* Check Slave RX DMA transfer done interrupt flag */
     u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
     while((PDMA0->ISR & PDMA_ISR_BLKD_IF_Msk)==0)
@@ -307,7 +315,7 @@ void SpiLoopTest_WithPDMA(void)
     }
     /* Clear the transfer done interrupt flag */
     PDMA0->ISR = PDMA_ISR_BLKD_IF_Msk;
-    
+
     i32Err = 0;
     /* Check the transfer data */
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
@@ -340,4 +348,3 @@ lexit:
 }
 
 /*** (C) COPYRIGHT 2017 Nuvoton Technology Corp. ***/
-
