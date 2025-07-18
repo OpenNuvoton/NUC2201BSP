@@ -153,6 +153,43 @@ extern "C"
 #define PWM_SET_CMR(pwm, u32ChannelNum, u32CMR) (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CMR0)) + (u32ChannelNum) * 12))) = (u32CMR))
 
 /**
+ * @brief Set the duty of the selected channel
+ * @param[in] pwm The pointer of the specified PWM module
+ *                - PWMA : PWM Group A
+ *                - PWMB : PWM Group B
+ * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
+ * @param[in] u32CMR Duty of specified channel. Valid values are between 0~0xFFFF
+ * @return None
+ * @note Equivalent to the PWM_SET_CMR() macro. Created to improve understandability.
+ * \hideinitializer
+ */
+#define PWM_SET_DUTY_COUNT(pwm, u32ChannelNum, u32Duty) PWM_SET_CMR(pwm, u32ChannelNum, u32Duty)
+
+/**
+ * @brief This macro get the comparator of the selected channel
+ * @param[in] pwm The pointer of the specified PWM module
+ *                - PWMA : PWM Group A
+ *                - PWMB : PWM Group B
+ * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
+ * @return Return the comparator of specified channel. Valid values are between 0~0xFFFF
+ * @details This macro is used to get the comparator of specified channel.
+ * \hideinitializer
+ */
+#define PWM_GET_CMR(pwm, u32ChannelNum) (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CMR0)) + (u32ChannelNum) * 12))))
+
+/**
+ * @brief This macro get the comparator of the selected channel
+ * @param[in] pwm The pointer of the specified PWM module
+ *                - PWMA : PWM Group A
+ *                - PWMB : PWM Group B
+ * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
+ * @return Return the comparator of specified PWM channel. Valid values are between 0~0xFFFF
+ * @note Equivalent to the PWM_GET_CMR() macro. Created to improve understandability.
+ * \hideinitializer
+ */
+#define PWM_GET_DUTY_COUNT(pwm, u32ChannelNum) PWM_GET_CMR(pwm, u32ChannelNum)
+
+/**
  * @brief Set the period of the selected channel
  * @param[in] pwm The pointer of the specified PWM module
  *                - PWMA : PWM Group A
@@ -167,6 +204,43 @@ extern "C"
  * @note PWMB only supports channel 0 ~ 1.
  */
 #define PWM_SET_CNR(pwm, u32ChannelNum, u32CNR)  (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CNR0)) + (u32ChannelNum) * 12))) = (u32CNR))
+
+/**
+ * @brief Set the period of the selected channel
+ * @param[in] pwm The pointer of the specified PWM module
+ *                - PWMA : PWM Group A
+ *                - PWMB : PWM Group B
+ * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
+ * @param[in] u32CNR Period of specified channel. Valid values are between 0~0xFFFF
+ * @return None
+ * @note Equivalent to the PWM_SET_CNR() macro. Created to improve understandability.
+ * \hideinitializer
+ */
+#define PWM_SET_PERIOD_COUNT(pwm, u32ChannelNum, u32Period) PWM_SET_CNR(pwm, u32ChannelNum, u32Period)
+
+/**
+ * @brief This macro get the period of the selected channel
+ * @param[in] pwm The pointer of the specified PWM module
+ *                - PWMA : PWM Group A
+ *                - PWMB : PWM Group B
+ * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
+ * @return Return the period of specified channel. Valid values are between 0~0xFFFF
+ * @details This macro is used to get the period of specified channel.
+ * \hideinitializer
+ */
+#define PWM_GET_CNR(pwm, u32ChannelNum)  (*((__IO uint32_t *) ((((uint32_t)&((pwm)->CNR0)) + (u32ChannelNum) * 12))))
+
+/**
+ * @brief This macro get the period of the selected PWM channel
+ * @param[in] pwm The pointer of the specified PWM module
+ *                - PWMA : PWM Group A
+ *                - PWMB : PWM Group B
+ * @param[in] u32ChannelNum PWM channel number. Valid values are between 0~3
+ * @return Return the period of specified PWM channel. Valid values are between 0~0xFFFF
+ * @note Equivalent to the PWM_GET_CNR() macro. Created to improve understandability.
+ * \hideinitializer
+ */
+#define PWM_GET_PERIOD_COUNT(pwm, u32ChannelNum) PWM_GET_CNR(pwm, u32ChannelNum)
 
 /**
  * @brief Set the PWM aligned type
