@@ -9,6 +9,10 @@
 #ifndef __I2C_REG_H__
 #define __I2C_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Inter-IC Bus Controller -------------------------*/
 /**
@@ -321,6 +325,6 @@ typedef struct
 #define I2C_I2CWKUPSTS_WKUPIF_Msk               (1ul << I2C_I2CWKUPSTS_WKUPIF_Pos)      /*!< I2C_T::I2CWKUPSTS: WKUPIF Mask */
 /*@}*/ /* end of group I2C_CONST */
 /*@}*/ /* end of group I2C */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __I2C_REG_H__ */

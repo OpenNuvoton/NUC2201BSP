@@ -9,6 +9,11 @@
 #ifndef __ADC_REG_H__
 #define __ADC_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
+
 /*----------------------------- ADC Controller -------------------------------*/
 /** @addtogroup ADC Analog to Digital Converter (ADC)
   Memory Mapped Structure for ADC Controller
@@ -399,5 +404,6 @@ typedef struct
 
 /*@}*/ /* end of group ADC_CONST */
 /*@}*/ /* end of group ADC */
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __ADC_REG_H__ */

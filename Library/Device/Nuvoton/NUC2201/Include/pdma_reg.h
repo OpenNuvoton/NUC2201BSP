@@ -9,6 +9,10 @@
 #ifndef __PDMA_REG_H__
 #define __PDMA_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Peripheral Direct Memory Access Controller -------------------------*/
 /**
@@ -552,5 +556,6 @@ typedef struct
 #define PDMA_PDSSR2_I2S_RXSEL_Msk                   (0xFul << PDMA_PDSSR2_I2S_RXSEL_Pos)    /*!< PDMA_GCR_T::PDSSR2: I2S_RXSEL Mask */
 /*@}*/ /* end of group PDMA_CONST */
 /*@}*/ /* end of group DMA */
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __PDMA_REG_H__ */

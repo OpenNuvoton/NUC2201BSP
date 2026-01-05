@@ -9,6 +9,10 @@
 #ifndef __FMC_REG_H__
 #define __FMC_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Flash Memory Controller -------------------------*/
 /**
@@ -270,7 +274,7 @@ typedef struct
 #define FMC_ISPSTA_VECMAP_Msk                   (0xFFFul << FMC_ISPSTA_VECMAP_Pos)      /*!< FMC_T::ISPSTA: VECMAP Mask */
 /*@}*/ /* end of group FMC_CONST */
 /*@}*/ /* end of group FMC */
-
+/**@}*/ /* end of REGISTER group */
 
 
 #endif /* __FMC_REG_H__ */

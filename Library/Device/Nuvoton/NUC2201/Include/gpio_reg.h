@@ -9,6 +9,10 @@
 #ifndef __GPIO_REG_H__
 #define __GPIO_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- General Purpose Input/Output Controller -------------------------*/
 /**
@@ -316,6 +320,6 @@ typedef struct
 #define GPIO_DBNCECON_DBCLKSEL_Msk  (0xFul << GPIO_DBNCECON_DBCLKSEL_Pos)       /*!< GPIO_DBNCECON_T::DBNCECON: DBCLKSEL Mask */
 /*@}*/ /* end of group GPIO_CONST */
 /*@}*/ /* end of group GPIO */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __GPIO_REG_H__ */

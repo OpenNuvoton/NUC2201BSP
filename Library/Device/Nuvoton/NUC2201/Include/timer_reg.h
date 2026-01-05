@@ -9,6 +9,10 @@
 #ifndef __TIMER_REG_H__
 #define __TIMER_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Timer Controller -------------------------*/
 /**
@@ -261,6 +265,6 @@ typedef struct
 #define TIMER_TEXISR_TEXIF_Msk      (1ul << TIMER_TEXISR_TEXIF_Pos)             /*!< TIMER_T::TEXISR: TEXIF Mask */
 /*@}*/ /* end of group TIMER_CONST */
 /*@}*/ /* end of group TIMER */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __TIMER_REG_H__ */

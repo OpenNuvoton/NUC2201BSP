@@ -9,6 +9,10 @@
 #ifndef __RTC_REG_H__
 #define __RTC_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Real Time Clock Controller -------------------------*/
 /**
@@ -426,6 +430,6 @@ typedef struct
 #define RTC_SPRCTL_SNOOPEN_Msk      (1ul << RTC_SPRCTL_SNOOPEN_Pos)             /*!< RTC_T::SPRCTL: SNOOPEN Mask */
 /*@}*/ /* end of group RTC_CONST */
 /*@}*/ /* end of group RTC */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __RTC_REG_H__ */

@@ -9,6 +9,10 @@
 #ifndef __UART_REG_H__
 #define __UART_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Universal Asynchronous Receiver/Transmitter Controller -------------------------*/
 /**
@@ -1018,6 +1022,6 @@ typedef struct
 
 /*@}*/ /* end of group UART_CONST */
 /*@}*/ /* end of group UART */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __UART_REG_H__ */

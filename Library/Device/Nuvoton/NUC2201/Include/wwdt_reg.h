@@ -9,6 +9,10 @@
 #ifndef __WWDT_REG_H__
 #define __WWDT_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Window Watchdog Timer -------------------------*/
 /**
@@ -146,6 +150,6 @@ typedef struct
 /*@}*/ /* end of group WWDT_CONST */
 /*@}*/ /* end of group WWDT */
 /*@}*/ /* end of group */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __WWDT_REG_H__ */

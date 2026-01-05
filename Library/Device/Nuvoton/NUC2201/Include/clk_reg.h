@@ -9,6 +9,10 @@
 #ifndef __CLK_REG_H__
 #define __CLK_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------------- Clock Controller ------------------------------*/
 /** @addtogroup CLK System Clock Controller (CLK)
@@ -707,6 +711,6 @@ typedef struct
 #define CLK_FRQDIV_FSEL_Msk                  (0xFul << CLK_FRQDIV_FSEL_Pos)           /*!< CLK_T::FRQDIV: FRQDIV_FSEL Mask */
 /*@}*/ /* end of group CLK_CONST */
 /*@}*/ /* end of group CLK */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __CLK_REG_H__ */

@@ -9,6 +9,10 @@
 #ifndef __SYS_REG_H__
 #define __SYS_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- System Manger Controller -------------------------*/
 /**
@@ -1298,5 +1302,6 @@ typedef struct
 
 /*@}*/ /* end of group INT_CONST */
 /*@}*/ /* end of group SYS */
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __SYS_REG_H__ */

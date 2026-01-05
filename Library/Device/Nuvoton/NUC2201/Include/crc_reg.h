@@ -9,6 +9,11 @@
 #ifndef __CRC_REG_H__
 #define __CRC_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
+
 /*----------------------------- Cyclic Redundancy Check (CRC) Controller -----------------------------*/
 /** @addtogroup CRC Cyclic Redundancy Check Controller (CRC)
   Memory Mapped Structure for Cyclic Redundancy Check
@@ -283,7 +288,7 @@ typedef struct
 #define CRC_CHECKSUM_CRC_CHECKSUM_Msk   (0xFFFFFFFFul << CRC_CHECKSUM_CRC_CHECKSUM_Pos) /*!< CRC_T::CHECKSUM: CRC_CHECKSUM Mask */
 /*@}*/ /* end of group CRC_CONST */
 /*@}*/ /* end of group CRC */
-
+/**@}*/ /* end of REGISTER group */
 
 
 #endif /* __CRC_REG_H__ */

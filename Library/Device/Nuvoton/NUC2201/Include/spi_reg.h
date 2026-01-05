@@ -9,6 +9,10 @@
 #ifndef __SPI_REG_H__
 #define __SPI_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Serial Peripheral Interface Controller -------------------------*/
 /**
@@ -631,6 +635,6 @@ typedef struct
 #define SPI_STATUS_RX_INTSTS_Msk   (1ul << SPI_STATUS_RX_INTSTS_Pos)                 /*!< SPI_T::STATUS: RX_INTSTS Mask */
 /*@}*/ /* end of group SPI_CONST */
 /*@}*/ /* end of group SPI */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __SPI_REG_H__ */

@@ -9,6 +9,10 @@
 #ifndef __WDT_REG_H__
 #define __WDT_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Watch Dog Timer Controller -------------------------*/
 /**
@@ -153,6 +157,6 @@ typedef struct
 #define WDT_WTCRALT_WTRDSEL_Msk (0x3ul << WDT_WTCRALT_WTRDSEL_Pos)              /*!< WDT_T::WTCRALT: WTRDSEL Mask */
 /*@}*/ /* end of group WDT_CONST */
 /*@}*/ /* end of group WDT */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __WDT_REG_H__ */

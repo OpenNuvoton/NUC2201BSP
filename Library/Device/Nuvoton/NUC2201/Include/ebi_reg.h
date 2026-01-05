@@ -9,6 +9,11 @@
 #ifndef __EBI_REG_H__
 #define __EBI_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
+
 /*---------------------- External Bus Interface Controller -------------------------*/
 /**
     @addtogroup EBI External Bus Interface Controller (EBI)
@@ -133,7 +138,7 @@ typedef struct
 #define EBI_EBICON2_WBUFF_EN_Msk    (1ul << EBI_EBICON2_WBUFF_EN_Pos)           /*!< EBI_T::EBICON2: WBUFF_EN Mask */
 /*@}*/ /* end of group EBI_CONST */
 /*@}*/ /* end of group EBI */
-
+/**@}*/ /* end of REGISTER group */
 
 
 #endif /* __EBI_REG_H__ */

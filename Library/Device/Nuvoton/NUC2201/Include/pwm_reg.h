@@ -9,6 +9,10 @@
 #ifndef __PWM_REG_H__
 #define __PWM_REG_H__
 
+/**
+   @addtogroup REGISTER Control Register
+   @{
+*/
 
 /*---------------------- Pulse Width Modulation Controller -------------------------*/
 /**
@@ -1174,6 +1178,6 @@ typedef struct
 #define PWM_SYNCBUSY3_S_BUSY_Msk                (1ul << PWM_SYNCBUSY3_S_BUSY_Pos)   /*!< PWM_T::SYNCBUSY3: S_BUSY Mask */
 /*@}*/ /* end of group PWM_CONST */
 /*@}*/ /* end of group PWM */
-
+/**@}*/ /* end of REGISTER group */
 
 #endif /* __PWM_REG_H__ */
